@@ -32,6 +32,41 @@ plot_tisza_2m_r_sub$type <- "tisza"
 plot_ferto_2m_r_sub$type <- "ferto"
 plot_balaton_2m_r_sub$type <- "balaton"
 
+data_tisza=plot_tisza_2m_r_sub %>% gather(-c(type,Veg_h,fhd_bio,sum_leaf_w,biomass),key = "var", value = "value")
+
+ggplot(data=data_tisza, aes(x=biomass , y=value),show.legend = TRUE) +  
+  geom_point() +
+  geom_smooth(method="lm",colour="black",se=FALSE)+
+  stat_cor() +
+  facet_wrap(~var,scales = "free") +
+  theme_minimal() +
+  ylab("LiDAR metrics") +
+  theme(axis.text.x=element_text(angle=45, hjust=1)) 
+
+data_ferto=plot_ferto_2m_r_sub %>% gather(-c(type,Veg_h,fhd_bio,sum_leaf_w,biomass),key = "var", value = "value")
+
+ggplot(data=data_ferto, aes(x=biomass , y=value),show.legend = TRUE) +  
+  geom_point() +
+  geom_smooth(method="lm",colour="black",se=FALSE)+
+  stat_cor() +
+  facet_wrap(~var,scales = "free") +
+  theme_minimal() +
+  ylab("LiDAR metrics") +
+  theme(axis.text.x=element_text(angle=45, hjust=1)) 
+
+data_balaton=plot_balaton_2m_r_sub %>% gather(-c(type,Veg_h,fhd_bio,sum_leaf_w,biomass),key = "var", value = "value")
+
+ggplot(data=data_balaton, aes(x=biomass , y=value),show.legend = TRUE) +  
+  geom_point() +
+  geom_smooth(method="lm",colour="black",se=FALSE)+
+  stat_cor() +
+  facet_wrap(~var,scales = "free") +
+  theme_minimal() +
+  ylab("LiDAR metrics") +
+  theme(axis.text.x=element_text(angle=45, hjust=1)) 
+
+
+# merging
 merged=rbind(plot_tisza_2m_r_sub,plot_ferto_2m_r_sub,plot_balaton_2m_r_sub)
 
 data=merged %>% gather(-c(type,Veg_h,fhd_bio,sum_leaf_w,biomass),key = "var", value = "value")
