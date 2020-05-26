@@ -5,7 +5,7 @@ library(dplyr)
 library(sdm)
 library(stringr)
 
-workingdir="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/2_Dataset/selected_lidarlayers_v2/balaton_2m_r/"
+workingdir="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/2_Dataset/selected_lidarlayers_v2/ferto_2m_r/"
 
 setwd(workingdir)
 dir.create("crop")
@@ -14,8 +14,8 @@ crs_proj="+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs"
 #crs_proj="+proj=utm +zone=34 +datum=WGS84 +units=m +no_defs"
 
 #shp=readOGR("tisza_pole_df_org_wstr_org.shp")
-#shp=readOGR("ferto_pole_df_wstr_org.shp")
-shp=readOGR("balaton_pole_df_wstr_org.shp")
+shp=readOGR("ferto_pole_df_wstr_org.shp")
+#shp=readOGR("balaton_pole_df_wstr_org.shp")
 
 proj4string(shp)<- CRS(crs_proj)
 
@@ -88,4 +88,4 @@ allcsv <- lapply(files,function(g){
 
 allcsv_df <- do.call(rbind.data.frame, allcsv)
 
-write.csv(allcsv_df,"balaton_2m_r_v2.csv")
+write.csv(allcsv_df,"ferto_2m_r_v2.csv")
