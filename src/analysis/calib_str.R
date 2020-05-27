@@ -87,5 +87,7 @@ grid.arrange(
   nrow = 1
 )
 
+# corrplot
+cor(balaton_2m_r_sub_LAI[,c(3,4)], balaton_2m_r_sub_LAI[,2],  method = "pearson", use = "complete.obs")
 
-
+cor.test(tisza_2m_r_sub_LAI[,3], tisza_2m_r_sub_LAI[,2], method = "pearson")
