@@ -27,16 +27,16 @@ names(tisza_2m_r_sub_LAI) <- c("class","LAI","NegOpeness","Pulsepen")
 tisza_2m_r_sub_LAI=tisza_2m_r_sub_LAI[tisza_2m_r_sub_LAI$class!="shrub",]
 
 a=ggplot(data=tisza_2m_r_sub_LAI, aes(x=NegOpeness , y=LAI),show.legend = TRUE) +  
-  geom_point(aes(color=class)) +
-  geom_smooth(method="lm",colour='darkblue',se=FALSE)+
-  stat_cor() +
+  geom_point(aes(color=class),size=4) +
+  geom_smooth(method="lm",colour='darkblue',se=FALSE,size=4)+
+  stat_cor(size=10) +
   theme_minimal(base_size = 17) +
   theme(axis.text.x=element_text(angle=45, hjust=1)) 
 
 b=ggplot(data=tisza_2m_r_sub_LAI, aes(x=Pulsepen , y=LAI),show.legend = TRUE) +  
-  geom_point(aes(color=class)) +
-  geom_smooth(method="lm",colour='darkblue',se=FALSE)+
-  stat_cor() +
+  geom_point(aes(color=class),size=4) +
+  geom_smooth(method="lm",colour='darkblue',se=FALSE,size=4)+
+  stat_cor(size=10) +
   theme_minimal(base_size = 17) +
   theme(axis.text.x=element_text(angle=45, hjust=1)) 
 
@@ -47,16 +47,16 @@ ferto_2m_r_sub_LAI=ferto_2m_r_sub_LAI[ferto_2m_r_sub_LAI$class!="shrub",]
 ferto_2m_r_sub_LAI=ferto_2m_r_sub_LAI[ferto_2m_r_sub_LAI$class!="tree",]
 
 aa=ggplot(data=ferto_2m_r_sub_LAI, aes(x=NegOpeness , y=LAI),show.legend = TRUE) +  
-  geom_point(aes(color=class)) +
-  geom_smooth(method="lm",colour='darkblue',se=FALSE)+
-  stat_cor() +
+  geom_point(aes(color=class),size=4) +
+  geom_smooth(method="lm",colour='darkblue',se=FALSE,size=4)+
+  stat_cor(size=10) +
   theme_minimal(base_size = 17) +
   theme(axis.text.x=element_text(angle=45, hjust=1)) 
 
 bb=ggplot(data=ferto_2m_r_sub_LAI, aes(x=Pulsepen , y=LAI),show.legend = TRUE) +  
-  geom_point(aes(color=class)) +
-  geom_smooth(method="lm",colour='darkblue',se=FALSE)+
-  stat_cor() +
+  geom_point(aes(color=class),size=4) +
+  geom_smooth(method="lm",colour='darkblue',se=FALSE,size=4)+
+  stat_cor(size=10) +
   theme_minimal(base_size = 17) +
   theme(axis.text.x=element_text(angle=45, hjust=1)) 
 
@@ -67,16 +67,16 @@ balaton_2m_r_sub_LAI=balaton_2m_r_sub_LAI[balaton_2m_r_sub_LAI$class!="shrub",]
 balaton_2m_r_sub_LAI=balaton_2m_r_sub_LAI[balaton_2m_r_sub_LAI$class!="tree",]
 
 aaa=ggplot(data=balaton_2m_r_sub_LAI, aes(x=NegOpeness , y=LAI),show.legend = TRUE) +  
-  geom_point(aes(color=class)) +
-  geom_smooth(method="lm",colour='darkblue',se=FALSE)+
-  stat_cor() +
+  geom_point(aes(color=class),size=4) +
+  geom_smooth(method="lm",colour='darkblue',se=FALSE,size=4)+
+  stat_cor(size=10) +
   theme_minimal(base_size = 17) +
   theme(axis.text.x=element_text(angle=45, hjust=1)) 
 
 bbb=ggplot(data=balaton_2m_r_sub_LAI, aes(x=Pulsepen , y=LAI),show.legend = TRUE) +  
-  geom_point(aes(color=class)) +
-  geom_smooth(method="lm",colour='darkblue',se=FALSE)+
-  stat_cor() +
+  geom_point(aes(color=class),size=4) +
+  geom_smooth(method="lm",colour='darkblue',se=FALSE,size=4)+
+  stat_cor(size=10) +
   theme_minimal(base_size = 17) +
   theme(axis.text.x=element_text(angle=45, hjust=1)) 
 
@@ -91,25 +91,3 @@ grid.arrange(
 cor(balaton_2m_r_sub_LAI[,c(3,4)], balaton_2m_r_sub_LAI[,2],  method = "pearson", use = "complete.obs")
 
 cor.test(tisza_2m_r_sub_LAI[,3], tisza_2m_r_sub_LAI[,2], method = "pearson")
-
-# simple plot
-
-b=ggplot(data=tisza_2m_r_sub_LAI, aes(x=Pulsepen , y=LAI),show.legend = TRUE) +  
-  geom_point(color="darkblue",size=4) +
-  geom_smooth(method="lm",colour='darkblue',se=FALSE,size=3)+
-  stat_cor(size=10) +
-  theme_minimal(base_size = 17) +
-  theme(axis.text.x=element_text(angle=45, hjust=1))+ xlab("Pulse penetration ratio") + xlim(0,1)
-
-bbb=ggplot(data=balaton_2m_r_sub_LAI, aes(x=Pulsepen , y=LAI),show.legend = TRUE) +  
-  geom_point(color='darkorange',size=4) +
-  geom_smooth(method="lm",colour='darkorange',se=FALSE,size=3)+
-  stat_cor(size=10) +
-  theme_minimal(base_size = 17) +
-  theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Pulse penetration ratio") + xlim(0,1)
-
-grid.arrange(
-  bbb,
-  b,
-  nrow = 1
-)
