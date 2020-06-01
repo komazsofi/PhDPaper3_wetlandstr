@@ -53,7 +53,7 @@ data_merged=merged %>% gather(-c(type,class,Height,FHD_bio,Biomass),key = "var",
 
 # which one?
 
-ggplot(data=data_merged, aes(x=value , y=Biomass),show.legend = TRUE) +  
+ggplot(data=data_merged, aes(x=value , y=Height),show.legend = TRUE) +  
   geom_point() +
   geom_smooth(method="lm",colour='darkblue',se=FALSE)+
   stat_cor() +
@@ -66,6 +66,15 @@ ggplot(data=data_merged, aes(x=value , y=Biomass,colour=type),show.legend = TRUE
   geom_point() +
   geom_smooth(method="lm",colour='darkblue',se=FALSE)+
   stat_cor() +
+  facet_wrap(~var,scales = "free") +
+  theme_minimal() +
+  ylab("LiDAR metrics") +
+  theme(axis.text.x=element_text(angle=45, hjust=1)) 
+
+ggplot(data=data_merged, aes(x=value , y=Height),show.legend = TRUE) +  
+  geom_point() +
+  geom_smooth(method="lm",colour='darkblue',se=FALSE)+
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "~`,`~"))) +
   facet_wrap(~var,scales = "free") +
   theme_minimal() +
   ylab("LiDAR metrics") +
