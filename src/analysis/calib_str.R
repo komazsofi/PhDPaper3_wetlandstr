@@ -21,43 +21,94 @@ balaton_2m_r$type<-"balaton"
 
 # Prep data 
 
-tisza_2m_r_sub_LAI=subset(tisza_2m_r,select=c(7,10,21,25))
-names(tisza_2m_r_sub_LAI) <- c("class","LAI","NegOpeness","Pulsepen")
+tisza_2m_r_sub=subset(tisza_2m_r,select=c(30,7,10,11,
+                                          14,16,17,19,20,21,22,24,25,27,28,29,18))
+names(tisza_2m_r_sub) <-  c("type","class","LAI","FHD_pole",
+                            "Mean_Z","SigmaZ","Lbiomass","Median_Z","P_95","NegOp","NofEmax","PSW",
+                            "Pulsepen","FHD","Std_Z","Var_Z","Echowidth")
 
-tisza_2m_r_sub_LAI=tisza_2m_r_sub_LAI[tisza_2m_r_sub_LAI$class!="shrub",]
-tisza_2m_r_sub_LAI=tisza_2m_r_sub_LAI[tisza_2m_r_sub_LAI$class!="tree",]
+#tisza_2m_r_sub_LAI=tisza_2m_r_sub_LAI[tisza_2m_r_sub_LAI$class!="shrub",]
+#tisza_2m_r_sub_LAI=tisza_2m_r_sub_LAI[tisza_2m_r_sub_LAI$class!="tree",]
 
-ferto_2m_r_sub_LAI=subset(ferto_2m_r,select=c(7,10,21,25))
-names(ferto_2m_r_sub_LAI) <- c("class","LAI","NegOpeness","Pulsepen")
+ferto_2m_r_sub=subset(ferto_2m_r,select=c(30,7,10,11,
+                                          14,16,17,19,20,21,22,24,25,27,28,29,18))
+names(ferto_2m_r_sub) <- c("type","class","LAI","FHD_pole",
+                               "Mean_Z","SigmaZ","Lbiomass","Median_Z","P_95","NegOp","NofEmax","PSW",
+                               "Pulsepen","FHD","Std_Z","Var_Z","Echowidth")
 
-ferto_2m_r_sub_LAI=ferto_2m_r_sub_LAI[ferto_2m_r_sub_LAI$class!="shrub",]
-ferto_2m_r_sub_LAI=ferto_2m_r_sub_LAI[ferto_2m_r_sub_LAI$class!="tree",]
+#ferto_2m_r_sub_LAI=ferto_2m_r_sub_LAI[ferto_2m_r_sub_LAI$class!="shrub",]
+#ferto_2m_r_sub_LAI=ferto_2m_r_sub_LAI[ferto_2m_r_sub_LAI$class!="tree",]
 
-balaton_2m_r_sub_LAI=subset(balaton_2m_r,select=c(7,10,20,24))
-names(balaton_2m_r_sub_LAI) <- c("class","LAI","NegOpeness","Pulsepen")
+balaton_2m_r_sub=subset(balaton_2m_r,select=c(29,7,10,11,
+                                              14,16,17,18,19,20,21,23,24,26,27,28,1))
+names(balaton_2m_r_sub) <- c("type","class","LAI","FHD_pole",
+                             "Mean_Z","SigmaZ","Lbiomass","Median_Z","P_95","NegOp","NofEmax","PSW",
+                             "Pulsepen","FHD","Std_Z","Var_Z","Echowidth")
+balaton_2m_r_sub$Echowidth<-NA
 
-balaton_2m_r_sub_LAI=balaton_2m_r_sub_LAI[balaton_2m_r_sub_LAI$class!="shrub",]
-balaton_2m_r_sub_LAI=balaton_2m_r_sub_LAI[balaton_2m_r_sub_LAI$class!="tree",]
+#balaton_2m_r_sub_LAI=balaton_2m_r_sub_LAI[balaton_2m_r_sub_LAI$class!="shrub",]
+#balaton_2m_r_sub_LAI=balaton_2m_r_sub_LAI[balaton_2m_r_sub_LAI$class!="tree",]
+
+merged=rbind(tisza_2m_r_sub,ferto_2m_r_sub,balaton_2m_r_sub)
+data_merged=merged %>% gather(-c(type,class,LAI,FHD_pole),key = "var", value = "value")
+
+# which one?
+
+ggplot(data=data_merged, aes(x=value , y=LAI),show.legend = TRUE) +  
+  geom_point() +
+  geom_smooth(method="lm",colour='darkblue',se=FALSE)+
+  stat_cor() +
+  facet_wrap(~var,scales = "free") +
+  theme_minimal() +
+  ylab("LiDAR metrics") +
+  theme(axis.text.x=element_text(angle=45, hjust=1)) 
+
+ggplot(data=data_merged, aes(x=value , y=LAI,colour=type),show.legend = TRUE) +  
+  geom_point() +
+  geom_smooth(method="lm",colour='darkblue',se=FALSE)+
+  stat_cor() +
+  facet_wrap(~var,scales = "free") +
+  theme_minimal() +
+  ylab("LiDAR metrics") +
+  theme(axis.text.x=element_text(angle=45, hjust=1)) 
+
+ggplot(data=data_merged, aes(x=value , y=LAI),show.legend = TRUE) +  
+  geom_point() +
+  geom_smooth(method="lm",colour='darkblue',se=FALSE)+
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "~`,`~"))) +
+  facet_wrap(~var,scales = "free") +
+  theme_minimal() +
+  ylab("LiDAR metrics") +
+  theme(axis.text.x=element_text(angle=45, hjust=1)) 
+
+ggplot(data=data_merged, aes(x=value , y=LAI,colour=type),show.legend = TRUE) +  
+  geom_point() +
+  geom_smooth(method="lm",colour='darkblue',se=FALSE)+
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "~`,`~"))) +
+  facet_wrap(~var,scales = "free") +
+  theme_minimal() +
+  ylab("LiDAR metrics") +
+  theme(axis.text.x=element_text(angle=45, hjust=1)) 
 
 # visualize pole metrics
 lidarstr="Pulsepen"
 field="LAI"
 
-a=ggplot(data=tisza_2m_r_sub_LAI, aes_string(x=lidarstr , y=field),show.legend = TRUE) +  
+a=ggplot(data=tisza_2m_r_sub, aes_string(x=lidarstr , y=field),show.legend = TRUE) +  
   geom_point(aes(color=class),size=4) +
   geom_smooth(method="lm",colour='darkblue',se=FALSE,size=4)+
   stat_cor(size=5) +
   theme_minimal(base_size = 17) +
   theme(axis.text.x=element_text(angle=45, hjust=1)) 
 
-aa=ggplot(data=ferto_2m_r_sub_LAI, aes_string(x=lidarstr , y=field),show.legend = TRUE) +  
+aa=ggplot(data=ferto_2m_r_sub, aes_string(x=lidarstr , y=field),show.legend = TRUE) +  
   geom_point(aes(color=class),size=4) +
   geom_smooth(method="lm",colour='darkblue',se=FALSE,size=4)+
   stat_cor(size=5) +
   theme_minimal(base_size = 17) +
   theme(axis.text.x=element_text(angle=45, hjust=1)) 
 
-aaa=ggplot(data=balaton_2m_r_sub_LAI, aes_string(x=lidarstr , y=field),show.legend = TRUE) +  
+aaa=ggplot(data=balaton_2m_r_sub, aes_string(x=lidarstr , y=field),show.legend = TRUE) +  
   geom_point(aes(color=class),size=4) +
   geom_smooth(method="lm",colour='darkblue',se=FALSE,size=4)+
   stat_cor(size=5) +
@@ -71,6 +122,3 @@ grid.arrange(
   nrow = 1
 )
 
-# corrplot
-cor(balaton_2m_r_sub_LAI[,c(3,4)], balaton_2m_r_sub_LAI[,2],  method = "pearson", use = "complete.obs")
-cor.test(tisza_2m_r_sub_LAI[,3], tisza_2m_r_sub_LAI[,2], method = "pearson")
