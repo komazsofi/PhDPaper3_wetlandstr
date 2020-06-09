@@ -27,8 +27,8 @@ names(tisza_2m_r_sub) <-  c("type","class","LAI","FHD_pole",
                             "Mean_Z","SigmaZ","Lbiomass","Median_Z","P_95","NegOp","NofEmax","PSW",
                             "Pulsepen","FHD","Std_Z","Var_Z","Echowidth")
 
-#tisza_2m_r_sub_LAI=tisza_2m_r_sub_LAI[tisza_2m_r_sub_LAI$class!="shrub",]
-#tisza_2m_r_sub_LAI=tisza_2m_r_sub_LAI[tisza_2m_r_sub_LAI$class!="tree",]
+tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="shrub",]
+tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="tree",]
 
 ferto_2m_r_sub=subset(ferto_2m_r,select=c(30,7,10,11,
                                           14,16,17,19,20,21,22,24,25,27,28,29,18))
@@ -36,8 +36,8 @@ names(ferto_2m_r_sub) <- c("type","class","LAI","FHD_pole",
                                "Mean_Z","SigmaZ","Lbiomass","Median_Z","P_95","NegOp","NofEmax","PSW",
                                "Pulsepen","FHD","Std_Z","Var_Z","Echowidth")
 
-#ferto_2m_r_sub_LAI=ferto_2m_r_sub_LAI[ferto_2m_r_sub_LAI$class!="shrub",]
-#ferto_2m_r_sub_LAI=ferto_2m_r_sub_LAI[ferto_2m_r_sub_LAI$class!="tree",]
+ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="shrub",]
+ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="tree",]
 
 balaton_2m_r_sub=subset(balaton_2m_r,select=c(29,7,10,11,
                                               14,16,17,18,19,20,21,23,24,26,27,28,1))
@@ -46,8 +46,8 @@ names(balaton_2m_r_sub) <- c("type","class","LAI","FHD_pole",
                              "Pulsepen","FHD","Std_Z","Var_Z","Echowidth")
 balaton_2m_r_sub$Echowidth<-NA
 
-#balaton_2m_r_sub_LAI=balaton_2m_r_sub_LAI[balaton_2m_r_sub_LAI$class!="shrub",]
-#balaton_2m_r_sub_LAI=balaton_2m_r_sub_LAI[balaton_2m_r_sub_LAI$class!="tree",]
+balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="shrub",]
+balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="tree",]
 
 merged=rbind(tisza_2m_r_sub,ferto_2m_r_sub,balaton_2m_r_sub)
 data_merged=merged %>% gather(-c(type,class,LAI,FHD_pole),key = "var", value = "value")
@@ -122,3 +122,9 @@ grid.arrange(
   nrow = 1
 )
 
+ggplot(data=merged, aes_string(x=lidarstr , y=field),show.legend = TRUE) +  
+  geom_point(aes(color=class),size=4) +
+  geom_smooth(method="lm",colour='darkblue',se=FALSE,size=4)+
+  stat_cor(size=5) +
+  theme_minimal(base_size = 17) +
+  theme(axis.text.x=element_text(angle=45, hjust=1)) 
