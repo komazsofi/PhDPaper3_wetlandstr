@@ -62,7 +62,7 @@ data_merged=merged %>% gather(-c(type,class,Height,FHD_bio,Biomass,lake),key = "
 # which one?
 
 ggplot(data=data_merged, aes(x=value , y=Height),show.legend = TRUE) +  
-  geom_point(aes(colour=type)) +
+  geom_point(aes(colour=class)) +
   geom_smooth(method = "gam")+
   stat_cor(method = "spearman") +
   facet_wrap(~var,scales = "free") +
