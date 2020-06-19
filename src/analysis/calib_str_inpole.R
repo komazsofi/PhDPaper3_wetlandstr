@@ -21,27 +21,27 @@ balaton_2m_r$type<-"balaton"
 
 # Prep data 
 
-tisza_2m_r_sub=subset(tisza_2m_r,select=c(30,7,10,11,
+tisza_2m_r_sub=subset(tisza_2m_r,select=c(30,7,10,11,6,
                                           14,16,17,19,20,21,22,24,25,27,28,29,18))
-names(tisza_2m_r_sub) <-  c("type","class","LAI","FHD_pole",
+names(tisza_2m_r_sub) <-  c("lake","class","LAI","FHD_pole","type",
                             "Mean_Z","SigmaZ","Lbiomass","Median_Z","P_95","C_nop","NofEmax","PSW",
                             "C_ppr","FHD","Std_Z","Var_Z","VV_echw")
 
 tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="shrub",]
 tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="tree",]
 
-ferto_2m_r_sub=subset(ferto_2m_r,select=c(30,7,10,11,
+ferto_2m_r_sub=subset(ferto_2m_r,select=c(30,7,10,11,6,
                                           14,16,17,19,20,21,22,24,25,27,28,29,18))
-names(ferto_2m_r_sub) <- c("type","class","LAI","FHD_pole",
+names(ferto_2m_r_sub) <- c("lake","class","LAI","FHD_pole","type",
                                "Mean_Z","SigmaZ","Lbiomass","Median_Z","P_95","C_nop","NofEmax","PSW",
                                "C_ppr","FHD","Std_Z","Var_Z","VV_echw")
 
 ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="shrub",]
 ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="tree",]
 
-balaton_2m_r_sub=subset(balaton_2m_r,select=c(29,7,10,11,
+balaton_2m_r_sub=subset(balaton_2m_r,select=c(29,7,10,11,6,
                                               14,16,17,18,19,20,21,23,24,26,27,28,1))
-names(balaton_2m_r_sub) <- c("type","class","LAI","FHD_pole",
+names(balaton_2m_r_sub) <- c("lake","class","LAI","FHD_pole","type",
                              "Mean_Z","SigmaZ","Lbiomass","Median_Z","P_95","C_nop","NofEmax","PSW",
                              "C_ppr","FHD","Std_Z","Var_Z","VV_echw")
 balaton_2m_r_sub$VV_echw<-NA
@@ -50,7 +50,7 @@ balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="shrub",]
 balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="tree",]
 
 merged=rbind(tisza_2m_r_sub,ferto_2m_r_sub,balaton_2m_r_sub)
-data_merged=merged %>% gather(-c(type,class,LAI,FHD_pole),key = "var", value = "value")
+data_merged=merged %>% gather(-c(type,class,LAI,FHD_pole,lake),key = "var", value = "value")
 
 # which one?
 
@@ -64,7 +64,7 @@ ggplot(data=data_merged, aes(x=value , y=LAI),show.legend = TRUE) +
   theme(axis.text.x=element_text(angle=45, hjust=1)) 
 
 ggplot(data=data_merged, aes(x=value , y=LAI),show.legend = TRUE) +  
-  geom_point(aes(colour=class)) +
+  geom_point(aes(colour=type)) +
   geom_smooth(method = "gam")+
   stat_cor(method = "spearman") +
   facet_wrap(~var,scales = "free") +
@@ -100,26 +100,26 @@ ggplot(data=data_merged, aes(x=value , y=LAI,colour=type),show.legend = TRUE) +
   theme(axis.text.x=element_text(angle=45, hjust=1)) 
 
 # visualize pole metrics
-lidarstr="C_nop"
+lidarstr="C_ppr"
 field="LAI"
 
 a=ggplot(data=tisza_2m_r_sub, aes_string(x=field , y=lidarstr),show.legend = TRUE) +  
   geom_point(aes(color=class),size=4) +
-  geom_smooth(method="gam",size=4)+
+  geom_smooth(method="gam",size=2)+
   stat_cor(method = "spearman",size=5) +
   theme_minimal(base_size = 17) +
   theme(axis.text.x=element_text(angle=45, hjust=1))+xlim(0,6.5)+ylim(-4,6)
 
 aa=ggplot(data=ferto_2m_r_sub, aes_string(x=field , y=lidarstr),show.legend = TRUE) +  
   geom_point(aes(color=class),size=4) +
-  geom_smooth(method="gam",size=4)+
+  geom_smooth(method="gam",size=2)+
   stat_cor(method = "spearman",size=5) +
   theme_minimal(base_size = 17) +
   theme(axis.text.x=element_text(angle=45, hjust=1))+xlim(0,6.5)+ylim(-4,6)
 
 aaa=ggplot(data=balaton_2m_r_sub, aes_string(x=field , y=lidarstr),show.legend = TRUE) +  
   geom_point(aes(color=class),size=4) +
-  geom_smooth(method="gam",size=4)+
+  geom_smooth(method="gam",size=2)+
   stat_cor(method = "spearman",size=5) +
   theme_minimal(base_size = 17) +
   theme(axis.text.x=element_text(angle=45, hjust=1))+xlim(0,6.5)+ylim(-4,6)
