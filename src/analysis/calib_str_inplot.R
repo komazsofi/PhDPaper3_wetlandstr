@@ -23,21 +23,21 @@ balaton_2m_r$type<-"balaton"
 
 # Prep data 
 
-tisza_2m_r_sub=subset(tisza_2m_r,select=c(42,8,38,39,41,7,
+tisza_2m_r_sub=subset(tisza_2m_r,select=c(42,8,38,39,41,7,13,14,
                                           15,17,18,20,21,22,23,25,26,28,29,30,19))
-names(tisza_2m_r_sub) <- c("lake","class","Height","FHD_bio","Biomass","type",
+names(tisza_2m_r_sub) <- c("lake","class","Height","FHD_bio","Biomass","type","x","y",
                            "H_m","VV_sigmaz","VV_lbio","H_50p","H_95p","C_negop","VV_nofech","VV_psw","C_ppr","VV_fhd","VV_std","VV_var","VV_echw")
 
 tisza_2m_r_sub=tisza_2m_r_sub[is.na(tisza_2m_r_sub$class)==FALSE,]
 
-ferto_2m_r_sub=subset(ferto_2m_r,select=c(41,8,37,38,40,7,
+ferto_2m_r_sub=subset(ferto_2m_r,select=c(41,8,37,38,40,7,13,14,
                                           15,17,18,20,21,22,23,25,26,28,29,30,19))
-names(ferto_2m_r_sub) <- c("lake","class","Height","FHD_bio","Biomass","type",
+names(ferto_2m_r_sub) <- c("lake","class","Height","FHD_bio","Biomass","type","x","y",
                            "H_m","VV_sigmaz","VV_lbio","H_50p","H_95p","C_negop","VV_nofech","VV_psw","C_ppr","VV_fhd","VV_std","VV_var","VV_echw")
 
-balaton_2m_r_sub=subset(balaton_2m_r,select=c(40,8,36,37,39,7,
+balaton_2m_r_sub=subset(balaton_2m_r,select=c(40,8,36,37,39,7,13,14,
                                                      15,17,18,19,20,21,22,24,25,27,28,29,1))
-names(balaton_2m_r_sub) <- c("lake","class","Height","FHD_bio","Biomass","type",
+names(balaton_2m_r_sub) <- c("lake","class","Height","FHD_bio","Biomass","type","x","y",
                              "H_m","VV_sigmaz","VV_lbio","H_50p","H_95p","C_negop","VV_nofech","VV_psw","C_ppr","VV_fhd","VV_std","VV_var","VV_echw")
 balaton_2m_r_sub$VV_echw<-NA
 
@@ -45,14 +45,21 @@ balaton_2m_r_sub$VV_echw<-NA
 tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="shrub",]
 tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="tree",]
 tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="grassland",]
+tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="scirpus",]
 
 ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="shrub",]
 ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="tree",]
 ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="grassland",]
+ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="scirpus",]
 
 balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="shrub",]
 balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="tree",]
 balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="grassland",]
+balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="scirpus",]
+
+tisza_2m_r_sub$class=str_replace(tisza_2m_r_sub$class,"reed","phragmites")
+ferto_2m_r_sub$class=str_replace(ferto_2m_r_sub$class,"reed","phragmites")
+balaton_2m_r_sub$class=str_replace(balaton_2m_r_sub$class,"reed","phragmites")
 
 #merging
 
@@ -100,7 +107,7 @@ ggplot(data=data_merged, aes(x=value , y=Height,colour=type),show.legend = TRUE)
   theme(axis.text.x=element_text(angle=45, hjust=1)) 
 
 # visualize pole metrics
-lidarstr="VV_var"
+lidarstr="H_95p"
 field="Height"
 
 a=ggplot(data=tisza_2m_r_sub, aes_string(x=lidarstr , y=field),show.legend = TRUE) +  
@@ -167,7 +174,7 @@ aaa=ggplot(data=balaton_2m_r_sub, aes_string(x=lidarstr , y=field),show.legend =
   theme(axis.text.x=element_text(angle=45, hjust=1))+xlim(0,2)+ylim(0,5)
 
 aaaa=ggplot(data=merged, aes_string(x=lidarstr , y=field),show.legend = TRUE) +  
-  geom_point(aes(color=type),size=4) +
+  geom_point(aes(color=class),size=4) +
   geom_smooth(method="lm",formula=y~poly(x,1),colour='darkblue',size=2,se=FALSE)+
   geom_smooth(se=FALSE)+
   stat_cor(method = "spearman",size=5) +
@@ -180,5 +187,29 @@ grid.arrange(
   a+ggtitle("Tisza"),
   nrow = 1
 )
+
+merged$id=seq(1,34,1)
+
+ggplot(data=merged, aes_string(x=lidarstr , y=field),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=class),size=4) +
+  geom_smooth(method="lm",formula=y~poly(x,1),colour='darkblue',size=2,se=FALSE)+
+  geom_smooth(se=FALSE)+
+  stat_cor(method = "pearson",size=5) +
+  theme_minimal(base_size = 17) +
+  theme(axis.text.x=element_text(angle=45, hjust=1))+
+  geom_text(aes(label=id),hjust=0, vjust=0)
+
+write.csv(merged,"Plot_merged_cleaned.csv")
+
+merged_sub=merged[merged$lake!="balaton",]
+
+ggplot(data=merged_sub, aes_string(x=lidarstr , y=field),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=class),size=4) +
+  geom_smooth(method="lm",formula=y~poly(x,1),colour='darkblue',size=2,se=FALSE)+
+  geom_smooth(se=FALSE)+
+  stat_cor(method = "pearson",size=5) +
+  theme_minimal(base_size = 17) +
+  theme(axis.text.x=element_text(angle=45, hjust=1))+
+  geom_text(aes(label=id),hjust=0, vjust=0)
 
 
