@@ -68,7 +68,7 @@ data_merged=merged %>% gather(-c(type,class,Height,FHD_bio,Biomass,lake),key = "
 
 # which one?
 
-ggplot(data=data_merged, aes(x=value , y=Height),show.legend = TRUE) +  
+ggplot(data=data_merged, aes(x=value , y=Biomass),show.legend = TRUE) +  
   geom_point(aes(colour=class)) +
   geom_smooth(method = "gam")+
   stat_cor(method = "spearman") +
@@ -107,8 +107,8 @@ ggplot(data=data_merged, aes(x=value , y=Height,colour=type),show.legend = TRUE)
   theme(axis.text.x=element_text(angle=45, hjust=1)) 
 
 # visualize pole metrics
-lidarstr="H_95p"
-field="Height"
+lidarstr="VV_sigmaz"
+field="Biomass"
 
 a=ggplot(data=tisza_2m_r_sub, aes_string(x=lidarstr , y=field),show.legend = TRUE) +  
   geom_point(aes(color=class),size=4) +
@@ -194,7 +194,7 @@ ggplot(data=merged, aes_string(x=lidarstr , y=field),show.legend = TRUE) +
   geom_point(aes(color=lake,shape=class),size=4) +
   geom_smooth(method="lm",formula=y~poly(x,1),colour='darkblue',size=2,se=FALSE)+
   geom_smooth(se=FALSE)+
-  stat_cor(method = "pearson",size=5) +
+  stat_cor(method = "spearman",size=5) +
   theme_minimal(base_size = 17) +
   theme(axis.text.x=element_text(angle=45, hjust=1))+
   geom_text(aes(label=id),hjust=0, vjust=0)
@@ -207,7 +207,7 @@ ggplot(data=merged_sub, aes_string(x=lidarstr , y=field),show.legend = TRUE) +
   geom_point(aes(color=lake,shape=class),size=4) +
   geom_smooth(method="lm",formula=y~poly(x,1),colour='darkblue',size=2,se=FALSE)+
   geom_smooth(se=FALSE)+
-  stat_cor(method = "pearson",size=5) +
+  stat_cor(method = "spearman",size=5) +
   theme_minimal(base_size = 17) +
   theme(axis.text.x=element_text(angle=45, hjust=1))+
   geom_text(aes(label=id),hjust=0, vjust=0)
