@@ -74,7 +74,7 @@ data_merged=merged %>% gather(-c(veg_type,class,Height,FHD_bio,Biomass,lake,type
 
 # all together
 
-ggplot(data=data_merged, aes(x=value , y=Height),show.legend = TRUE) +  
+ggplot(data=data_merged, aes(x=value , y=FHD_bio),show.legend = TRUE) +  
   geom_point(aes(colour=class)) +
   geom_smooth(method = "gam")+
   stat_cor(method = "spearman") +
@@ -84,7 +84,7 @@ ggplot(data=data_merged, aes(x=value , y=Height),show.legend = TRUE) +
   xlab("LiDAR metrics") +
   theme(axis.text.x=element_text(angle=45, hjust=1))+ggtitle("Spearman correlation coefficient")
 
-ggplot(data=data_merged, aes(x=value , y=Height),show.legend = TRUE) +  
+ggplot(data=data_merged, aes(x=value , y=FHD_bio),show.legend = TRUE) +  
   geom_point(aes(colour=class)) +
   geom_smooth(method = "lm")+
   stat_cor(method = "pearson") +
@@ -96,7 +96,7 @@ ggplot(data=data_merged, aes(x=value , y=Height),show.legend = TRUE) +
 
 # FWF, non-FWF
 
-ggplot(data=data_merged, aes(x=value , y=Height,colour=type),show.legend = TRUE) +  
+ggplot(data=data_merged, aes(x=value , y=FHD_bio,colour=type),show.legend = TRUE) +  
   geom_point() +
   geom_smooth(method = "gam")+
   stat_cor(method = "spearman") +
@@ -106,7 +106,7 @@ ggplot(data=data_merged, aes(x=value , y=Height,colour=type),show.legend = TRUE)
   xlab("LiDAR metrics") +
   theme(axis.text.x=element_text(angle=45, hjust=1))+ggtitle("Spearman correlation coefficient")
 
-ggplot(data=data_merged, aes(x=value , y=Height,colour=type),show.legend = TRUE) +  
+ggplot(data=data_merged, aes(x=value , y=FHD_bio,colour=type),show.legend = TRUE) +  
   geom_point() +
   geom_smooth(method = "lm")+
   stat_cor(method = "pearson") +
@@ -117,8 +117,8 @@ ggplot(data=data_merged, aes(x=value , y=Height,colour=type),show.legend = TRUE)
   theme(axis.text.x=element_text(angle=45, hjust=1))+ggtitle("Pearson correlation coefficient")
 
 # per lakes
-lidarstr="H_95p"
-field="Height"
+lidarstr="VV_fhd"
+field="FHD_bio"
 
 a=ggplot(data=tisza_2m_r_sub, aes_string(x=lidarstr , y=field),show.legend = TRUE) +  
   geom_point(aes(color=class),size=4) +
@@ -199,8 +199,8 @@ grid.arrange(
 )
 
 # FWF, non-FWF
-lidarstr="H_95p"
-field="Height"
+lidarstr="VV_echw"
+field="FHD_bio"
 
 merged$id=seq(1,34,1)
 
@@ -216,6 +216,17 @@ ggplot(data=merged, aes_string(x=lidarstr , y=field),show.legend = TRUE) +
 merged_sub=merged[merged$lake!="Lake Balaton",]
 
 ggplot(data=merged_sub, aes_string(x=lidarstr , y=field),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=class),size=4) +
+  geom_smooth(se=TRUE)+
+  stat_cor(method = "spearman",size=5) +
+  theme_minimal(base_size = 17) +
+  theme(axis.text.x=element_text(angle=45, hjust=1))+
+  geom_text(aes(label=id),hjust=0, vjust=0)+
+  ggtitle("Spearman correlation coefficient")
+
+merged_sub2=merged[merged$lake=="Lake Balaton",]
+
+ggplot(data=merged_sub2, aes_string(x=lidarstr , y=field),show.legend = TRUE) +  
   geom_point(aes(color=lake,shape=class),size=4) +
   geom_smooth(se=TRUE)+
   stat_cor(method = "spearman",size=5) +
