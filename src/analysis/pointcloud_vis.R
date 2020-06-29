@@ -51,7 +51,7 @@ clipped_4=readLAS("C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/2_Dat
 clipped_4=readLAS("sukoro_34_plot.laz")
 clipped_4=readLAS("tisza_1_plot.laz")
 clipped_4=readLAS("fertohun_6_plot.laz")
-clipped_4=readLAS("fertohun_21_plot.laz")
+clipped_4=readLAS("C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/2_Dataset/pointcloud_forfielddata/fertohun_21_plot.laz")
 
 #rasterplot
 addalpha <- function(colors, alpha=1.0) {
@@ -116,4 +116,4 @@ rasterplot<-function(clipped_4,x=184877,y=511157,bird="Great reed warbler"){
   
 }
 
-rasterplot(clipped_4,x=681650.3622,y=5175399.689,bird="Plot 21")
+rasterplot(clipped_4,x=629745.0183,y=5283627.69,bird="Plot 21 [1 m]")
