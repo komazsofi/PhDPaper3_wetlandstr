@@ -47,7 +47,7 @@ writeLAS(clipped_1,"fertohun_21_plot.laz")
 writeLAS(clipped_1b,"fertohun_21_plot_10.laz")
 
 # Import for vis
-clipped_4=readLAS("mariafurdo_29_plot.laz")
+clipped_4=readLAS("C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/2_Dataset/pointcloud_forfielddata/mariafurdo_29_plot.laz")
 clipped_4=readLAS("sukoro_34_plot.laz")
 clipped_4=readLAS("tisza_1_plot.laz")
 clipped_4=readLAS("fertohun_6_plot.laz")
@@ -70,14 +70,14 @@ rasterplot<-function(clipped_4,x=184877,y=511157,bird="Great reed warbler"){
   dtm = grid_metrics(clipped_4, min(Z), res=5)
   clipped_4_norm=lasnormalize(clipped_4, dtm)
   
-  hperc09all = grid_metrics(clipped_4_norm, quantile(Z, 0.90), res=1)
+  hperc09all = grid_metrics(clipped_4_norm, max(Z), res=1)
   crs(hperc09all) <- "+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs"
   
   slope <- terrain(hperc09all, opt='slope')
   aspect <- terrain(hperc09all, opt='aspect')
   dsm_shd <- hillShade(slope, aspect, 40, 270)
   
-  height_class=reclassify(hperc09all, c(-Inf,1,1,1,3,2,3,5,3,5,Inf,4))
+  height_class=reclassify(hperc09all, c(-Inf,0.5,1,0.5,3,2,3,5,3,5,Inf,4))
   
   coords = matrix(c(x, y), 
                   ncol = 2, byrow = TRUE)
@@ -111,9 +111,9 @@ rasterplot<-function(clipped_4,x=184877,y=511157,bird="Great reed warbler"){
   plot(line_cr, lwd=3,col="black",add=TRUE)
   plot(line_cr2, lwd=3,col="black",add=TRUE)
   plot(height_class, col=defcolpal,breaks=c(0,1,2,3,4), add=TRUE,
-       lab.breaks = c("0","1","3","5","20"),
+       lab.breaks = c("0","0.5","3","5","20"),
        legend.args=list(text='Height [m]', side=4, font=2, line=2.5,cex=2))
   
 }
 
-rasterplot(clipped_4,x=629745.0183,y=5283627.69,bird="Plot 21")
+rasterplot(clipped_4,x=681650.3622,y=5175399.689,bird="Plot 21")
