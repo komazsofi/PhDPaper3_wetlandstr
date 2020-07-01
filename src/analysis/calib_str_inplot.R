@@ -199,8 +199,8 @@ grid.arrange(
 )
 
 # FWF, non-FWF
-lidarstr="VV_echw"
-field="FHD_bio"
+lidarstr="VV_lbio"
+field="Biomass"
 
 merged$id=seq(1,34,1)
 
