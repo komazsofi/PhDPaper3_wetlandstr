@@ -54,7 +54,7 @@ data_merged=merged %>% gather(-c(type,class,LAI,FHD_pole,lake),key = "var", valu
 
 # which one?
 
-ggplot(data=data_merged, aes(x=value , y=LAI),show.legend = TRUE) +  
+ggplot(data=data_merged, aes(x=value , y=FHD_pole),show.legend = TRUE) +  
   geom_point() +
   geom_smooth(method = "gam")+
   stat_cor(method = "spearman") +
@@ -72,7 +72,7 @@ ggplot(data=data_merged, aes(x=value , y=LAI),show.legend = TRUE) +
   ylab("LiDAR metrics") +
   theme(axis.text.x=element_text(angle=45, hjust=1)) 
 
-ggplot(data=data_merged, aes(x=value , y=LAI,colour=type),show.legend = TRUE) +  
+ggplot(data=data_merged, aes(x=value , y=FHD_pole,colour=lake),show.legend = TRUE) +  
   geom_point() +
   geom_smooth(method = "gam")+
   stat_cor(method = "spearman") +
