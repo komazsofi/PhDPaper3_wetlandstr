@@ -6,14 +6,14 @@ library(ggplot2)
 library(gridExtra)
 library(GGally)
 
-workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis3/"
+workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis4/"
 setwd(workdir)
 
 # Import
 
-tisza_2m_r=read.csv("tisza_2m_r_v2.csv")
-ferto_2m_r=read.csv("ferto_2m_r_v2.csv")
-balaton_2m_r=read.csv("balaton_2m_r_v2.csv")
+tisza_2m_r=read.csv("tisza_2m_r_v3.csv")
+ferto_2m_r=read.csv("ferto_2m_r_v3.csv")
+balaton_2m_r=read.csv("balaton_2m_r_v3.csv")
 
 plotdata=read.csv("data_quadtrat_tolidar.csv")
 
