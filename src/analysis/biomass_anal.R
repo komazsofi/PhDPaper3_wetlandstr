@@ -72,12 +72,12 @@ data_merged=merged %>% gather(-c(class,Biomass,lake,type,x,y),key = "var", value
 merged=merged[complete.cases(merged), ]
 summary(merged)
 
-cor(merged[,c(7:15)], method="spearman") # 
+round(cor(merged[,c(7:15)], method="spearman"),2) # 
 # Select: H_max + spearman r <0.7
 
 # linear regression across all lakes
 
-lm_biomass<-lm(Biomass~H_max+V_psw+C_ppr+S_arms,data=merged)
+lm_biomass<-lm(Biomass~H_max+V_psw+C_ppr+S_amean,data=merged)
 summary(lm_biomass)
 
 #AIC model selection (step)

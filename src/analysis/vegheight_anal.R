@@ -73,7 +73,7 @@ data_merged=merged %>% gather(-c(class,Height,lake,type,x,y),key = "var", value 
 merged=merged[complete.cases(merged), ]
 summary(merged)
 
-cor(merged[,c(7,9,10,11,12)], method="spearman") # median excluded: only reflects on the ground points (most of the points are ground - shall we calculate only for vegetation?)
+round(cor(merged[,c(7,9,10,11,12)], method="spearman"),2) # median excluded: only reflects on the ground points (most of the points are ground - shall we calculate only for vegetation?)
 
 # Select: H_max - that would be the least sensitive for ground points and otherwise all metrics are highly correlated >0.8 spearman r
 
