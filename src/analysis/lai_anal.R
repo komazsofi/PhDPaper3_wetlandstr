@@ -76,12 +76,12 @@ data_merged=merged %>% gather(-c(class,LAI,lake,type,x,y),key = "var", value = "
 merged=merged[complete.cases(merged[,c(1:10)]), ]
 summary(merged)
 
-cor(merged[,c(7:10)], method="spearman") #without echowidth
-cor(merged[merged$lake!="Lake Balaton",c(7:11)], method="spearman") #with ecowidth -> drop ppr
+round(cor(merged[,c(7:10)], method="spearman"),2) #without echowidth
+round(cor(merged[merged$lake!="Lake Balaton",c(7:11)], method="spearman"),2) #with ecowidth -> drop ppr
 
 # linear regression across all lakes
 
-lm_lai<-lm(LAI~V_sigmaz+C_negop+C_er+C_ppr,data=merged)
+lm_lai<-lm(LAI~log(V_sigmaz)+log(C_negop)+log(C_er)+log(C_ppr),data=merged)
 summary(lm_lai)
 
 #AIC model selection (step)
@@ -156,3 +156,12 @@ fit <- lm(LAI~V_sigmaz+C_negop+C_er+V_ewidth, data = merged[merged$lake=="Lake T
 effect_plot(fit, pred = V_ewidth, interval = TRUE, plot.points = TRUE)
 
 plot(fit$fitted.values,merged[merged$lake=="Lake Tisza",3])
+
+# linear regression across non-fwf
+
+lm_lai<-lm(LAI~V_sigmaz+C_negop+C_er+C_ppr,data=merged[merged$lake=="Lake Balaton",])
+summary(lm_lai)
+
+#AIC model selection (step)
+lm_lai_step<-step(lm_lai)
+summary(lm_lai_step)
