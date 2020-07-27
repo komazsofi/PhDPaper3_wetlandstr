@@ -5,7 +5,7 @@ library(dplyr)
 library(sdm)
 library(stringr)
 
-workingdir="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/2_Dataset/selected_lidarlayers_v2/tisza_2m_r/"
+workingdir="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/2_Dataset/selected_lidarlayers_v2/tisza_2m_r_leafon/"
 
 setwd(workingdir)
 dir.create("crop")
@@ -88,4 +88,4 @@ allcsv <- lapply(files,function(g){
 
 allcsv_df <- do.call(rbind.data.frame, allcsv)
 
-write.csv(allcsv_df,"tisza_2m_r_v3.csv")
+write.csv(allcsv_df,"tisza_2m_r_leafon_v3.csv")
