@@ -15,7 +15,7 @@ tisza_2m_r=read.csv("tisza_2m_r_v3.csv")
 ferto_2m_r=read.csv("ferto_2m_r_v3.csv")
 balaton_2m_r=read.csv("balaton_2m_r_v3.csv")
 
-plotdata=read.csv("data_quadtrat_tolidar.csv")
+plotdata=read.csv("data_quadtrat_tolidar_2.csv")
 
 # add lidar to plot
 
@@ -29,6 +29,6 @@ tisza_plot=tisza_plot[tisza_plot$location!="máriafürdo",]
 tisza_plot=tisza_plot[tisza_plot$location!="kenese",]
 
 # export
-write.csv(balaton_plot,"balaton_plot.csv")
-write.csv(ferto_plot,"ferto_plot.csv")
-write.csv(tisza_plot,"tisza_plot.csv")
+write.csv(balaton_plot,"balaton_plot_2.csv")
+write.csv(ferto_plot,"ferto_plot_2.csv")
+write.csv(tisza_plot,"tisza_plot_2.csv")
