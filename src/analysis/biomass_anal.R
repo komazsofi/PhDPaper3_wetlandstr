@@ -43,6 +43,11 @@ balaton_2m_r_sub=subset(balaton_2m_r,select=c(45,8,43,13,14,44,
                                               29,19,20,24,26,27,16,17,18))
 names(balaton_2m_r_sub) <- c("lake","class","Biomass","x","y","type",
                              "H_max","lbiomass","C_er","V_nech","V_psw","C_ppr","S_amean","S_arms","V_sigmaz")
+
+balaton_2m_r_sub_2=subset(balaton_2m_r,select=c(45,8,43,13,14,44,
+                                              29,19,20,24,26,27,16,17,18,30))
+names(balaton_2m_r_sub_2) <- c("lake","class","Biomass","x","y","type",
+                             "H_max","lbiomass","C_er","V_nech","V_psw","C_ppr","S_amean","S_arms","V_sigmaz","S_reflmean")
 #Filters
 tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="shrub",]
 tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="tree",]
@@ -129,3 +134,22 @@ termplot(lm_biomass_fwf, partial=T, term=2, pch=20, cex=1.5, col.term=0,
          lwd.term=3, col.res="dodgerblue",xlab="Annual precipitation (mm yr-1)", ylab="Partial residual")
 lines(lwd=7, lty=2, col='red', termplot(lm_biomass_fwf, partial=T, term=2, plot=F)$V_psw$x, 
       termplot(lm_biomass_fwf, partial=T, term=2, plot=F)$V_psw$y)
+
+# linear regression across nonfwf
+
+lm_biomass_nfwf<-lm(Biomass~H_max+V_psw+C_ppr+S_reflmean,data=balaton_2m_r_sub_2)
+summary(lm_biomass_nfwf)
+
+#AIC model selection (step)
+lm_biomass_nfwf_step<-step(lm_biomass_nfwf)
+summary(lm_biomass_nfwf_step)
+
+# Vis
+
+fit <- lm(Biomass ~ H_max + V_psw, data = balaton_2m_r_sub_2)
+
+plot(fit$fitted.values,fit$model$Biomass)
+
+plot(fit$model$H_max,fit$model$Biomass)
+plot(fit$model$V_psw,fit$model$Biomass)
+plot(balaton_2m_r_sub_2$S_amean,balaton_2m_r_sub_2$Biomass)
