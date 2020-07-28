@@ -17,14 +17,17 @@ setwd(workdir)
 tisza_2m_r=read.csv("tisza_2m_r_v3.csv")
 ferto_2m_r=read.csv("ferto_2m_r_v3.csv")
 balaton_2m_r=read.csv("balaton_2m_r_v3.csv")
+tisza_2m_r_leafon=read.csv("tisza_2m_r_leafon_v3.csv")
 
 tisza_2m_r$type<-"FWF"
 ferto_2m_r$type<-"FWF"
 balaton_2m_r$type<-"non-FWF"
+tisza_2m_r_leafon$type<-"FWF"
 
 tisza_2m_r$lake<-"Lake Tisza"
 ferto_2m_r$lake<-"Lake Ferto"
 balaton_2m_r$lake<-"Lake Balaton"
+tisza_2m_r_leafon$lake<-"Lake Tisza"
 
 # Prep data 
 
@@ -47,29 +50,64 @@ names(balaton_2m_r_sub) <- c("lake","class","LAI","x","y","type",
 
 balaton_2m_r_sub$V_ewidth<-NA
 
+tisza_2m_r_sub_leafon=subset(tisza_2m_r_leafon,select=c(34,7,10,12,13,33,
+                                          17,23,19,27,20))
+names(tisza_2m_r_sub_leafon) <- c("lake","class","LAI","x","y","type",
+                           "V_sigmaz","C_negop","C_er","C_ppr","V_ewidth")
+
+tisza_2m_r_sub_leafon=tisza_2m_r_sub_leafon[is.na(tisza_2m_r_sub_leafon$class)==FALSE,]
+
 #Filters
 tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="shrub",]
 tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="tree",]
 tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="grassland",]
 tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="scirpus",]
+tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="artificial",]
+tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="flat",]
+tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="land",]
+tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="mudflat",]
+tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="not_known",]
+tisza_2m_r_sub=tisza_2m_r_sub[tisza_2m_r_sub$class!="water",]
 
 ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="shrub",]
 ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="tree",]
 ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="grassland",]
 ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="scirpus",]
+ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="artificial",]
+ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="flat",]
+ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="land",]
+ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="mudflat",]
+ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="not_known",]
+ferto_2m_r_sub=ferto_2m_r_sub[ferto_2m_r_sub$class!="water",]
 
 balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="shrub",]
 balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="tree",]
 balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="grassland",]
 balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="scirpus",]
+balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="artificial",]
+balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="flat",]
+balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="land",]
+balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="mudflat",]
+balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="not_known",]
+balaton_2m_r_sub=balaton_2m_r_sub[balaton_2m_r_sub$class!="water",]
 
 tisza_2m_r_sub$class=str_replace(tisza_2m_r_sub$class,"reed","phragmites")
 ferto_2m_r_sub$class=str_replace(ferto_2m_r_sub$class,"reed","phragmites")
 balaton_2m_r_sub$class=str_replace(balaton_2m_r_sub$class,"reed","phragmites")
 
+tisza_2m_r_sub_leafon=tisza_2m_r_sub_leafon[tisza_2m_r_sub_leafon$class!="shrubs",]
+tisza_2m_r_sub_leafon=tisza_2m_r_sub_leafon[tisza_2m_r_sub_leafon$class!="trees",]
+tisza_2m_r_sub_leafon=tisza_2m_r_sub_leafon[tisza_2m_r_sub_leafon$class!="water",]
+tisza_2m_r_sub_leafon=tisza_2m_r_sub_leafon[tisza_2m_r_sub_leafon$class!="artificial",]
+tisza_2m_r_sub_leafon=tisza_2m_r_sub_leafon[tisza_2m_r_sub_leafon$class!="grassland",]
+tisza_2m_r_sub_leafon=tisza_2m_r_sub_leafon[tisza_2m_r_sub_leafon$class!="scirpus",]
+
+tisza_2m_r_sub_leafon$class=str_replace(tisza_2m_r_sub_leafon$class,"reed","phragmites")
+
 #merging
 
 merged=rbind(tisza_2m_r_sub,ferto_2m_r_sub,balaton_2m_r_sub)
+merged=merged[is.na(merged$class)==FALSE,]
 data_merged=merged %>% gather(-c(class,LAI,lake,type,x,y),key = "var", value = "value")
 
 # check correlation among metrics without echowidth
@@ -150,12 +188,19 @@ barplot(std_coef_sum_fwf,
         beside =T,
         ylab="Standardized coefficient")
 
+# linear regression across fwf with high pdens + leafon
+
+lm_LAI_fwf<-lm(LAI~log(V_sigmaz)+log(C_negop)+log(C_er)+log(V_ewidth),data=tisza_2m_r_sub_leafon)
+summary(lm_LAI_fwf)
+
+#AIC model selection (step)
+lm_LAI_fwf_step<-step(lm_LAI_fwf)
+summary(lm_LAI_fwf_step)
+
 # predicted vs. field
 
-fit <- lm(LAI~V_sigmaz+C_negop+C_er+V_ewidth, data = merged[merged$lake=="Lake Tisza",])
-effect_plot(fit, pred = V_ewidth, interval = TRUE, plot.points = TRUE)
-
-plot(fit$fitted.values,merged[merged$lake=="Lake Tisza",3])
+fit <- lm(LAI ~ log(V_sigmaz) + log(C_negop) + log(C_er), data = tisza_2m_r_sub_leafon)
+effect_plot(fit, pred = V_sigmaz, interval = TRUE, plot.points = TRUE)
 
 # linear regression across non-fwf
 
@@ -165,3 +210,44 @@ summary(lm_lai)
 #AIC model selection (step)
 lm_lai_step<-step(lm_lai)
 summary(lm_lai_step)
+
+# Visualization
+
+tisza_2m_r_sub_leafon$id=seq(1,63,1)
+merged$id=seq(1,201,1)
+
+ggplot(data=merged, aes(x=V_sigmaz, y=LAI),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=class),size=4) +
+  geom_smooth(se=TRUE)+
+  stat_cor(method = "spearman",size=5) +
+  theme_minimal(base_size = 17) +
+  theme(axis.text.x=element_text(angle=45, hjust=1))+
+  geom_text(aes(label=id),hjust=0, vjust=0) +
+  ggtitle("Spearman correlation coefficient")
+
+ggplot(data=tisza_2m_r_sub_leafon, aes(x=C_negop, y=LAI),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=class),size=4) +
+  geom_smooth(se=TRUE)+
+  stat_cor(method = "spearman",size=5) +
+  theme_minimal(base_size = 17) +
+  theme(axis.text.x=element_text(angle=45, hjust=1))+
+  geom_text(aes(label=id),hjust=0, vjust=0) +
+  ggtitle("Spearman correlation coefficient")
+
+ggplot(data=merged[merged$lake=="Lake Tisza",], aes(x=C_er, y=LAI),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=class),size=4) +
+  geom_smooth(se=TRUE)+
+  stat_cor(method = "spearman",size=5) +
+  theme_minimal(base_size = 17) +
+  theme(axis.text.x=element_text(angle=45, hjust=1))+
+  geom_text(aes(label=id),hjust=0, vjust=0) +
+  ggtitle("Spearman correlation coefficient")
+
+ggplot(data=merged[merged$lake=="Lake Tisza",], aes(x=log(V_ewidth), y=LAI),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=class),size=4) +
+  geom_smooth(se=TRUE)+
+  stat_cor(method = "spearman",size=5) +
+  theme_minimal(base_size = 17) +
+  theme(axis.text.x=element_text(angle=45, hjust=1))+
+  geom_text(aes(label=id),hjust=0, vjust=0) +
+  ggtitle("Spearman correlation coefficient")
