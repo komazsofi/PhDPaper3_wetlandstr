@@ -101,6 +101,8 @@ hist((residuals(lm_height_fwf)))
 lm_height_nonfwf<-lm(Height~H_max,data=merged[merged$lake=="Lake Balaton",])
 summary(lm_height_nonfwf)
 
+plot(Height~H_max,data=merged[merged$lake=="Lake Balaton",])
+
 #Residual histogram
 hist((residuals(lm_height_nonfwf)))
 

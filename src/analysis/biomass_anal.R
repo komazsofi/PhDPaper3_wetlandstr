@@ -130,10 +130,10 @@ barplot(std_coef_sum_fwf,
 
 # Partial residual
 
-termplot(lm_biomass_fwf, partial=T, term=2, pch=20, cex=1.5, col.term=0,
+termplot(lm_biomass_nfwf_step, partial=T, term=1, pch=20, cex=1.5, col.term=0,
          lwd.term=3, col.res="dodgerblue",xlab="Annual precipitation (mm yr-1)", ylab="Partial residual")
-lines(lwd=7, lty=2, col='red', termplot(lm_biomass_fwf, partial=T, term=2, plot=F)$V_psw$x, 
-      termplot(lm_biomass_fwf, partial=T, term=2, plot=F)$V_psw$y)
+lines(lwd=7, lty=2, col='red', termplot(lm_biomass_nfwf_step, partial=T, term=2, plot=F)$V_psw$x, 
+      termplot(lm_biomass_nfwf_step, partial=T, term=2, plot=F)$V_psw$y)
 
 # linear regression across nonfwf
 
