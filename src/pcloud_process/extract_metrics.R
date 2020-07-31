@@ -42,7 +42,7 @@ for (i in objname) {
       
       H_max= max(las_clip@data$Z)
       
-      newline <- data.frame(t(c(OBJNAME=i,point_ID=areaofint_sel$point_ID,point_name=areaofint_sel$point_name,
+      newline <- data.frame(t(c(OBJNAME=i,point_ID=areaofint_sel$point_ID,point_name=as.character(areaofint_sel$point_name),
                                 H_max=H_max)))
       
       dpcloudfea_exp_df <- rbind(dpcloudfea_exp_df, newline)
