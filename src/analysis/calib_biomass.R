@@ -15,9 +15,9 @@ setwd(workdir)
 
 # Import
 
-balaton_m=read.csv("Balaton_lidarmetrics_5.csv")
-tisza_m=read.csv("Tisza_lidarmetrics_5.csv")
-ferto_m=read.csv("Ferto_lidarmetrics_5.csv")
+balaton_m=read.csv("Balaton_lidarmetrics_0.5.csv")
+tisza_m=read.csv("Tisza_lidarmetrics_0.5.csv")
+ferto_m=read.csv("Ferto_lidarmetrics_0.5.csv")
 
 plotdata=read.csv("data_quadtrat_tolidar_2.csv")
 
@@ -59,11 +59,20 @@ merged=merged[merged$veg_type_2!="schoenoplectus",]
 merged=merged[merged$veg_type_2!="scirpus",]
 merged=merged[merged$X.y!=11,]
 
-# vegetation height
+# biomass
 
-lm=lm(veg_height_m~H_max,data=merged)
-summary(lm)
+round(cor(merged[,c(1,7:19)], method="spearman"),2) # 
+
+# linear regression across all lakes
+
+lm_biomass<-lm(total.weight~V_std+V_cr+C_ppr+A_std,data=merged)
+summary(lm_biomass)
+
+#AIC model selection (step)
+lm_biomass_step<-step(lm_biomass)
+summary(lm_biomass_step)
+
+# visualization
 
 ggplot(data=merged,aes(x=H_max,y=veg_height_m))+geom_point(aes(color=lake,shape=veg_type_2),size=4)+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
   geom_text(aes(label=X.y),hjust=0, vjust=0)
-
