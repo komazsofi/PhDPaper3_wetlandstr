@@ -7,10 +7,15 @@ library(sp)
 library(e1071)
 
 # Set working dirctory
-workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/balaton_25mrad/"
+#workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/balaton_25mrad/"
+#workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad/"
+workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad_leafon/"
+#workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/ferto_25mrad/"
 setwd(workingdirectory)
 
-fieldfile="w_point_balaton.shp"
+#fieldfile="w_point_balaton.shp"
+fieldfile="tisza_full.shp"
+#fieldfile="w_point.shp"
 
 #Import
 fieldsp = readOGR(dsn=fieldfile)
@@ -18,20 +23,23 @@ fieldsp_df=fieldsp@data
 
 objname=fieldsp_df$OBJNAME
 
-dpcloudfea_exp_df <- data.frame(matrix(ncol = 21, nrow = 0))
+dpcloudfea_exp_df <- data.frame(matrix(ncol = 22, nrow = 0))
 x <- c("OBJNAME", "point_ID","point_name", "H_max","H_mean","H_median","H_q25","H_q75","H_q95",
-       "V_std","V_var","V_cr","V_vdr","V_sk","V_ku","V_coefv","C_ppr","C_b2","C_vegd","A_std","A_mean")
+       "V_std","V_var","V_cr","V_vdr","V_sk","V_ku","V_coefv","C_ppr","C_ppr2","C_b2","C_vegd","A_std","A_mean")
 colnames(dpcloudfea_exp_df) <- x
 
-rad=5
+rad=0.5
+#name="Balaton_OBJNAME"
+name="Tisza_OBJNAME"
+#name="Ferto_OBJNAME"
 
 for (i in objname) {
   
   print(i)
   
-  if (file.exists(paste("Balaton_OBJNAME",i,"_25mrad.laz",sep=""))) {
+  if (file.exists(paste(name,i,"_25mrad.laz",sep=""))) {
     
-    las=readLAS(paste("Balaton_OBJNAME",i,"_25mrad.laz",sep=""))
+    las=readLAS(paste(name,i,"_25mrad.laz",sep=""))
     
     field_df_sel=fieldsp_df[fieldsp_df$OBJNAME==i,]
     areaofint_sel=fieldsp[fieldsp$OBJNAME==i,]
@@ -58,6 +66,7 @@ for (i in objname) {
       V_coefv=sd(las_clip@data$Z)/mean(las_clip@data$Z)
       
       C_ppr=(nrow(las_clip@data[las_clip@data$Classification==2L])/length(las_clip@data$Z))*100
+      C_ppr2=(length(las_norm_veg@data$Z)/length(las_clip@data$Z))*100
       C_b2=(nrow(las_norm_veg@data[(las_norm_veg@data$Z<2)])/length(las_clip@data$Z))*100
       C_vegd=length(las_norm_veg@data$Z)*1
       
@@ -79,6 +88,7 @@ for (i in objname) {
                                 V_ku=V_ku,
                                 V_coefv=V_coefv,
                                 C_ppr=C_ppr,
+                                C_ppr2=C_ppr2,
                                 C_b2=C_b2,
                                 C_vegd=C_vegd,
                                 A_std=A_std,
@@ -90,4 +100,6 @@ for (i in objname) {
   }
 }
 
-write.csv(dpcloudfea_exp_df,paste("Balaton_lidarmetrics_",rad,".csv",sep=""))
+#write.csv(dpcloudfea_exp_df,paste("Balaton_lidarmetrics_",rad,".csv",sep=""))
+write.csv(dpcloudfea_exp_df,paste("Tisza_lidarmetrics_",rad,".csv",sep=""))
+#write.csv(dpcloudfea_exp_df,paste("Ferto_lidarmetrics_",rad,".csv",sep=""))
