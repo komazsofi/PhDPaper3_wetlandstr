@@ -15,9 +15,9 @@ setwd(workdir)
 
 # Import
 
-balaton_m=read.csv("Balaton_lidarmetrics_5.csv")
-tisza_m=read.csv("Tisza_lidarmetrics_5.csv")
-ferto_m=read.csv("Ferto_lidarmetrics_5.csv")
+balaton_m=read.csv("Balaton_lidarmetrics_0.5.csv")
+tisza_m=read.csv("Tisza_lidarmetrics_0.5.csv")
+ferto_m=read.csv("Ferto_lidarmetrics_0.5.csv")
 
 plotdata=read.csv("data_quadtrat_tolidar_2.csv")
 
@@ -59,9 +59,17 @@ merged=merged[merged$veg_type_2!="schoenoplectus",]
 merged=merged[merged$veg_type_2!="scirpus",]
 merged=merged[merged$X.y!=11,]
 
+merged_filt05<-subset(merged, X.y %in% c(9,10,4,34,24,33,21,30,26,29,32,31,27,28,22,35,15,14,17,16))
+
 # vegetation height
 
 lm=lm(veg_height_m~H_max,data=merged)
+summary(lm)
+
+lm=lm(veg_height_m~H_max,data=merged_filt05)
+summary(lm)
+
+lm=lm(veg_height_m~H_max,data=merged_filt05[merged_filt05$lake!="Lake Balaton",])
 summary(lm)
 
 ggplot(data=merged,aes(x=H_max,y=veg_height_m))+geom_point(aes(color=lake,shape=veg_type_2),size=4)+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
