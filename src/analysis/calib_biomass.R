@@ -15,9 +15,9 @@ setwd(workdir)
 
 # Import
 
-balaton_m=read.csv("Balaton_lidarmetrics_0.5.csv")
-tisza_m=read.csv("Tisza_lidarmetrics_0.5.csv")
-ferto_m=read.csv("Ferto_lidarmetrics_0.5.csv")
+balaton_m=read.csv("Balaton_lidarmetrics_2.5.csv")
+tisza_m=read.csv("Tisza_lidarmetrics_2.5.csv")
+ferto_m=read.csv("Ferto_lidarmetrics_2.5.csv")
 
 plotdata=read.csv("data_quadtrat_tolidar_2.csv")
 
@@ -45,9 +45,9 @@ tisza_plot=tisza_plot[tisza_plot$location!="hegyko island",]
 tisza_plot=tisza_plot[tisza_plot$location!="máriafürdo",]
 tisza_plot=tisza_plot[tisza_plot$location!="kenese",]
 
-balaton_plot=balaton_plot[c(5:35)]
-ferto_plot=ferto_plot[c(5:35)]
-tisza_plot=tisza_plot[c(4:27,29:35)]
+balaton_plot=balaton_plot[c(5:35,4)]
+ferto_plot=ferto_plot[c(5:35,4)]
+tisza_plot=tisza_plot[c(4:27,29:35,2)]
 
 balaton_plot$lake="Lake Balaton"
 ferto_plot$lake="Lake Ferto"
@@ -55,9 +55,12 @@ tisza_plot$lake="Lake Tisza"
 
 merged=rbind(balaton_plot,ferto_plot,tisza_plot)
 
-merged=merged[merged$veg_type_2!="schoenoplectus",]
-merged=merged[merged$veg_type_2!="scirpus",]
-merged=merged[merged$X.y!=11,]
+#merged=merged[merged$veg_type_2!="schoenoplectus",]
+#merged=merged[merged$veg_type_2!="scirpus",]
+#merged=merged[merged$X.y!=11,]
+
+merged_filt05<-subset(merged, X.y %in% c(9,10,4,34,24,33,21,30,26,29,32,31,27,28,22,35,15,14,17,16))
+merged_filt05<-subset(merged, X.y %in% c(34,24,33,21,30,29,32,31,27,28,35,15,14,16))
 
 # biomass
 
@@ -65,7 +68,7 @@ round(cor(merged[,c(1,7:19)], method="spearman"),2) #
 
 # linear regression across all lakes
 
-lm_biomass<-lm(total.weight~V_std+V_cr+C_ppr+A_std,data=merged)
+lm_biomass<-lm(total.weight~V_std+V_cr+C_ppr2+A_std,data=merged_filt05)
 summary(lm_biomass)
 
 #AIC model selection (step)
@@ -74,5 +77,7 @@ summary(lm_biomass_step)
 
 # visualization
 
-ggplot(data=merged,aes(x=H_max,y=veg_height_m))+geom_point(aes(color=lake,shape=veg_type_2),size=4)+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
+ggplot(data=merged_filt05,aes(x=V_std,y=total.weight))+geom_point(aes(color=lake,shape=veg_type_2),size=4)+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
+  geom_text(aes(label=X.y),hjust=0, vjust=0)
+ggplot(data=merged_filt05,aes(x=A_std,y=total.weight))+geom_point(aes(color=lake,shape=veg_type_2),size=4)+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
   geom_text(aes(label=X.y),hjust=0, vjust=0)
