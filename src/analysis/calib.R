@@ -75,3 +75,11 @@ summary(lm)
 ggplot(data=merged,aes(x=H_max,y=veg_height_m))+geom_point(aes(color=lake,shape=veg_type_2),size=4)+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
   geom_text(aes(label=X.y),hjust=0, vjust=0)
 
+par(mfrow=c(1, 1), cex=1.5)  
+termplot(lm, partial=T, term=1, pch=20, cex=1.5, col.term=0, ylim=c(-2.5,2),
+         lwd.term=3, col.res="dodgerblue",xlab="H_max", ylab="Partial residual")
+lines(lwd=7, lty=2, col='red', termplot(lm, partial=T, term=1, plot=F)$H_max$x, 
+      termplot(lm, partial=T, term=1, plot=F)$H_max$y)
+
+
+

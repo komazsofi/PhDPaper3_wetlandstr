@@ -15,9 +15,9 @@ setwd(workdir)
 
 # Import
 
-balaton_m=read.csv("Balaton_lidarmetrics_0.5.csv")
-tisza_m=read.csv("Tisza_lidarmetrics_0.5.csv")
-ferto_m=read.csv("Ferto_lidarmetrics_0.5.csv")
+balaton_m=read.csv("Balaton_lidarmetrics_2.5.csv")
+tisza_m=read.csv("Tisza_lidarmetrics_2.5.csv")
+ferto_m=read.csv("Ferto_lidarmetrics_2.5.csv")
 
 plotdata=read.csv("data_quadtrat_tolidar_2.csv")
 
@@ -86,7 +86,33 @@ summary(lm_biomass_step)
 
 # visualization
 
-ggplot(data=merged_filt05,aes(x=V_std,y=total.weight))+geom_point(aes(color=lake,shape=veg_type_2),size=4)+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
+p1=ggplot(data=merged_filt05,aes(x=V_std,y=total.weight))+geom_point(aes(color=lake,shape=veg_type_2),size=4)+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
   geom_text(aes(label=X.y),hjust=0, vjust=0)
-ggplot(data=merged_filt05,aes(x=A_std,y=total.weight))+geom_point(aes(color=lake,shape=veg_type_2),size=4)+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
+p2=ggplot(data=merged_filt05,aes(x=A_std,y=total.weight))+geom_point(aes(color=lake,shape=veg_type_2),size=4)+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
   geom_text(aes(label=X.y),hjust=0, vjust=0)
+
+grid.arrange(
+  p1,
+  p2,
+  nrow = 1
+)
+
+par(mfrow=c(1, 1), cex=1.5)  
+termplot(lm_biomass_step, partial=T, term=2, pch=20, cex=1.5, col.term=0,
+         lwd.term=3, col.res="dodgerblue",xlab="A_std", ylab="Partial residual")
+lines(lwd=7, lty=2, col='red', termplot(lm_biomass_step, partial=T, term=2, plot=F)$A_std$x, 
+      termplot(lm_biomass_step, partial=T, term=2, plot=F)$A_std$y)
+
+# visualize metrics against field data
+
+merged_forvis=merged_filt05 %>% gather(-c(X.y,XID,location,corrseponding.sample.no,FID...4,veg_type_2,
+                                          veg_height_m,fhd_bio,fhd_bio_1m,fhd_bio_rao,fhd_bio_rao_1m,total.weight,
+                                          lake),key = "var", value = "value")
+
+ggplot(data=merged_forvis, aes(x=value , y=total.weight),show.legend = TRUE) +  
+  geom_point(aes(shape=veg_type_2,colour=lake)) +
+  facet_wrap(~var,scales = "free") +
+  theme_minimal() +
+  ylab("LAI") +
+  xlab("LiDAR metrics") +
+  theme(axis.text.x=element_text(angle=45, hjust=1)) 
