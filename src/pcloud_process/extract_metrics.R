@@ -7,15 +7,15 @@ library(sp)
 library(e1071)
 
 # Set working dirctory
-#workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/balaton_25mrad/"
-#workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad/"
-workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad_leafon/"
-#workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/ferto_25mrad/"
+#workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/balaton_25mrad_reclass/"
+#workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad_reclass/"
+#workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad_leafon_reclass/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/ferto_25mrad_reclass/"
 setwd(workingdirectory)
 
 #fieldfile="w_point_balaton.shp"
-fieldfile="tisza_full.shp"
-#fieldfile="w_point.shp"
+#fieldfile="tisza_full.shp"
+fieldfile="w_point.shp"
 
 #Import
 fieldsp = readOGR(dsn=fieldfile)
@@ -25,21 +25,21 @@ objname=fieldsp_df$OBJNAME
 
 dpcloudfea_exp_df <- data.frame(matrix(ncol = 22, nrow = 0))
 x <- c("OBJNAME", "point_ID","point_name", "H_max","H_mean","H_median","H_q25","H_q75","H_q95",
-       "V_std","V_var","V_cr","V_vdr","V_sk","V_ku","V_coefv","C_ppr","C_ppr2","C_b2","C_vegd","A_std","A_mean")
+       "V_std","V_vdr","V_sk","V_ku","V_coefv","C_ppr","C_lpi","C_can","A_std","A_med","A_cover")
 colnames(dpcloudfea_exp_df) <- x
 
 rad=0.5
 #name="Balaton_OBJNAME"
-name="Tisza_OBJNAME"
-#name="Ferto_OBJNAME"
+#name="Tisza_OBJNAME"
+name="Ferto_OBJNAME"
 
 for (i in objname) {
   
   print(i)
   
-  if (file.exists(paste(name,i,"_25mrad.laz",sep=""))) {
+  if (file.exists(paste(name,i,"_25mrad_reclass.laz",sep=""))) {
     
-    las=readLAS(paste(name,i,"_25mrad.laz",sep=""))
+    las=readLAS(paste(name,i,"_25mrad_reclass.laz",sep=""))
     
     field_df_sel=fieldsp_df[fieldsp_df$OBJNAME==i,]
     areaofint_sel=fieldsp[fieldsp$OBJNAME==i,]
@@ -48,6 +48,7 @@ for (i in objname) {
       las_norm=lasnormalize(las, knnidw(k=10,p=2))
       
       las_clip=lasclipCircle(las_norm,areaofint_sel@coords[1],areaofint_sel@coords[2],rad)
+      
       las_norm_veg=lasfilter(las_clip,(Classification!=2L))
       
       H_max= max(las_norm_veg@data$Z)
@@ -59,19 +60,17 @@ for (i in objname) {
       
       V_std=sd(las_clip@data$Z)
       V_var=var(las_clip@data$Z)
-      V_cr=(mean(las_clip@data$Z)-min(las_clip@data$Z))/max(las_clip@data$Z)-min(las_clip@data$Z)
-      V_vdr=(max(las_clip@data$Z)-median(las_clip@data$Z))/max(las_clip@data$Z)
       V_sk=skewness(las_clip@data$Z)
       V_ku=kurtosis(las_clip@data$Z)
       V_coefv=sd(las_clip@data$Z)/mean(las_clip@data$Z)
       
       C_ppr=(nrow(las_clip@data[las_clip@data$Classification==2L])/length(las_clip@data$Z))*100
-      C_ppr2=(length(las_norm_veg@data$Z)/length(las_clip@data$Z))*100
-      C_b2=(nrow(las_norm_veg@data[(las_norm_veg@data$Z<2)])/length(las_clip@data$Z))*100
-      C_vegd=length(las_norm_veg@data$Z)*1
+      C_lpi=(length(las_norm_veg@data$Z)/length(las_clip@data$Z))*100
+      C_can=(length(las_clip@data[las_clip@data$Z>mean(las_clip@data$Z),])/length(las_clip@data$Z))*100
       
       A_std=sd(las_clip@data$Intensity)
-      A_mean=mean(las_clip@data$Intensity)
+      A_med=median(las_clip@data$Intensity)
+      A_cover=sum(las_norm_veg@data$Intensity)/sum(las_clip@data$Intensity)
       
       newline <- data.frame(t(c(OBJNAME=i,point_ID=areaofint_sel$point_ID,point_name=as.character(areaofint_sel$point_name),
                                 H_max=H_max,
@@ -82,17 +81,15 @@ for (i in objname) {
                                 H_q95=H_q95,
                                 V_std=V_std,
                                 V_var=V_var,
-                                V_cr=V_cr,
-                                V_vdr=V_vdr,
                                 V_sk=V_sk,
                                 V_ku=V_ku,
                                 V_coefv=V_coefv,
                                 C_ppr=C_ppr,
-                                C_ppr2=C_ppr2,
-                                C_b2=C_b2,
-                                C_vegd=C_vegd,
+                                C_lpi=C_lpi,
+                                C_can=C_can,
                                 A_std=A_std,
-                                A_mean=A_mean
+                                A_med=A_med,
+                                A_cover=A_cover
                                 )))
       
       dpcloudfea_exp_df <- rbind(dpcloudfea_exp_df, newline)
@@ -100,6 +97,9 @@ for (i in objname) {
   }
 }
 
-#write.csv(dpcloudfea_exp_df,paste("Balaton_lidarmetrics_",rad,".csv",sep=""))
-write.csv(dpcloudfea_exp_df,paste("Tisza_lidarmetrics_",rad,".csv",sep=""))
-#write.csv(dpcloudfea_exp_df,paste("Ferto_lidarmetrics_",rad,".csv",sep=""))
+dpcloudfea_exp_df_c=dpcloudfea_exp_df[complete.cases(dpcloudfea_exp_df), ]
+
+#write.csv(dpcloudfea_exp_df,paste("Balaton_lidarmetrics_",rad,"_reclass.csv",sep=""))
+#write.csv(dpcloudfea_exp_df_c,paste("Tisza_lidarmetrics_",rad,"_reclass.csv",sep=""))
+#write.csv(dpcloudfea_exp_df_c,paste("Tisza_lidarmetrics_",rad,"_leafon_reclass.csv",sep=""))
+write.csv(dpcloudfea_exp_df,paste("Ferto_lidarmetrics_",rad,"_reclass.csv",sep=""))
