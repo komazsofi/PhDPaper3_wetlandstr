@@ -15,10 +15,10 @@ setwd(workdir)
 
 # Import
 
-balaton_m=read.csv("Balaton_lidarmetrics_2.5.csv")
-tisza_m=read.csv("Tisza_lidarmetrics_2.5.csv")
-ferto_m=read.csv("Ferto_lidarmetrics_2.5.csv")
-tisza_m_leafon=read.csv("Tisza_lidarmetrics_2.5_leafon.csv")
+balaton_m=read.csv("Balaton_lidarmetrics_2.5_reclass.csv")
+tisza_m=read.csv("Tisza_lidarmetrics_2.5_reclass.csv")
+ferto_m=read.csv("Ferto_lidarmetrics_2.5_reclass.csv")
+tisza_m_leafon=read.csv("Tisza_lidarmetrics_2.5_leafon_reclass.csv")
 
 tisza_2m_r=read.csv("tisza_2m_r_v3.csv")
 ferto_2m_r=read.csv("ferto_2m_r_v3.csv")
@@ -59,10 +59,10 @@ ferto_plot2=merge(ferto_plot,ferto_2m_r[c(3,19,26,17,23,20)], by.x=c('OBJNAME'),
 tisza_plot_leafon=merge(tisza_m_c_leafon,fieldsp_tisza_df_sel, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
 tisza_plot2_leafon=merge(tisza_plot_leafon,tisza_2m_r_leafon[c(3,19,26,17,23,20)], by.x=c('OBJNAME'), by.y=c('OBJNAME'))
 
-balaton_plot3=balaton_plot2[c(5:23,25:31,1)]
-ferto_plot3=ferto_plot2[c(5:23,25:31,1)]
-tisza_plot3=tisza_plot2[c(3:21,23:29,1)]
-tisza_plot3_leafon=tisza_plot2_leafon[c(3:21,23:29,1)]
+balaton_plot3=balaton_plot2[c(5:21,23:29,1)]
+ferto_plot3=ferto_plot2[c(5:21,23:29,1)]
+tisza_plot3=tisza_plot2[c(3:19,21:27,1)]
+tisza_plot3_leafon=tisza_plot2_leafon[c(3:19,21:27,1)]
 
 balaton_plot3$lake="Lake Balaton"
 ferto_plot3$lake="Lake Ferto"
@@ -119,13 +119,13 @@ ggplot(data=merged_forvis, aes(x=value , y=gct_lai),show.legend = TRUE) +
 round(cor(merged[,c(1,7:19)], method="spearman"),2) # 
 
 # linear regression across all lakes
-lm_lai<-lm(gct_lai~C_ppr2+A_std+EchoWidth2EchoWidthmedian.grd,data=merged_tisza_filt05)
+lm_lai<-lm(gct_lai~V_std+C_lpi+A_cover+A_std+EchoWidth2EchoWidthmedian.grd,data=merged_tisza_filt05)
 summary(lm_lai)
 
-lm_lai<-lm(gct_lai~C_ppr2+A_std+EchoWidth2EchoWidthmedian.grd,data=merged_tisza_filt05_leafon)
+lm_lai<-lm(gct_lai~V_std+C_lpi+A_cover+A_std+EchoWidth2EchoWidthmedian.grd,data=merged_tisza_filt05_leafon)
 summary(lm_lai)
 
-lm_lai<-lm(gct_lai~C_ppr2+A_std+EchoWidth2EchoWidthmedian.grd,data=merged_ferto_filt05)
+lm_lai<-lm(gct_lai~V_std+C_lpi+A_cover+A_std+EchoWidth2EchoWidthmedian.grd,data=merged_ferto_filt05)
 summary(lm_lai)
 
 #AIC model selection (step)
@@ -133,7 +133,7 @@ lm_lai_step<-step(lm_lai)
 summary(lm_lai_step)
 
 # non fwf
-lm_lai<-lm(gct_lai~C_ppr2+A_std,data=merged_balaton_filt05)
+lm_lai<-lm(gct_lai~V_std+C_lpi+A_cover+A_std,data=merged_balaton_filt05)
 summary(lm_lai)
 
 #AIC model selection (step)
