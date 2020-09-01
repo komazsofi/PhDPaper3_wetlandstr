@@ -8,9 +8,7 @@ library(GGally)
 library(corrplot)
 library(ggpubr)
 
-library(olsrr)
-
-workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis4/"
+workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis4/"
 setwd(workdir)
 
 tisza_2m_r=read.csv("tisza_plot.csv")
