@@ -15,16 +15,28 @@ setwd(workdir)
 
 # Import
 
-balaton_m=read.csv("Balaton_lidarmetrics_0.5_reclass2.csv")
-tisza_m=read.csv("Tisza_lidarmetrics_0.5_reclass2.csv")
-ferto_m=read.csv("Ferto_lidarmetrics_0.5_reclass2.csv")
+balaton_m=read.csv("Balaton_lidarmetrics_5_reclass2.csv")
+tisza_m=read.csv("Tisza_lidarmetrics_5_reclass2.csv")
+ferto_m=read.csv("Ferto_lidarmetrics_5_reclass2.csv")
 
-plotdata=read.csv("data_quadtrat_tolidar_2.csv")
+plotdata=read.csv("data_quadtrat_tolidar_forarticle.csv")
 
 fieldsp = readOGR(dsn="tisza_full.shp")
 fieldsp_df=fieldsp@data
 
 fieldsp_df_sel=fieldsp_df[,c(1,2)]
+
+tisza_pole = readOGR(dsn="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/2_Dataset/field_data/tisza_full.shp")
+ferto_pole = readOGR(dsn="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/2_Dataset/field_data/w_point.shp")
+balaton_pole = readOGR(dsn="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/2_Dataset/field_data/w_point_balaton.shp")
+
+tisza_pole_df=as.data.frame(tisza_pole)
+ferto_pole_df=as.data.frame(ferto_pole)
+balaton_pole_df=as.data.frame(balaton_pole)
+
+tisza_pole_df_min=tisza_pole_df[c(1,21,22)]
+ferto_pole_df_min=ferto_pole_df[c(1,23,24)]
+balaton_pole_df_min=balaton_pole_df[c(1,23,24)]
 
 # cleaining
 
@@ -45,15 +57,22 @@ tisza_plot=tisza_plot[tisza_plot$location!="hegyko island",]
 tisza_plot=tisza_plot[tisza_plot$location!="máriafürdo",]
 tisza_plot=tisza_plot[tisza_plot$location!="kenese",]
 
-balaton_plot=balaton_plot[c(5:35)]
-ferto_plot=ferto_plot[c(5:35)]
-tisza_plot=tisza_plot[c(4:27,29:35)]
+balaton_plot=balaton_plot[c(4,5:18,24,25,26,27,28)]
+ferto_plot=ferto_plot[c(4,5:18,24,25,26,27,28)]
+tisza_plot=tisza_plot[c(2,4:17,24,25,26,27,28)]
 
-balaton_plot$lake="Lake Balaton"
-ferto_plot$lake="Lake Ferto"
-tisza_plot$lake="Lake Tisza"
+# add coords
+balaton_plot_coord=merge(balaton_plot,balaton_pole_df_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
+ferto_plot_coord=merge(ferto_plot,ferto_pole_df_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
+tisza_plot_coord=merge(tisza_plot,tisza_pole_df_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
 
-merged=rbind(balaton_plot,ferto_plot,tisza_plot)
+balaton_plot_coord$lake="Lake Balaton"
+ferto_plot_coord$lake="Lake Ferto"
+tisza_plot_coord$lake="Lake Tisza"
+
+merged=rbind(balaton_plot_coord,ferto_plot_coord,tisza_plot_coord)
 
 merged=merged[merged$veg_type_2!="schoenoplectus",]
 merged=merged[merged$veg_type_2!="scirpus",]
+
+write.csv(merged,"Plot_db_5.csv")
