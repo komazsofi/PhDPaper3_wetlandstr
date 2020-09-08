@@ -76,3 +76,8 @@ merged=merged[merged$veg_type_2!="schoenoplectus",]
 merged=merged[merged$veg_type_2!="scirpus",]
 
 write.csv(merged,"Plot_db_5.csv")
+
+# only 0.5
+
+merged_filt05<-subset(merged, OBJNAME %in% c(120,123,124,160,204,209,131,163,170,198,200,203,251,255,317,321,325,118,122,186,187,188))
+write.csv(merged_filt05,"Plot_db_5_filt.csv")
