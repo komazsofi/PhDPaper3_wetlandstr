@@ -10,14 +10,15 @@ library(rgdal)
 library(raster)
 library(sp)
 
-workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis6/"
+workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis7/"
 setwd(workdir)
+rad=0.5
 
 # Import
 
-balaton_m=read.csv("Balaton_lidarmetrics_5_reclass2.csv")
-tisza_m=read.csv("Tisza_lidarmetrics_5_reclass2.csv")
-ferto_m=read.csv("Ferto_lidarmetrics_5_reclass2.csv")
+balaton_m=read.csv(paste("Balaton_lidarmetrics_",rad,"_reclass2.csv",sep=""))
+tisza_m=read.csv(paste("Tisza_lidarmetrics_",rad,"_reclass2.csv",sep=""))
+ferto_m=read.csv(paste("Ferto_lidarmetrics_",rad,"_reclass2.csv",sep=""))
 
 plotdata=read.csv("data_quadtrat_tolidar_forarticle.csv")
 
@@ -65,9 +66,9 @@ tisza_plot=tisza_plot[tisza_plot$location!="hegyko island",]
 tisza_plot=tisza_plot[tisza_plot$location!="máriafürdo",]
 tisza_plot=tisza_plot[tisza_plot$location!="kenese",]
 
-balaton_plot=balaton_plot[c(4,5:18,24,25,26,27,28)]
-ferto_plot=ferto_plot[c(4,5:18,24,25,26,27,28)]
-tisza_plot=tisza_plot[c(2,4:17,24,25,26,27,28)]
+balaton_plot=balaton_plot[c(4,5:20,26,27,28,29,30)]
+ferto_plot=ferto_plot[c(4,5:20,26,27,28,29,30)]
+tisza_plot=tisza_plot[c(2,4:19,26,27,28,29,30)]
 
 # add echowidth
 ferto_plot2=merge(ferto_plot,ferto_2m_r_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
@@ -88,9 +89,9 @@ merged=rbind(balaton_plot_coord,ferto_plot_coord,tisza_plot_coord)
 merged=merged[merged$veg_type_2!="schoenoplectus",]
 merged=merged[merged$veg_type_2!="scirpus",]
 
-write.csv(merged,"Plot_db_5.csv")
+write.csv(merged,paste("Plot_db_",rad,".csv",sep=""))
 
 # only 0.5
 
 merged_filt05<-subset(merged, OBJNAME %in% c(120,123,124,160,204,209,131,163,170,198,200,203,251,255,317,321,325,118,122,186,187,188))
-write.csv(merged_filt05,"Plot_db_5_filt.csv")
+write.csv(merged_filt05,paste("Plot_db_",rad,"_filt.csv",sep=""))
