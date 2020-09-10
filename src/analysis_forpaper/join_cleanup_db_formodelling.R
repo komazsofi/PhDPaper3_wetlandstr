@@ -10,7 +10,7 @@ library(rgdal)
 library(raster)
 library(sp)
 
-workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis6/"
+workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis6/"
 setwd(workdir)
 
 # Import
@@ -26,9 +26,9 @@ fieldsp_df=fieldsp@data
 
 fieldsp_df_sel=fieldsp_df[,c(1,2)]
 
-tisza_pole = readOGR(dsn="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/2_Dataset/field_data/tisza_full.shp")
-ferto_pole = readOGR(dsn="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/2_Dataset/field_data/w_point.shp")
-balaton_pole = readOGR(dsn="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/2_Dataset/field_data/w_point_balaton.shp")
+tisza_pole = readOGR(dsn="tisza_full.shp")
+ferto_pole = readOGR(dsn="w_point.shp")
+balaton_pole = readOGR(dsn="w_point_balaton.shp")
 
 tisza_pole_df=as.data.frame(tisza_pole)
 ferto_pole_df=as.data.frame(ferto_pole)
@@ -37,6 +37,14 @@ balaton_pole_df=as.data.frame(balaton_pole)
 tisza_pole_df_min=tisza_pole_df[c(1,21,22)]
 ferto_pole_df_min=ferto_pole_df[c(1,23,24)]
 balaton_pole_df_min=balaton_pole_df[c(1,23,24)]
+
+tisza_2m_r=read.csv("tisza_2m_r_v3.csv")
+ferto_2m_r=read.csv("ferto_2m_r_v3.csv")
+
+tisza_2m_r_min=tisza_2m_r[c(3,20)]
+names(tisza_2m_r_min)<-c("OBJNAME","W_echw")
+ferto_2m_r_min=ferto_2m_r[c(3,20)]
+names(ferto_2m_r_min)<-c("OBJNAME","W_echw")
 
 # cleaining
 
@@ -61,10 +69,15 @@ balaton_plot=balaton_plot[c(4,5:18,24,25,26,27,28)]
 ferto_plot=ferto_plot[c(4,5:18,24,25,26,27,28)]
 tisza_plot=tisza_plot[c(2,4:17,24,25,26,27,28)]
 
+# add echowidth
+ferto_plot2=merge(ferto_plot,ferto_2m_r_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
+tisza_plot2=merge(tisza_plot,tisza_2m_r_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
+balaton_plot$W_echw<-0
+
 # add coords
 balaton_plot_coord=merge(balaton_plot,balaton_pole_df_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
-ferto_plot_coord=merge(ferto_plot,ferto_pole_df_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
-tisza_plot_coord=merge(tisza_plot,tisza_pole_df_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
+ferto_plot_coord=merge(ferto_plot2,ferto_pole_df_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
+tisza_plot_coord=merge(tisza_plot2,tisza_pole_df_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
 
 balaton_plot_coord$lake="Lake Balaton"
 ferto_plot_coord$lake="Lake Ferto"
