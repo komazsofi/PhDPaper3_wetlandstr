@@ -20,7 +20,7 @@ setwd(workdir)
 
 # Import
 
-plot_0.5=read.csv("Plot_db_2_filt.csv")
+plot_0.5=read.csv("Plot_db_5_filt.csv")
 plot_0.5_filt=plot_0.5[plot_0.5$nofveg>2,]
 
 # Non correlated feature group for modelling step
@@ -42,51 +42,50 @@ vifcor(plot_0.5_filt[,c(3:16,24)], th=0.6, method='spearman')
 ###### Height
 
 #all
-lm_all_h=lm(veg_height_m~H_max+H_q25.25.+V_ku+A_std+A_cover+W_echw,data=plot_0.5_filt)
+lm_all_h=lm(veg_height_m~H_max+H_q25.25.+V_ku+A_std+A_cover,data=plot_0.5_filt)
 summary(lm_all_h)
 
-lm_all_h_step<-step(lm_all_h)
-summary(lm_all_h_step)
+ols_step_forward_aic(lm_all_h,details = TRUE)
 
-ols_step_both_p(lm_all_h)
-ols_step_both_aic(lm_all_h)
+lm_all_hfit=lm(veg_height_m~H_max,data=plot_0.5_filt)
+summary(lm_all_hfit)
 
 
 #fwf
 lm_fwf_h=lm(veg_height_m~H_max+H_q25.25.+V_ku+A_std+A_cover+W_echw,data=plot_0.5_filt[plot_0.5_filt$lake!="Lake Balaton",])
 summary(lm_fwf_h)
 
-lm_fwf_h_step<-step(lm_fwf_h)
-summary(lm_fwf_h_step)
+ols_step_forward_aic(lm_fwf_h,details = TRUE)
 
-ols_step_both_aic(lm_fwf_h)
+lm_fwf_hfit=lm(veg_height_m~H_max,data=plot_0.5_filt[plot_0.5_filt$lake!="Lake Balaton",])
+summary(lm_fwf_hfit)
+
+# Visualize
+ggplot(data=plot_0.5_filt,aes(x=H_max,y=veg_height_m))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
+  geom_text(aes(label=OBJNAME),hjust=0, vjust=0)
+
+ggplot(data=plot_0.5_filt[plot_0.5_filt$lake!="Lake Balaton",],aes(x=H_max,y=veg_height_m))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
+  geom_text(aes(label=OBJNAME),hjust=0, vjust=0)
 
 ###### Biomass
 
+plot_0.5_filt2=plot_0.5[plot_0.5$nofveg>5,]
+
 #all
-lm_all_b=lm(total.weight~V_std+A_std,data=plot_0.5_filt)
+lm_all_b=lm(total.weight~H_max+H_q25.25.+V_ku+A_std+A_cover,data=plot_0.5_filt)
 summary(lm_all_b)
 
-lm_all_b_step<-step(lm_all_b)
-summary(lm_all_b_step)
-
-ols_step_all_possible(lm_all_b)
-ols_step_both_p(lm_all_b)
-ols_step_both_aic(lm_all_b)
-
+ols_step_forward_aic(lm_all_b,details = TRUE)
 
 #fwf
-lm_fwf_b=lm(total.weight~V_std+A_std,data=plot_0.5_filt[plot_0.5_filt$lake!="Lake Balaton",])
+lm_fwf_b=lm(total.weight~H_max+H_q25.25.+V_ku+A_std+A_cover+W_echw,data=plot_0.5_filt[plot_0.5_filt$lake!="Lake Balaton",])
 summary(lm_fwf_b)
 
-lm_fwf_h_step<-step(lm_fwf_b)
-summary(lm_fwf_h_step)
-
-ols_step_both_aic(lm_fwf_b)
+ols_step_forward_aic(lm_fwf_b,details = TRUE)
 
 # Visualize
-ggplot(data=plot_0.5_filt,aes(x=V_std,y=total.weight))+geom_point(aes(color=lake,shape=veg_type_2),size=4)+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
+ggplot(data=plot_0.5_filt,aes(x=W_echw,y=total.weight))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
   geom_text(aes(label=OBJNAME),hjust=0, vjust=0)
 
-ggplot(data=plot_0.5_filt[plot_0.5_filt$lake!="Lake Balaton",],aes(x=H_max,y=total.weight))+geom_point(aes(color=lake,shape=veg_type_2),size=4)+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
+ggplot(data=plot_0.5_filt[plot_0.5_filt$lake!="Lake Balaton",],aes(x=W_echw,y=total.weight))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
   geom_text(aes(label=OBJNAME),hjust=0, vjust=0)
