@@ -15,12 +15,13 @@ library(usdm)
 
 library(olsrr)
 
-workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis7/"
+workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis7/"
+#workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis7/"
 setwd(workdir)
 
 # Import
 
-plot_0.5=read.csv("Plot_db_5_filt.csv")
+plot_0.5=read.csv("Plot_db_0.5_filt.csv")
 plot_0.5_filt=plot_0.5[plot_0.5$nofveg>2,]
 
 # Non correlated feature group for modelling step
@@ -66,6 +67,16 @@ ggplot(data=plot_0.5_filt,aes(x=H_max,y=veg_height_m))+geom_point(aes(color=lake
 
 ggplot(data=plot_0.5_filt[plot_0.5_filt$lake!="Lake Balaton",],aes(x=H_max,y=veg_height_m))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
   geom_text(aes(label=OBJNAME),hjust=0, vjust=0)
+
+ggplot(data=plot_0.5,aes(x=H_max,y=veg_height_m))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal(base_size=12)+
+  geom_smooth(data=plot_0.5[plot_0.5$nofveg>2,],aes(x=H_max,y=veg_height_m),method="lm",se=TRUE,color="black")+
+  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=3)+
+  xlab("H_max (LiDAR)")+ylab("Vegetation height (field)")+
+  ggtitle("Estimation of vegetation height")+
+  scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
+  scale_size_continuous(breaks=c(3,10,25),name="Number of vegetation point")+
+  scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
+  
 
 ###### Biomass
 
