@@ -43,13 +43,10 @@ vifcor(plot_0.5_filt[,c(3:16,24)], th=0.6, method='spearman')
 ###### Height
 
 #all
-lm_all_h=lm(veg_height_m~H_max+H_q25.25.+V_ku+A_std+A_cover,data=plot_0.5_filt)
+lm_all_h=lm(veg_height_m~H_max+H_q25.25.+V_ku+A_cover,data=plot_0.5_filt)
 summary(lm_all_h)
 
 ols_step_forward_aic(lm_all_h,details = TRUE)
-
-lm_all_hfit=lm(veg_height_m~H_max,data=plot_0.5_filt)
-summary(lm_all_hfit)
 
 
 #fwf
@@ -58,15 +55,16 @@ summary(lm_fwf_h)
 
 ols_step_forward_aic(lm_fwf_h,details = TRUE)
 
-lm_fwf_hfit=lm(veg_height_m~H_max,data=plot_0.5_filt[plot_0.5_filt$lake!="Lake Balaton",])
-summary(lm_fwf_hfit)
-
 # Visualize
-ggplot(data=plot_0.5_filt,aes(x=H_max,y=veg_height_m))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0)
 
-ggplot(data=plot_0.5_filt[plot_0.5_filt$lake!="Lake Balaton",],aes(x=H_max,y=veg_height_m))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0)
+lm_eqn <- function(df){
+  m <- lm(veg_height_m ~ H_max, df);
+  eq <- substitute(italic("y") == a + b %.% italic("H_max")*","~~italic(r)^2~"="~r2, 
+                   list(a = format(unname(coef(m)[1]), digits = 2),
+                        b = format(unname(coef(m)[2]), digits = 2),
+                        r2 = format(summary(m)$r.squared, digits = 3)))
+  as.character(as.expression(eq));
+}
 
 ggplot(data=plot_0.5,aes(x=H_max,y=veg_height_m))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal(base_size=12)+
   geom_smooth(data=plot_0.5[plot_0.5$nofveg>2,],aes(x=H_max,y=veg_height_m),method="lm",se=TRUE,color="black")+
@@ -74,16 +72,15 @@ ggplot(data=plot_0.5,aes(x=H_max,y=veg_height_m))+geom_point(aes(color=lake,shap
   xlab("H_max (LiDAR)")+ylab("Vegetation height (field)")+
   ggtitle("Estimation of vegetation height")+
   scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
-  scale_size_continuous(breaks=c(3,10,25),name="Number of vegetation point")+
-  scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
+  scale_size_continuous(breaks=c(5,10,25),name="Number of vegetation point")+
+  scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))+
+  geom_text(x = 1, y = 5, label = lm_eqn(plot_0.5[plot_0.5$nofveg>2,]), parse = TRUE)
   
 
 ###### Biomass
 
-plot_0.5_filt2=plot_0.5[plot_0.5$nofveg>5,]
-
 #all
-lm_all_b=lm(total.weight~H_max+H_q25.25.+V_ku+A_std+A_cover,data=plot_0.5_filt)
+lm_all_b=lm(total.weight~H_max+H_q25.25.+V_ku+A_cover,data=plot_0.5_filt)
 summary(lm_all_b)
 
 ols_step_forward_aic(lm_all_b,details = TRUE)
@@ -95,8 +92,18 @@ summary(lm_fwf_b)
 ols_step_forward_aic(lm_fwf_b,details = TRUE)
 
 # Visualize
-ggplot(data=plot_0.5_filt,aes(x=W_echw,y=total.weight))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0)
+ggplot(data=plot_0.5,aes(x=H_max,y=total.weight))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal(base_size=12)+
+  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=3)+
+  xlab("H_max (LiDAR)")+ylab("Biomass (field)")+
+  ggtitle("Estimation of biomass")+
+  scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
+  scale_size_continuous(breaks=c(5,10,25),name="Number of vegetation point")+
+  scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
 
-ggplot(data=plot_0.5_filt[plot_0.5_filt$lake!="Lake Balaton",],aes(x=W_echw,y=total.weight))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal()+geom_smooth(method="lm",se=TRUE)+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0)
+ggplot(data=plot_0.5,aes(x=A_std,y=total.weight))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal(base_size=12)+
+  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=3)+
+  xlab("A_std (LiDAR)")+ylab("Biomass (field)")+
+  ggtitle("Estimation of biomass")+
+  scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
+  scale_size_continuous(breaks=c(5,10,25),name="Number of vegetation point")+
+  scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
