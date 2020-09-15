@@ -24,6 +24,10 @@ setwd(workdir)
 plot_0.5=read.csv("Plot_db_0.5_filt.csv")
 plot_0.5_filt=plot_0.5[plot_0.5$nofveg>2,]
 
+plot_0.5_filt_c=distinct(plot_0.5_filt,OBJNAME,.keep_all=TRUE)
+
+plot_0.5_filt_c$drybiomass=plot_0.5_filt_c$total.weight-plot_0.5_filt_c$sum_leaf_weight
+
 # Non correlated feature group for modelling step
 corr=round(cor(plot_0.5_filt[,c(3:16,24)], method="spearman"),2)
 
@@ -43,14 +47,14 @@ vifcor(plot_0.5_filt[,c(3:16,24)], th=0.6, method='spearman')
 ###### Height
 
 #all
-lm_all_h=lm(veg_height_m~H_max+H_q25.25.+V_ku+A_cover,data=plot_0.5_filt)
+lm_all_h=lm(veg_height_m~H_max+H_q25.25.+V_ku+A_cover,data=plot_0.5_filt_c)
 summary(lm_all_h)
 
 ols_step_forward_aic(lm_all_h,details = TRUE)
 
 
 #fwf
-lm_fwf_h=lm(veg_height_m~H_max+H_q25.25.+V_ku+A_std+A_cover+W_echw,data=plot_0.5_filt[plot_0.5_filt$lake!="Lake Balaton",])
+lm_fwf_h=lm(veg_height_m~H_max+H_q25.25.+V_ku+A_std+A_cover+W_echw,data=plot_0.5_filt_c[plot_0.5_filt_c$lake!="Lake Balaton",])
 summary(lm_fwf_h)
 
 ols_step_forward_aic(lm_fwf_h,details = TRUE)
@@ -67,7 +71,7 @@ lm_eqn <- function(df){
 }
 
 ggplot(data=plot_0.5,aes(x=H_max,y=veg_height_m))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal(base_size=12)+
-  geom_smooth(data=plot_0.5[plot_0.5$nofveg>2,],aes(x=H_max,y=veg_height_m),method="lm",se=TRUE,color="black")+
+  geom_smooth(data=plot_0.5_filt_c,aes(x=H_max,y=veg_height_m),method="lm",se=TRUE,color="black")+
   geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=3)+
   xlab("H_max (LiDAR)")+ylab("Vegetation height (field)")+
   ggtitle("Estimation of vegetation height")+
@@ -79,30 +83,24 @@ ggplot(data=plot_0.5,aes(x=H_max,y=veg_height_m))+geom_point(aes(color=lake,shap
 
 ###### Biomass
 
+plot_0.5_filt_c=plot_0.5_filt_c[plot_0.5_filt_c$veg_type_2!="carex",]
+
 #all
-lm_all_b=lm(total.weight~H_max+H_q25.25.+V_ku+A_cover,data=plot_0.5_filt)
+lm_all_b=lm(drybiomass~H_max+H_q25.25.+V_ku+A_cover,data=plot_0.5_filt_c)
 summary(lm_all_b)
 
 ols_step_forward_aic(lm_all_b,details = TRUE)
 
 #fwf
-lm_fwf_b=lm(total.weight~H_max+H_q25.25.+V_ku+A_std+A_cover+W_echw,data=plot_0.5_filt[plot_0.5_filt$lake!="Lake Balaton",])
+lm_fwf_b=lm(drybiomass~H_max+H_q25.25.+V_ku+A_std+A_cover+W_echw,data=plot_0.5_filt_c[plot_0.5_filt_c$lake!="Lake Balaton",])
 summary(lm_fwf_b)
 
 ols_step_forward_aic(lm_fwf_b,details = TRUE)
 
 # Visualize
-ggplot(data=plot_0.5,aes(x=H_max,y=total.weight))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal(base_size=12)+
+ggplot(data=plot_0.5_filt_c,aes(x=H_max,y=drybiomass))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal(base_size=12)+
   geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=3)+
   xlab("H_max (LiDAR)")+ylab("Biomass (field)")+
-  ggtitle("Estimation of biomass")+
-  scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
-  scale_size_continuous(breaks=c(5,10,25),name="Number of vegetation point")+
-  scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
-
-ggplot(data=plot_0.5,aes(x=A_std,y=total.weight))+geom_point(aes(color=lake,shape=veg_type_2,size=nofveg))+theme_minimal(base_size=12)+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=3)+
-  xlab("A_std (LiDAR)")+ylab("Biomass (field)")+
   ggtitle("Estimation of biomass")+
   scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   scale_size_continuous(breaks=c(5,10,25),name="Number of vegetation point")+
