@@ -24,6 +24,8 @@ setwd(workdir)
 pole_0.5=read.csv("Pole_db_5_filt.csv")
 pole_0.5_filt=pole_0.5[pole_0.5$nofveg>2,]
 
+vifcor(pole_0.5_filt[,c(4:17,24)], th=0.6, method='spearman')
+
 # Modelling
 
 #all
