@@ -14,6 +14,7 @@ library(corrplot)
 library(usdm)
 
 library(olsrr)
+library(lme4)
 
 workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis7/"
 #workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis7/"
@@ -91,4 +92,5 @@ lm_fwfh_lai=lm(gct_lai~H_max+H_q25.25.+V_ku+A_std+A_cover+W_echw,data=pole_0.5_f
 summary(lm_fwfh_lai)
 
 ols_step_forward_aic(lm_fwfh_lai,details = TRUE)
+
 
