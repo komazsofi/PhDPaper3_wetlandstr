@@ -16,9 +16,9 @@ for(i in rad) {
   print(paste("Pole: selected radius is:",i,"m",sep=""))
   
   pole_data=read.csv(paste("Pole_db_",i,"_filt.csv",sep=""))
-  pole_data=pole_data[pole_data$nofveg>2,]
+  pole_data_filt=pole_data[pole_data$nofveg>2,]
   
-  vifcorr_pole=vifcor(pole_data[,c(4:17,24)], th=0.6, method='spearman')
+  vifcorr_pole=vifcor(pole_data_filt[,c(4:17,24)], th=0.6, method='spearman')
   print(vifcorr_pole)
   
   pole_noncorr=exclude(pole_data,vifcorr_pole)
@@ -32,10 +32,10 @@ for(i in rad) {
   
   print(paste("Plot: selected radius is:",i,"m",sep=""))
   
-  plot_data=read.csv(paste("Plot_db_",i,"_filt.csv",sep=""))
-  plot_data=plot_data[plot_data$nofveg>2,]
+  plot_data=read.csv(paste("Plot_db_",i,".csv",sep=""))
+  plot_data_filt=plot_data[plot_data$nofveg>2,]
   
-  vifcorr_plot=vifcor(plot_data[,c(3:16,24)], th=0.6, method='spearman')
+  vifcorr_plot=vifcor(plot_data_filt[,c(3:16,24)], th=0.6, method='spearman')
   print(vifcorr_plot)
   
   plot_noncorr=exclude(plot_data,vifcorr_plot)
