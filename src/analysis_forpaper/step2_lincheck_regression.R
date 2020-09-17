@@ -57,7 +57,14 @@ summary(model_fwf_step)
 model_nfwf=lm(veg_height_m ~ H_max+H_q25.25.+V_ku+A_std+A_cover, data = plot_data[plot_data$lake=="Lake Balaton",])
 summary(model_nfwf) 
 
+# results
+
+if (file.exists("step2_vegheight_fit.txt")) file.remove("step2_vegheight_fit.txt")
+sink("step2_vegheight_fit.txt", append=TRUE)
+
 stargazer(model_all_step, model_fwf_step,title="Vegetation height", align=TRUE,type="text",column.labels=c("all","fwf"))
+
+sink()
 
 # dependence
 
