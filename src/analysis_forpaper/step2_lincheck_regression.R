@@ -1,4 +1,6 @@
 library(ggplot2)
+library(dplyr)
+library(tidyr)
 
 workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis7/"
 #workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis7/"
@@ -13,13 +15,15 @@ plot_data_filt=plot_data[plot_data$nofveg>2,]
 
 ##### Visualization  
 
-ggplot(data=plot_data_filt,aes(x=H_max,y=veg_height_m))+geom_point(aes(color=lake,shape=veg_type_2,size=grpoints))+theme_minimal(base_size=12)+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=3)+
-  xlab("H_max (LiDAR)")+ylab("Vegetation height (field)")+
-  ggtitle("Estimation of vegetation height")+
-  scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
-  scale_size_continuous(breaks=c(5,10,25),name="Number of vegetation point")+
-  scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
+plot_data_filt_c=plot_data_filt[c(20:24,11,15,18,9)]
+plot_data_filt_c_vis=plot_data_filt_c %>% gather(-c(total.weight,lake,veg_type_2,nofveg),key = "var", value = "value")
+
+ggplot(data=plot_data_filt_c_vis, aes(x=value , y=total.weight),show.legend = TRUE) +  
+  geom_point(aes(colour=lake,shape=veg_type_2)) +
+  facet_wrap(~var,scales = "free") +
+  theme_minimal() +
+  ylab("Biomass (field)") +
+  xlab("LiDAR metrics") 
 
 ##### Modelling
 # vegetation height
@@ -34,3 +38,21 @@ summary(model_all_step)
 # check linearity
 par(mfrow = c(2, 2))
 plot(model_all_step)
+
+# Import
+
+pole_data=read.csv(paste("Pole_noncorr",5,".csv",sep=""))
+
+pole_data_filt=pole_data[pole_data$nofveg>2,]
+
+##### Visualization  
+
+pole_data_filt_c=pole_data_filt[c(15:19,8,10,13,14)]
+pole_data_filt_c_vis=pole_data_filt_c %>% gather(-c(gct_lai,lake,class,nofveg),key = "var", value = "value")
+
+ggplot(data=pole_data_filt_c_vis, aes(x=value , y=gct_lai),show.legend = TRUE) +  
+  geom_point(aes(colour=lake,shape=class)) +
+  facet_wrap(~var,scales = "free") +
+  theme_minimal() +
+  ylab("LAI (field)") +
+  xlab("LiDAR metrics") 
