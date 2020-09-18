@@ -3,7 +3,6 @@ library(dplyr)
 library(tidyr)
 
 library(stargazer)
-library(lme4)
 
 workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis7/"
 #workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis7/"
@@ -18,6 +17,7 @@ plot_data=read.csv(paste("Plot_noncorr",0.5,".csv",sep=""))
 ##### Visualization  
 
 plot_data_c=plot_data[c(2:7,11,13,15,18,9)]
+plot_data_c[plot_data_c$W_echw==0,6]<- NA
 plot_data_vis=plot_data_c %>% gather(-c(veg_height_m,total.weight,lake,veg_type_2,nofveg),key = "var", value = "value")
 
 ggplot(data=plot_data_vis, aes(x=value , y=veg_height_m),show.legend = TRUE) +  
@@ -35,53 +35,55 @@ ggplot(data=plot_data_vis, aes(x=value , y=total.weight),show.legend = TRUE) +
   xlab("LiDAR metrics") 
 
 ##### Modelling
+# we expect that we have minimum 4 pt/m2 otherwise most of the lidar metrics makes not much sense
+
+plot_data_f=plot_data[(plot_data$nofallp>3 & plot_data$nofveg>1),]
+
 # vegetation height
 
-# all
-model_all=lm(veg_height_m ~ H_max+H_q25.25.+V_ku+A_std+A_cover, data = plot_data)
-summary(model_all) 
-
-#AIC model selection (step)
-model_all_step<-step(model_all,direction = "backward")
-summary(model_all_step)
-
 # FWF
-model_fwf=lm(veg_height_m ~ H_max+H_q25.25.+V_ku+A_std+A_cover+W_echw, data = plot_data[plot_data$lake!="Lake Balaton",])
+model_fwf=lm(veg_height_m ~ H_max+H_q25.25.+V_ku+A_std+A_cover+W_echw, data = plot_data_f)
 summary(model_fwf) 
 
 #AIC model selection (step)
 model_fwf_step<-step(model_fwf,direction = "backward")
 summary(model_fwf_step)
 
+# biomass
+
+# all
+model_all_b=lm(total.weight ~ H_max+H_q25.25.+V_ku+A_std+A_cover, data = plot_data)
+summary(model_all_b) 
+
+#AIC model selection (step)
+model_all_step_b<-step(model_all_b,direction = "backward")
+summary(model_all_step_b)
+
+# simple model
+lm_all_b=lm(total.weight ~ H_max, data = plot_data)
+
+# FWF
+model_fwf_b=lm(total.weight ~ H_max+H_q25.25.+V_ku+A_std+A_cover+W_echw, data = plot_data[plot_data$lake!="Lake Balaton",])
+summary(model_fwf_b) 
+
+#AIC model selection (step)
+model_fwf_step_b<-step(model_fwf_b,direction = "backward")
+summary(model_fwf_step_b)
+
+# simple model
+lm_fwf_b=lm(total.weight ~ H_max, data = plot_data[plot_data$lake!="Lake Balaton",])
+
 # nonFWF
-model_nfwf=lm(veg_height_m ~ H_max+H_q25.25.+V_ku+A_std+A_cover, data = plot_data[plot_data$lake=="Lake Balaton",])
-summary(model_nfwf) 
+model_nfwf_b=lm(total.weight ~ H_max + H_q25.25. + A_cover, data = plot_data[plot_data$lake=="Lake Balaton",])
+summary(model_nfwf_b)
 
-# results
+lm_nfwf_b=lm(total.weight ~ H_max, data = plot_data[plot_data$lake=="Lake Balaton",])
 
-if (file.exists("step2_vegheight_fit.txt")) file.remove("step2_vegheight_fit.txt")
-sink("step2_vegheight_fit.txt", append=TRUE)
+# export results
 
-stargazer(model_all_step, model_fwf_step,title="Vegetation height", align=TRUE,type="text",column.labels=c("all","fwf"))
+stargazer(model_fwf_step, model_nfwf, model_all_step, title="Vegetation height", align=TRUE,type="html",column.labels=c("fwf","discrete","all"),out="height_aic.doc")
+stargazer(lm_fwf_h, lm_nfwf_h, lm_all_h, title="Vegetation height", align=TRUE,type="html",column.labels=c("fwf","discrete","all"),out="height_exp.doc")
 
-sink()
-
-# dependence
-
-plot_data$pdens_cat[plot_data$nofveg < 5] <- "low"
-plot_data$pdens_cat[plot_data$nofveg > 5] <- "high"
-
-plot_data$iswater[plot_data$water_dept...8 < 5] <- "no"
-plot_data$iswater[plot_data$water_dept...8 > 5] <- "yes"
-
-mixed.lmer_h <- lmer(veg_height_m  ~ H_max+V_ku+A_cover + (1|pdens_cat), data = plot_data)
-summary(mixed.lmer_h)
-mixed.lmer_h2 <- lmer(veg_height_m  ~ H_max+V_ku+A_cover + (1|lake), data = plot_data)
-summary(mixed.lmer_h2)
-mixed.lmer_h3 <- lmer(veg_height_m  ~ H_max+V_ku+A_cover + (1|veg_type_2), data = plot_data)
-summary(mixed.lmer_h3)
-mixed.lmer_h4 <- lmer(veg_height_m  ~ H_max+V_ku+A_cover + (1|iswater), data = plot_data)
-summary(mixed.lmer_h4)
 
 ####################################### Pole
 
