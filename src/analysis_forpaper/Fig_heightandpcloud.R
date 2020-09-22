@@ -47,35 +47,45 @@ grid.arrange(g1,g2,
 
 ##### Standardized coefficient
 # height
-plot_data05_filt=plot_data05[(plot_data05$OBJNAME!=209 & plot_data05$OBJNAME!=160 & plot_data05$OBJNAME!=120),]
+plot_data05_filt=plot_data05[(plot_data05$OBJNAME!=160),]
 
 lm_scaled<-lm(veg_height_m ~ Scaled_H_max+Scaled_V_ku+Scaled_A_std+Scaled_A_cover,data = plot_data05_filt)
 summary(lm_scaled)
 
-std_coef_sum=as.data.frame(lm_scaled$coefficients[2:5])
-names(std_coef_sum)<-c("Coeff")
+std_coef_sum2 <- data.frame(matrix(ncol = 2, nrow = 13))
+names(std_coef_sum2)<-c("coeff","metric")
 
-ggplot(data=std_coef_sum, aes(x=Coeff, y=rownames(std_coef_sum))) +
+std_coef_sum2$metric<-c("A_med","A_std","A_cover","C_ppr","H_max","H_mean","H_med","H_p95","V_std","V_var","V_ku","V_sk","W_echw")
+std_coef_sum2$coeff<-c(0,lm_scaled$coefficients[4],lm_scaled$coefficients[5],0,lm_scaled$coefficients[2],0,0,0,0,0,lm_scaled$coefficients[3],0,0)
+
+a=ggplot(data=std_coef_sum2, aes(x=coeff, y=metric)) +
   geom_bar(stat="identity")+
   xlab("Standardized coefficient")+ylab("LiDAR metrics")+
-  ggtitle("Feature importance for estimating vegetation height (res=0.5 m)")+
+  ggtitle("Feature importance for vegetation height (res=0.5 m)")+
   theme_classic(base_size=20)
 
 # biomass
 
-plot_data5_filt=plot_data5
+plot_data5_filt=plot_data5[(plot_data5$OBJNAME!=120),]
 
 lm_scaled_b<-lm(total.weight ~ Scaled_V_var+Scaled_A_std+Scaled_A_med+Scaled_A_cover,data = plot_data5_filt)
 summary(lm_scaled_b)
 
-std_coef_sum_b=as.data.frame(lm_scaled_b$coefficients[2:5])
-names(std_coef_sum_b)<-c("Coeff")
+std_coef_sum2_b <- data.frame(matrix(ncol = 2, nrow = 13))
+names(std_coef_sum2_b)<-c("coeff","metric")
 
-ggplot(data=std_coef_sum_b, aes(x=Coeff, y=rownames(std_coef_sum_b))) +
+std_coef_sum2_b$metric<-c("A_med","A_std","A_cover","C_ppr","H_max","H_mean","H_med","H_p95","V_std","V_var","V_ku","V_sk","W_echw")
+std_coef_sum2_b$coeff<-c(lm_scaled_b$coefficients[4],lm_scaled_b$coefficients[3],lm_scaled_b$coefficients[5],0,0,0,0,0,0,lm_scaled_b$coefficients[2],0,0,0)
+
+b=ggplot(data=std_coef_sum2_b, aes(x=coeff, y=metric)) +
   geom_bar(stat="identity")+
   xlab("Standardized coefficient")+ylab("LiDAR metrics")+
-  ggtitle("Feature importance for estimating biomass (res=5 m)")+
+  ggtitle("Feature importance for biomass (res=5 m)")+
   theme_classic(base_size=20)
+
+grid.arrange(a,b,
+             nrow = 1
+)
 
 ##### Pcloud visualization
 
