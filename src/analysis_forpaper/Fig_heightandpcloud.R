@@ -52,14 +52,37 @@ plot_data05_filt=plot_data05[(plot_data05$OBJNAME!=160),]
 lm_scaled<-lm(veg_height_m ~ Scaled_H_max+Scaled_V_ku+Scaled_A_std+Scaled_A_cover,data = plot_data05_filt)
 summary(lm_scaled)
 
+lm_scaled_nfwf<-lm(veg_height_m ~ Scaled_H_max+Scaled_V_ku+Scaled_A_std+Scaled_A_cover,data = plot_data05_filt[plot_data05_filt$lake=="Lake Balaton",])
+summary(lm_scaled_nfwf)
+
+lm_scaled_fwf<-lm(veg_height_m ~ Scaled_H_max+Scaled_V_ku+Scaled_A_std+Scaled_A_cover,data = plot_data05_filt[plot_data05_filt$lake!="Lake Balaton",])
+summary(lm_scaled_fwf)
+
 std_coef_sum2 <- data.frame(matrix(ncol = 2, nrow = 13))
 names(std_coef_sum2)<-c("coeff","metric")
 
 std_coef_sum2$metric<-c("A_med","A_std","A_cover","C_ppr","H_max","H_mean","H_med","H_p95","V_std","V_var","V_ku","V_sk","W_echw")
 std_coef_sum2$coeff<-c(0,lm_scaled$coefficients[4],lm_scaled$coefficients[5],0,lm_scaled$coefficients[2],0,0,0,0,0,lm_scaled$coefficients[3],0,0)
+std_coef_sum2$type<-c("all")
 
-a=ggplot(data=std_coef_sum2, aes(x=coeff, y=metric)) +
-  geom_bar(stat="identity")+
+std_coef_sum22 <- data.frame(matrix(ncol = 2, nrow = 13))
+names(std_coef_sum22)<-c("coeff","metric")
+
+std_coef_sum22$metric<-c("A_med","A_std","A_cover","C_ppr","H_max","H_mean","H_med","H_p95","V_std","V_var","V_ku","V_sk","W_echw")
+std_coef_sum22$coeff<-c(0,0,0,0,0,0,0,0,0,0,0,0,0)
+std_coef_sum22$type<-c("discrete")
+
+std_coef_sum222 <- data.frame(matrix(ncol = 2, nrow = 13))
+names(std_coef_sum222)<-c("coeff","metric")
+
+std_coef_sum222$metric<-c("A_med","A_std","A_cover","C_ppr","H_max","H_mean","H_med","H_p95","V_std","V_var","V_ku","V_sk","W_echw")
+std_coef_sum222$coeff<-c(0,lm_scaled_fwf$coefficients[4],lm_scaled_fwf$coefficients[5],0,lm_scaled_fwf$coefficients[2],0,0,0,0,0,lm_scaled_fwf$coefficients[3],0,0)
+std_coef_sum222$type<-c("fwf")
+
+std_coef_sum_h=rbind(std_coef_sum2,std_coef_sum22,std_coef_sum222)
+
+a=ggplot(data=std_coef_sum_h, aes(x=coeff, y=metric,fill=type)) +
+  geom_bar(stat="identity",position=position_dodge())+
   xlab("Standardized coefficient")+ylab("LiDAR metrics")+
   ggtitle("Feature importance for vegetation height (res=0.5 m)")+
   theme_classic(base_size=20)
@@ -71,14 +94,37 @@ plot_data5_filt=plot_data5[(plot_data5$OBJNAME!=120),]
 lm_scaled_b<-lm(total.weight ~ Scaled_V_var+Scaled_A_std+Scaled_A_med+Scaled_A_cover,data = plot_data5_filt)
 summary(lm_scaled_b)
 
+lm_scaled_b_nfwf<-lm(total.weight ~ Scaled_V_var+Scaled_A_std+Scaled_A_med+Scaled_A_cover,data = plot_data5_filt[plot_data5_filt$lake=="Lake Balaton",])
+summary(lm_scaled_b_nfwf)
+
+lm_scaled_b_fwf<-lm(total.weight ~ Scaled_V_var+Scaled_A_std+Scaled_A_med+Scaled_A_cover,data = plot_data5_filt[plot_data5_filt$lake!="Lake Balaton",])
+summary(lm_scaled_b_fwf)
+
 std_coef_sum2_b <- data.frame(matrix(ncol = 2, nrow = 13))
 names(std_coef_sum2_b)<-c("coeff","metric")
 
 std_coef_sum2_b$metric<-c("A_med","A_std","A_cover","C_ppr","H_max","H_mean","H_med","H_p95","V_std","V_var","V_ku","V_sk","W_echw")
-std_coef_sum2_b$coeff<-c(lm_scaled_b$coefficients[4],lm_scaled_b$coefficients[3],lm_scaled_b$coefficients[5],0,0,0,0,0,0,lm_scaled_b$coefficients[2],0,0,0)
+std_coef_sum2_b$coeff<-c(lm_scaled_b_nfwf$coefficients[4],lm_scaled_b_nfwf$coefficients[3],lm_scaled_b_nfwf$coefficients[5],0,0,0,0,0,0,lm_scaled_b_nfwf$coefficients[2],0,0,0)
+std_coef_sum2_b$type<-c("discrete")
 
-b=ggplot(data=std_coef_sum2_b, aes(x=coeff, y=metric)) +
-  geom_bar(stat="identity")+
+std_coef_sum2_b1 <- data.frame(matrix(ncol = 2, nrow = 13))
+names(std_coef_sum2_b1)<-c("coeff","metric")
+
+std_coef_sum2_b1$metric<-c("A_med","A_std","A_cover","C_ppr","H_max","H_mean","H_med","H_p95","V_std","V_var","V_ku","V_sk","W_echw")
+std_coef_sum2_b1$coeff<-c(lm_scaled_b_fwf$coefficients[4],lm_scaled_b_fwf$coefficients[3],lm_scaled_b_fwf$coefficients[5],0,0,0,0,0,0,lm_scaled_b_fwf$coefficients[2],0,0,0)
+std_coef_sum2_b1$type<-c("fwf")
+
+std_coef_sum2_b11 <- data.frame(matrix(ncol = 2, nrow = 13))
+names(std_coef_sum2_b11)<-c("coeff","metric")
+
+std_coef_sum2_b11$metric<-c("A_med","A_std","A_cover","C_ppr","H_max","H_mean","H_med","H_p95","V_std","V_var","V_ku","V_sk","W_echw")
+std_coef_sum2_b11$coeff<-c(lm_scaled_b$coefficients[4],lm_scaled_b$coefficients[3],lm_scaled_b$coefficients[5],0,0,0,0,0,0,lm_scaled_b$coefficients[2],0,0,0)
+std_coef_sum2_b11$type<-c("all")
+
+std_coef_sum_b=rbind(std_coef_sum2_b11,std_coef_sum2_b,std_coef_sum2_b1)
+
+b=ggplot(data=std_coef_sum_b, aes(x=coeff, y=metric, fill=type)) +
+  geom_bar(stat="identity",position=position_dodge())+
   xlab("Standardized coefficient")+ylab("LiDAR metrics")+
   ggtitle("Feature importance for biomass (res=5 m)")+
   theme_classic(base_size=20)
