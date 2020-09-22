@@ -48,12 +48,12 @@ ggplot(data=plot_data_vis05, aes(x=value , y=total.weight),show.legend = TRUE) +
   scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
 
-plot_data05=plot_data05[(plot_data05$OBJNAME!=209 & plot_data05$OBJNAME!=160 & plot_data05$OBJNAME!=120),]
+plot_data05filt1=plot_data05[(plot_data05$OBJNAME!=160),]
 
 # height
 
 # all
-model_all_h05=lm(veg_height_m ~ H_max+V_ku+A_std+A_cover, data = plot_data05)
+model_all_h05=lm(veg_height_m ~ H_max+V_ku+A_std+A_cover, data = plot_data05filt1)
 summary(model_all_h05) 
 
 #AIC model selection (step)
@@ -61,7 +61,7 @@ model_all_step_h05<-step(model_all_h05,direction = "backward")
 summary(model_all_step_h05)
 
 # FWF
-model_fwf_h05=lm(veg_height_m ~ H_max+V_ku+A_std+A_cover+W_echw, data = plot_data05[plot_data05$lake!="Lake Balaton",])
+model_fwf_h05=lm(veg_height_m ~ H_max+V_ku+A_std+A_cover+W_echw, data = plot_data05filt1[plot_data05filt1$lake!="Lake Balaton",])
 summary(model_fwf_h05) 
 
 #AIC model selection (step)
@@ -69,7 +69,7 @@ model_fwf_step_h05<-step(model_fwf_h05,direction = "backward")
 summary(model_fwf_step_h05)
 
 # nonFWF
-model_nfwf_h05=lm(veg_height_m ~ H_max+V_ku+A_std+A_cover, data = plot_data05[plot_data05$lake=="Lake Balaton",])
+model_nfwf_h05=lm(veg_height_m ~ H_max+V_ku+A_std+A_cover, data = plot_data05filt1[plot_data05filt1$lake=="Lake Balaton",])
 summary(model_nfwf_h05)
 
 #AIC model selection (step)
@@ -78,8 +78,10 @@ summary(model_nfwf_step_h05)
 
 # biomass
 
+plot_data05filt2=plot_data05[(plot_data05$OBJNAME!=120),]
+
 # all
-model_all_b05=lm(total.weight ~ H_max+V_ku+A_std+A_cover, data = plot_data05)
+model_all_b05=lm(total.weight ~ H_max+V_ku+A_std+A_cover, data = plot_data05filt2)
 summary(model_all_b05) 
 
 #AIC model selection (step)
@@ -87,7 +89,7 @@ model_all_step_b05<-step(model_all_b05,direction = "backward")
 summary(model_all_step_b05)
 
 # FWF
-model_fwf_b05=lm(total.weight ~ H_max+V_ku+A_std+A_cover+W_echw, data = plot_data05[plot_data05$lake!="Lake Balaton",])
+model_fwf_b05=lm(total.weight ~ H_max+V_ku+A_std+A_cover+W_echw, data = plot_data05filt2[plot_data05filt2$lake!="Lake Balaton",])
 summary(model_fwf_b05) 
 
 #AIC model selection (step)
@@ -95,7 +97,7 @@ model_fwf_step_b05<-step(model_fwf_b05,direction = "backward")
 summary(model_fwf_step_b05)
 
 # nonFWF
-model_nfwf_b05=lm(total.weight~ H_max+V_ku+A_std+A_cover, data = plot_data05[plot_data05$lake=="Lake Balaton",])
+model_nfwf_b05=lm(total.weight~ H_max+V_ku+A_std+A_cover, data = plot_data05filt2[plot_data05filt2$lake=="Lake Balaton",])
 summary(model_nfwf_b05)
 
 #AIC model selection (step)
@@ -133,11 +135,11 @@ ggplot(data=plot_data_vis2, aes(x=value , y=total.weight),show.legend = TRUE) +
   scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
 
-plot_data2=plot_data2[(plot_data2$OBJNAME!=209 & plot_data2$OBJNAME!=160 & plot_data2$OBJNAME!=120),]
 # height
+plot_data2filt1=plot_data2[(plot_data2$OBJNAME!=160),]
 
 # all
-model_all_h2=lm(veg_height_m ~ H_median+A_med+A_cover, data = plot_data2)
+model_all_h2=lm(veg_height_m ~ H_median+log(A_med)+A_cover, data = plot_data2filt1)
 summary(model_all_h2) 
 
 #AIC model selection (step)
@@ -145,7 +147,7 @@ model_all_step_h2<-step(model_all_h2,direction = "backward")
 summary(model_all_step_h2)
 
 # FWF
-model_fwf_h2=lm(veg_height_m ~ H_median+A_med+A_cover+W_echw, data = plot_data2[plot_data2$lake!="Lake Balaton",])
+model_fwf_h2=lm(veg_height_m ~ H_median+log(A_med)+A_cover+W_echw, data = plot_data2filt1[plot_data2filt1$lake!="Lake Balaton",])
 summary(model_fwf_h2) 
 
 #AIC model selection (step)
@@ -153,7 +155,7 @@ model_fwf_step_h2<-step(model_fwf_h2,direction = "backward")
 summary(model_fwf_step_h2)
 
 # nonFWF
-model_nfwf_h2=lm(veg_height_m ~ H_median+A_med+A_cover, data = plot_data2[plot_data2$lake=="Lake Balaton",])
+model_nfwf_h2=lm(veg_height_m ~ H_median+log(A_med)+A_cover, data = plot_data2filt1[plot_data2filt1$lake=="Lake Balaton",])
 summary(model_nfwf_h2)
 
 #AIC model selection (step)
@@ -161,9 +163,10 @@ model_nfwf_step_h2<-step(model_nfwf_h2,direction = "backward")
 summary(model_nfwf_step_h2)
 
 # biomass
+plot_data2filt2=plot_data2[(plot_data2$OBJNAME!=120),]
 
 # all
-model_all_b2=lm(total.weight ~ H_median+A_med+A_cover, data = plot_data2)
+model_all_b2=lm(total.weight ~ H_median+log(A_med)+A_cover, data = plot_data2filt2)
 summary(model_all_b) 
 
 #AIC model selection (step)
@@ -171,7 +174,7 @@ model_all_step_b2<-step(model_all_b2,direction = "backward")
 summary(model_all_step_b2)
 
 # FWF
-model_fwf_b2=lm(total.weight ~ H_median+A_med+A_cover+W_echw, data = plot_data2[plot_data2$lake!="Lake Balaton",])
+model_fwf_b2=lm(total.weight ~ H_median+log(A_med)+A_cover+W_echw, data = plot_data2filt2[plot_data2filt2$lake!="Lake Balaton",])
 summary(model_fwf_b2) 
 
 #AIC model selection (step)
@@ -179,7 +182,7 @@ model_fwf_step_b2<-step(model_fwf_b2,direction = "backward")
 summary(model_fwf_step_b2)
 
 # nonFWF
-model_nfwf_b2=lm(total.weight~ H_median+A_med+A_cover, data = plot_data2[plot_data2$lake=="Lake Balaton",])
+model_nfwf_b2=lm(total.weight~ H_median+log(A_med)+A_cover, data = plot_data2filt2[plot_data2filt2$lake=="Lake Balaton",])
 summary(model_nfwf_b2)
 
 #AIC model selection (step)
@@ -216,12 +219,12 @@ ggplot(data=plot_data_vis5, aes(x=value , y=total.weight),show.legend = TRUE) +
   scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
 
-plot_data5=plot_data5[(plot_data5$OBJNAME!=209 & plot_data5$OBJNAME!=160 & plot_data5$OBJNAME!=120),]
-
 # height
 
+plot_data5filt1=plot_data5[(plot_data5$OBJNAME!=160),]
+
 # all
-model_all_h5=lm(veg_height_m ~ V_var+A_std+A_med+A_cover, data = plot_data5)
+model_all_h5=lm(veg_height_m ~ V_var+log(A_std)+log(A_med)+A_cover, data = plot_data5filt1)
 summary(model_all_h5) 
 
 #AIC model selection (step)
@@ -229,7 +232,7 @@ model_all_step_h5<-step(model_all_h5,direction = "backward")
 summary(model_all_step_h5)
 
 # FWF
-model_fwf_h5=lm(veg_height_m ~ V_var+A_std+A_med+A_cover+W_echw, data = plot_data5[plot_data5$lake!="Lake Balaton",])
+model_fwf_h5=lm(veg_height_m ~ V_var+log(A_std)+log(A_med)+A_cover+W_echw, data = plot_data5filt1[plot_data5filt1$lake!="Lake Balaton",])
 summary(model_fwf_h5) 
 
 #AIC model selection (step)
@@ -237,7 +240,7 @@ model_fwf_step_h5<-step(model_fwf_h5,direction = "backward")
 summary(model_fwf_step_h5)
 
 # nonFWF
-model_nfwf_h5=lm(veg_height_m ~ V_var+A_std+A_med+A_cover, data = plot_data5[plot_data5$lake=="Lake Balaton",])
+model_nfwf_h5=lm(veg_height_m ~ V_var+log(A_std)+log(A_med)+A_cover, data = plot_data5filt1[plot_data5filt1$lake=="Lake Balaton",])
 summary(model_nfwf_h5)
 
 #AIC model selection (step)
@@ -246,8 +249,10 @@ summary(model_nfwf_step_h5)
 
 # biomass
 
+plot_data5filt2=plot_data5[(plot_data5$OBJNAME!=120),]
+
 # all
-model_all_b5=lm(total.weight ~ V_var+A_std+A_med+A_cover, data = plot_data5)
+model_all_b5=lm(total.weight ~ V_var+log(A_std)+log(A_med)+A_cover, data = plot_data5filt2)
 summary(model_all_b5) 
 
 #AIC model selection (step)
@@ -255,7 +260,7 @@ model_all_step_b5<-step(model_all_b5,direction = "backward")
 summary(model_all_step_b5)
 
 # FWF
-model_fwf_b5=lm(total.weight ~ V_var+A_std+A_med+A_cover+W_echw, data = plot_data5[plot_data5$lake!="Lake Balaton",])
+model_fwf_b5=lm(total.weight ~ V_var+log(A_std)+log(A_med)+A_cover+W_echw, data = plot_data5filt2[plot_data5filt2$lake!="Lake Balaton",])
 summary(model_fwf_b5) 
 
 #AIC model selection (step)
@@ -263,7 +268,7 @@ model_fwf_step_b5<-step(model_fwf_b5,direction = "backward")
 summary(model_fwf_step_b5)
 
 # nonFWF
-model_nfwf_b5=lm(total.weight~ V_var+A_std+A_med+A_cover, data = plot_data5[plot_data5$lake=="Lake Balaton",])
+model_nfwf_b5=lm(total.weight~ V_var+log(A_std)+log(A_med)+A_cover, data = plot_data5filt2[plot_data5filt2$lake=="Lake Balaton",])
 summary(model_nfwf_b5)
 
 #AIC model selection (step)
