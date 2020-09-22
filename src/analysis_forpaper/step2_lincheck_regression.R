@@ -277,6 +277,8 @@ summary(model_nfwf_step_b5)
 
 stargazer(model_nfwf_step_h5, model_fwf_step_h5, model_all_h5, model_nfwf_step_b5, model_fwf_step_b5, model_all_step_b5,align=TRUE,type="html",column.labels=c("discrete","fwf","all","discrete","fwf","all"),title="5 m",out="height_biomass_5.doc")
 
+stargazer(model_nfwf_step_h2, model_fwf_step_h05, model_all_h05, model_nfwf_step_b5, model_fwf_step_b5, model_all_step_b5,align=TRUE,type="html",column.labels=c("discrete (2 m)","fwf (0.5 m)","all (0.5 m)","discrete (5 m)","fwf (5 m)","all (5 m)"),out="height_biomass_best.doc")
+
 ####################################### Pole
 
 pole_data05=read.csv(paste("Pole_noncorr",0.5,".csv",sep=""))
