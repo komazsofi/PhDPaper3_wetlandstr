@@ -10,15 +10,15 @@ library(rgdal)
 library(raster)
 library(sp)
 
-workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis7/"
+workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis8/"
 setwd(workdir)
 rad=0.5
 
 # Import
 
-balaton_m=read.csv(paste("Balaton_lidarmetrics_",rad,"_reclass2.csv",sep=""))
-tisza_m=read.csv(paste("Tisza_lidarmetrics_",rad,"_reclass2.csv",sep=""))
-ferto_m=read.csv(paste("Ferto_lidarmetrics_",rad,"_reclass2.csv",sep=""))
+balaton_m=read.csv(paste("Balaton_lidarmetrics_",rad,"_reclass3.csv",sep=""))
+tisza_m=read.csv(paste("Tisza_lidarmetrics_",rad,"_reclass3.csv",sep=""))
+ferto_m=read.csv(paste("Ferto_lidarmetrics_",rad,"_reclass3.csv",sep=""))
 
 plotdata=read.csv("data_quadtrat_tolidar_forarticle.csv")
 
@@ -39,14 +39,6 @@ tisza_pole_df_min=tisza_pole_df[c(1,21,22)]
 ferto_pole_df_min=ferto_pole_df[c(1,23,24)]
 balaton_pole_df_min=balaton_pole_df[c(1,23,24)]
 
-tisza_2m_r=read.csv("tisza_2m_r_v3.csv")
-ferto_2m_r=read.csv("ferto_2m_r_v3.csv")
-
-tisza_2m_r_min=tisza_2m_r[c(3,20)]
-names(tisza_2m_r_min)<-c("OBJNAME","W_echw")
-ferto_2m_r_min=ferto_2m_r[c(3,20)]
-names(ferto_2m_r_min)<-c("OBJNAME","W_echw")
-
 # cleaining
 
 balaton_m_c=balaton_m[complete.cases(balaton_m), ]
@@ -66,19 +58,14 @@ tisza_plot=tisza_plot[tisza_plot$location!="hegyko island",]
 tisza_plot=tisza_plot[tisza_plot$location!="máriafürdo",]
 tisza_plot=tisza_plot[tisza_plot$location!="kenese",]
 
-balaton_plot=balaton_plot[c(4,5:20,26,27,28,29,30)]
-ferto_plot=ferto_plot[c(4,5:20,26,27,28,29,30)]
-tisza_plot=tisza_plot[c(2,4:19,26,27,28,29,30)]
-
-# add echowidth
-ferto_plot2=merge(ferto_plot,ferto_2m_r_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
-tisza_plot2=merge(tisza_plot,tisza_2m_r_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
-balaton_plot$W_echw<-0
+balaton_plot=balaton_plot[c(4,5:14,20,21,22,23,24)]
+ferto_plot=ferto_plot[c(4,5:14,20,21,22,23,24)]
+tisza_plot=tisza_plot[c(2,4:13,20,21,22,23,24)]
 
 # add coords
 balaton_plot_coord=merge(balaton_plot,balaton_pole_df_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
-ferto_plot_coord=merge(ferto_plot2,ferto_pole_df_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
-tisza_plot_coord=merge(tisza_plot2,tisza_pole_df_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
+ferto_plot_coord=merge(ferto_plot,ferto_pole_df_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
+tisza_plot_coord=merge(tisza_plot,tisza_pole_df_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
 
 balaton_plot_coord$lake="Lake Balaton"
 ferto_plot_coord$lake="Lake Ferto"
@@ -90,8 +77,3 @@ merged=merged[merged$veg_type_2!="schoenoplectus",]
 merged=merged[merged$veg_type_2!="scirpus",]
 
 write.csv(merged,paste("Plot_db_",rad,".csv",sep=""))
-
-# only 0.5
-
-merged_filt05<-subset(merged, OBJNAME %in% c(120,123,124,160,204,209,131,163,170,198,200,203,251,255,317,321,325,118,122,186,187,188))
-write.csv(merged_filt05,paste("Plot_db_",rad,"_filt.csv",sep=""))
