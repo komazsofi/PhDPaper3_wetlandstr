@@ -12,7 +12,7 @@ library(sp)
 
 workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis8/"
 setwd(workdir)
-rad=0.5
+rad=5
 
 # Import
 
