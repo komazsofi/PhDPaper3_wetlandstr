@@ -70,8 +70,3 @@ ggplot(data=plot_data_vis05_scaled, aes(x=value , y=total.weight),show.legend = 
   scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
 
 dev.off()
-
-####################################### Correlation check
-
-
-####################################### lm()
