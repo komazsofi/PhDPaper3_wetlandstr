@@ -7,15 +7,15 @@ library(sp)
 library(e1071)
 
 # Set working dirctory
-workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/balaton_25mrad_reclass/"
-#workingdirectory="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad_reclass/"
+#workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/balaton_25mrad_reclass/"
+#workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad_reclass/"
 #workingdirectory="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad_leafon_reclass/"
-#workingdirectory="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/ferto_25mrad_reclass/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/ferto_25mrad_reclass/"
 setwd(workingdirectory)
 
-fieldfile="w_point_balaton.shp"
+#fieldfile="w_point_balaton.shp"
 #fieldfile="tisza_full.shp"
-#fieldfile="w_point.shp"
+fieldfile="w_point.shp"
 
 #Import
 fieldsp = readOGR(dsn=fieldfile)
@@ -28,10 +28,10 @@ x <- c("OBJNAME", "point_ID","point_name", "H_p99","H_mean","H_median",
        "V_std","V_var","C_ppr","A_std","A_cover","nofveg","nofallp")
 colnames(dpcloudfea_exp_df) <- x
 
-rad=2.5
-name="Balaton_OBJNAME"
+rad=5
+#name="Balaton_OBJNAME"
 #name="Tisza_OBJNAME"
-#name="Ferto_OBJNAME"
+name="Ferto_OBJNAME"
 
 for (i in objname) {
   
@@ -86,7 +86,7 @@ for (i in objname) {
 
 dpcloudfea_exp_df_c=dpcloudfea_exp_df[complete.cases(dpcloudfea_exp_df), ]
 
-write.csv(dpcloudfea_exp_df,paste("Balaton_lidarmetrics_",rad,"_reclass3.csv",sep=""))
-#write.csv(dpcloudfea_exp_df_c,paste("Tisza_lidarmetrics_",rad,"_reclass2.csv",sep=""))
+#write.csv(dpcloudfea_exp_df,paste("Balaton_lidarmetrics_",rad,"_reclass3.csv",sep=""))
+#write.csv(dpcloudfea_exp_df_c,paste("Tisza_lidarmetrics_",rad,"_reclass3.csv",sep=""))
 #write.csv(dpcloudfea_exp_df_c,paste("Tisza_lidarmetrics_",rad,"_leafon_reclass2.csv",sep=""))
-#write.csv(dpcloudfea_exp_df,paste("Ferto_lidarmetrics_",rad,"_reclass2.csv",sep=""))
+write.csv(dpcloudfea_exp_df,paste("Ferto_lidarmetrics_",rad,"_reclass2.csv",sep=""))
