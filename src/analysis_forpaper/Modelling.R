@@ -21,7 +21,7 @@ plot_data05$total.weight=plot_data05$total.weight/10000
 plot_data05_scaled=scale(plot_data05[,c(3:10)])
 colnames(plot_data05_scaled)=paste("Scaled_",colnames(plot_data05_scaled),sep="")
 plot_data05_f=cbind(plot_data05,plot_data05_scaled)
-plot_data05_f=plot_data05_f[(plot_data05_f$OBJNAME!=120 & plot_data05_f$OBJNAME!=163 & plot_data05_f$OBJNAME!=209 & plot_data05_f$OBJNAME!=204),]
+plot_data05_f=plot_data05_f[(plot_data05_f$OBJNAME!=120 & plot_data05_f$OBJNAME!=163 & plot_data05_f$OBJNAME!=209),]
 
 plot_data2=read.csv(paste("Plot_db_",2.5,".csv",sep=""))
 plot_data2$total.weight=plot_data2$total.weight/10000
@@ -29,7 +29,7 @@ plot_data2$total.weight=plot_data2$total.weight/10000
 plot_data2_scaled=scale(plot_data2[,c(3:10)])
 colnames(plot_data2_scaled)=paste("Scaled_",colnames(plot_data2_scaled),sep="")
 plot_data2_f=cbind(plot_data2,plot_data2_scaled)
-plot_data2_f=plot_data2_f[(plot_data2_f$OBJNAME!=120 & plot_data2_f$OBJNAME!=163 & plot_data2_f$OBJNAME!=209 & plot_data2_f$OBJNAME!=204),]
+plot_data2_f=plot_data2_f[(plot_data2_f$OBJNAME!=120 & plot_data2_f$OBJNAME!=163 & plot_data2_f$OBJNAME!=209),]
 
 plot_data5=read.csv(paste("Plot_db_",5,".csv",sep=""))
 plot_data5$total.weight=plot_data5$total.weight/10000
@@ -37,7 +37,7 @@ plot_data5$total.weight=plot_data5$total.weight/10000
 plot_data5_scaled=scale(plot_data5[,c(3:10)])
 colnames(plot_data5_scaled)=paste("Scaled_",colnames(plot_data5_scaled),sep="")
 plot_data5_f=cbind(plot_data5,plot_data5_scaled)
-plot_data5_f=plot_data5_f[(plot_data5_f$OBJNAME!=120 & plot_data5_f$OBJNAME!=163 & plot_data5_f$OBJNAME!=209 & plot_data5_f$OBJNAME!=204),]
+plot_data5_f=plot_data5_f[(plot_data5_f$OBJNAME!=120 & plot_data5_f$OBJNAME!=163 & plot_data5_f$OBJNAME!=209),]
 
 ####################################### Correlation check
 col <- colorRampPalette(c("#4477AA","#77AADD","#FFFFFF","#EE9988","#BB4444"))
@@ -205,147 +205,37 @@ stargazer(model_fwf_step_b05,model_all_step_b05,model_fwf_step_b2,model_all_step
 ####################################### Visualization
 
 ##### 0.5 m
-# height
 
-#biomass
-
-a05=ggplot(data=plot_data05_f[plot_data05_f$lake=="Lake Ferto",], aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(shape=veg_type_2),size=5,color="darkgreen",show.legend = FALSE) +
+a=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Ferto" | plot_data5_f$lake=="Lake Tisza"),], aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
   geom_smooth(method="lm",se=FALSE)+
   theme_bw(base_size = 20) +
   ylab("Biomass (field)") +
   geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)+
-  xlim(-2,1.5)+
-  scale_shape_manual(values=c("carex"=16,"phragmites"=17),name="Species",labels=c("Carex spec.","Phragmites australis"))
+  scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
+  ylim(0,2)+
+  xlim(-2,2.5)
 
-
-b05=ggplot(data=plot_data05_f[plot_data05_f$lake=="Lake Tisza",], aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(shape=veg_type_2),size=5,color="blue",show.legend = FALSE) +
-  geom_smooth(method="lm",se=FALSE)+
-  theme_bw(base_size = 20) +
-  ylab("Biomass (field)") +
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)+
-  xlim(-2,1.5)+
-  scale_shape_manual(values=c("phragmites"=17,"typha"=15),name="Species",labels=c("Phragmites australis","Typha spec."))
-
-c05=ggplot(data=plot_data05_f[plot_data05_f$lake=="Lake Balaton",], aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
+b=ggplot(data=plot_data5_f[plot_data5_f$lake=="Lake Balaton",], aes(x=Scaled_V_var  , y=total.weight),show.legend = TRUE) +  
   geom_point(aes(shape=veg_type_2),size=5,color="red",show.legend = FALSE) +
   geom_smooth(method="lm",se=FALSE)+
   theme_bw(base_size = 20) +
   ylab("Biomass (field)") +
   geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)+
-  xlim(-2,1.5)+
-  scale_shape_manual(values=c("phragmites"=17),name="Species",labels=c("Phragmites australis"))
+  ylim(0,2)+
+  xlim(-2,2.5)
 
-g05=ggplot(data=plot_data05_f, aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
+c=ggplot(data=plot_data5_f, aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
   geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
   geom_smooth(method="lm",se=FALSE,color="black")+
   theme_bw(base_size = 20) +
   ylab("Biomass (field)") +
   geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)+
-  xlim(-2,1.5)+
+  ylim(0,2)+
+  xlim(-2,2.5)+
   scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
 
-grid.arrange(a05,b05,c05,g05,
-             nrow = 1
-)
-
-##### 2.5 m
-
-# height
-
-#biomass
-
-a2=ggplot(data=plot_data2_f[plot_data2_f$lake=="Lake Ferto",], aes(x=Scaled_A_cover , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(shape=veg_type_2),size=5,color="darkgreen",show.legend = FALSE) +
-  geom_smooth(method="lm",se=FALSE)+
-  theme_bw(base_size = 20) +
-  ylab("Biomass (field)") +
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)+
-  xlim(-1.7,1.7)
-
-b2=ggplot(data=plot_data2_f[plot_data2_f$lake=="Lake Tisza",], aes(x=Scaled_A_cover , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(shape=veg_type_2),size=5,color="blue",show.legend = FALSE) +
-  geom_smooth(method="lm",se=FALSE)+
-  theme_bw(base_size = 20) +
-  ylab("Biomass (field)") +
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)+
-  xlim(-1.7,1.7)
-
-c2=ggplot(data=plot_data2_f[plot_data2_f$lake=="Lake Balaton",], aes(x=Scaled_A_cover , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(shape=veg_type_2),size=5,color="red",show.legend = FALSE) +
-  geom_smooth(method="lm",se=FALSE)+
-  theme_bw(base_size = 20) +
-  ylab("Biomass (field)") +
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)+
-  xlim(-1.7,1.7)
-
-g2=ggplot(data=plot_data2_f, aes(x=Scaled_A_cover , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
-  geom_smooth(method="lm",se=FALSE,color="black")+
-  theme_bw(base_size = 20) +
-  ylab("Biomass (field)") +
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)+
-  xlim(-1.7,1.7)+
-  scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
-  scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
-
-grid.arrange(a2,b2,c2,g2,
-             nrow = 1
-)
-
-##### 5 m
-# height
-
-#biomass
-
-a5=ggplot(data=plot_data5_f[plot_data5_f$lake=="Lake Ferto",], aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(shape=veg_type_2),size=5,color="darkgreen",show.legend = FALSE) +
-  geom_smooth(method="lm",se=FALSE)+
-  theme_bw(base_size = 20) +
-  ylab("Biomass (field)") +
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)+
-  xlim(-1.5,2.5)
-
-b5=ggplot(data=plot_data5_f[plot_data5_f$lake=="Lake Tisza",], aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(shape=veg_type_2),size=5,color="blue",show.legend = FALSE) +
-  geom_smooth(method="lm",se=FALSE)+
-  theme_bw(base_size = 20) +
-  ylab("Biomass (field)") +
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)+
-  xlim(-1.5,2.5)
-
-c5=ggplot(data=plot_data5_f[plot_data5_f$lake=="Lake Balaton",], aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(shape=veg_type_2),size=5,color="red",show.legend = FALSE) +
-  geom_smooth(method="lm",se=FALSE)+
-  theme_bw(base_size = 20) +
-  ylab("Biomass (field)") +
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)+
-  xlim(-1.5,2.5)
-
-g5=ggplot(data=plot_data5_f, aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
-  geom_smooth(method="lm",se=FALSE,color="black")+
-  theme_bw(base_size = 20) +
-  ylab("Biomass (field)") +
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)+
-  xlim(-1.5,2.5)+
-  scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
-  scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
-
-grid.arrange(a5,b5,c5,g5,
+grid.arrange(a,b,c,
              nrow = 1
 )
