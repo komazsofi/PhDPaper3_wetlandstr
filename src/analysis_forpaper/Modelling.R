@@ -85,7 +85,7 @@ corrplot(corr5, method="color", col=col(200),
 ##### height
 
 # all
-model_all_h05=lm(veg_height_m ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data = plot_data05_f)
+model_all_h05=lm(veg_height_m ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data = plot_data05_f)
 summary(model_all_h05) 
 
 #AIC model selection (step)
@@ -93,7 +93,7 @@ model_all_step_h05<-step(model_all_h05,direction = "backward")
 summary(model_all_step_h05)
 
 # fwf
-model_fwf_h05=lm(veg_height_m ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake!="Lake Balaton",])
+model_fwf_h05=lm(veg_height_m ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake!="Lake Balaton",])
 summary(model_fwf_h05) 
 
 #AIC model selection (step)
@@ -102,7 +102,7 @@ summary(model_fwf_step_h05)
 
 ##### biomass
 
-model_all_b05=lm(total.weight ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data = plot_data05_f)
+model_all_b05=lm(total.weight ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data = plot_data05_f)
 summary(model_all_b05) 
 
 #AIC model selection (step)
@@ -110,7 +110,7 @@ model_all_step_b05<-step(model_all_b05,direction = "backward")
 summary(model_all_step_b05)
 
 # fwf
-model_fwf_b05=lm(total.weight ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake!="Lake Balaton",])
+model_fwf_b05=lm(total.weight ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake!="Lake Balaton",])
 summary(model_fwf_b05) 
 
 #AIC model selection (step)
@@ -124,7 +124,7 @@ stargazer(model_fwf_step_h05,model_all_step_h05,model_fwf_step_b05,model_all_ste
 ##### height
 
 # all
-model_all_h2=lm(veg_height_m ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data = plot_data2_f)
+model_all_h2=lm(veg_height_m ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data = plot_data2_f)
 summary(model_all_h2) 
 
 #AIC model selection (step)
@@ -132,7 +132,7 @@ model_all_step_h2<-step(model_all_h2,direction = "backward")
 summary(model_all_step_h2)
 
 # fwf
-model_fwf_h2=lm(veg_height_m ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake!="Lake Balaton",])
+model_fwf_h2=lm(veg_height_m ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake!="Lake Balaton",])
 summary(model_fwf_h2) 
 
 #AIC model selection (step)
@@ -141,7 +141,7 @@ summary(model_fwf_step_h2)
 
 ##### biomass
 
-model_all_b2=lm(total.weight ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data = plot_data2_f)
+model_all_b2=lm(total.weight ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data = plot_data2_f)
 summary(model_all_b2) 
 
 #AIC model selection (step)
@@ -149,7 +149,7 @@ model_all_step_b2<-step(model_all_b2,direction = "backward")
 summary(model_all_step_b2)
 
 # fwf
-model_fwf_b2=lm(total.weight ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake!="Lake Balaton",])
+model_fwf_b2=lm(total.weight ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake!="Lake Balaton",])
 summary(model_fwf_b2) 
 
 #AIC model selection (step)
@@ -197,6 +197,11 @@ summary(model_fwf_step_b5)
 
 stargazer(model_fwf_step_h5,model_all_step_h5,model_fwf_step_b5,model_all_step_b5,align=TRUE,type="text",column.labels=c("fwf","all","fwf","all"),title="5 m")
 
+## report for study
+
+stargazer(model_fwf_step_h05,model_all_step_h05,model_fwf_step_h2,model_all_step_h2,model_fwf_step_h5,model_all_step_h5,align=TRUE,type="html",column.labels=c("fwf [0.5 m]","all [0.5 m]","fwf [2.5 m]","all [2.5 m]","fwf [5 m]","all [5 m]"),title="Estimation of vegetation height at different resolutions",out="height_report.doc")
+stargazer(model_fwf_step_b05,model_all_step_b05,model_fwf_step_b2,model_all_step_b2,model_fwf_step_b5,model_all_step_b5,align=TRUE,type="html",column.labels=c("fwf [0.5 m]","all [0.5 m]","fwf [2.5 m]","all [2.5 m]","fwf [5 m]","all [5 m]"),title="Estimation of biomass at different resolutions",out="biomass_report.doc")
+
 ####################################### Visualization
 
 ##### 0.5 m
@@ -204,6 +209,51 @@ stargazer(model_fwf_step_h5,model_all_step_h5,model_fwf_step_b5,model_all_step_b
 
 #biomass
 
+a05=ggplot(data=plot_data05_f[plot_data05_f$lake=="Lake Ferto",], aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
+  geom_point(aes(shape=veg_type_2),size=5,color="darkgreen",show.legend = FALSE) +
+  geom_smooth(method="lm",se=FALSE)+
+  theme_bw(base_size = 20) +
+  ylab("Biomass (field)") +
+  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
+  ylim(0,1.7)+
+  xlim(-2,1.5)+
+  scale_shape_manual(values=c("carex"=16,"phragmites"=17),name="Species",labels=c("Carex spec.","Phragmites australis"))
+
+
+b05=ggplot(data=plot_data05_f[plot_data05_f$lake=="Lake Tisza",], aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
+  geom_point(aes(shape=veg_type_2),size=5,color="blue",show.legend = FALSE) +
+  geom_smooth(method="lm",se=FALSE)+
+  theme_bw(base_size = 20) +
+  ylab("Biomass (field)") +
+  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
+  ylim(0,1.7)+
+  xlim(-2,1.5)+
+  scale_shape_manual(values=c("phragmites"=17,"typha"=15),name="Species",labels=c("Phragmites australis","Typha spec."))
+
+c05=ggplot(data=plot_data05_f[plot_data05_f$lake=="Lake Balaton",], aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
+  geom_point(aes(shape=veg_type_2),size=5,color="red",show.legend = FALSE) +
+  geom_smooth(method="lm",se=FALSE)+
+  theme_bw(base_size = 20) +
+  ylab("Biomass (field)") +
+  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
+  ylim(0,1.7)+
+  xlim(-2,1.5)+
+  scale_shape_manual(values=c("phragmites"=17),name="Species",labels=c("Phragmites australis"))
+
+g05=ggplot(data=plot_data05_f, aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
+  geom_smooth(method="lm",se=FALSE,color="black")+
+  theme_bw(base_size = 20) +
+  ylab("Biomass (field)") +
+  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
+  ylim(0,1.7)+
+  xlim(-2,1.5)+
+  scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
+  scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
+
+grid.arrange(a05,b05,c05,g05,
+             nrow = 1
+)
 
 ##### 2.5 m
 
@@ -211,65 +261,91 @@ stargazer(model_fwf_step_h5,model_all_step_h5,model_fwf_step_b5,model_all_step_b
 
 #biomass
 
+a2=ggplot(data=plot_data2_f[plot_data2_f$lake=="Lake Ferto",], aes(x=Scaled_A_cover , y=total.weight),show.legend = TRUE) +  
+  geom_point(aes(shape=veg_type_2),size=5,color="darkgreen",show.legend = FALSE) +
+  geom_smooth(method="lm",se=FALSE)+
+  theme_bw(base_size = 20) +
+  ylab("Biomass (field)") +
+  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
+  ylim(0,1.7)+
+  xlim(-1.7,1.7)
+
+b2=ggplot(data=plot_data2_f[plot_data2_f$lake=="Lake Tisza",], aes(x=Scaled_A_cover , y=total.weight),show.legend = TRUE) +  
+  geom_point(aes(shape=veg_type_2),size=5,color="blue",show.legend = FALSE) +
+  geom_smooth(method="lm",se=FALSE)+
+  theme_bw(base_size = 20) +
+  ylab("Biomass (field)") +
+  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
+  ylim(0,1.7)+
+  xlim(-1.7,1.7)
+
+c2=ggplot(data=plot_data2_f[plot_data2_f$lake=="Lake Balaton",], aes(x=Scaled_A_cover , y=total.weight),show.legend = TRUE) +  
+  geom_point(aes(shape=veg_type_2),size=5,color="red",show.legend = FALSE) +
+  geom_smooth(method="lm",se=FALSE)+
+  theme_bw(base_size = 20) +
+  ylab("Biomass (field)") +
+  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
+  ylim(0,1.7)+
+  xlim(-1.7,1.7)
+
+g2=ggplot(data=plot_data2_f, aes(x=Scaled_A_cover , y=total.weight),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
+  geom_smooth(method="lm",se=FALSE,color="black")+
+  theme_bw(base_size = 20) +
+  ylab("Biomass (field)") +
+  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
+  ylim(0,1.7)+
+  xlim(-1.7,1.7)+
+  scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
+  scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
+
+grid.arrange(a2,b2,c2,g2,
+             nrow = 1
+)
+
 ##### 5 m
 # height
 
 #biomass
 
-a5=ggplot(data=plot_data5_f[plot_data5_f$lake=="Lake Ferto",], aes(x=A_cover , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(color=nofveg,shape=veg_type_2),size=5) +
+a5=ggplot(data=plot_data5_f[plot_data5_f$lake=="Lake Ferto",], aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
+  geom_point(aes(shape=veg_type_2),size=5,color="darkgreen",show.legend = FALSE) +
   geom_smooth(method="lm",se=FALSE)+
   theme_bw(base_size = 20) +
   ylab("Biomass (field)") +
   geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)
+  ylim(0,1.7)+
+  xlim(-1.5,2.5)
 
-
-b5=ggplot(data=plot_data5_f[plot_data5_f$lake=="Lake Tisza",], aes(x=A_cover , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(color=nofveg,shape=veg_type_2),size=5) +
+b5=ggplot(data=plot_data5_f[plot_data5_f$lake=="Lake Tisza",], aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
+  geom_point(aes(shape=veg_type_2),size=5,color="blue",show.legend = FALSE) +
   geom_smooth(method="lm",se=FALSE)+
   theme_bw(base_size = 20) +
   ylab("Biomass (field)") +
   geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)
+  ylim(0,1.7)+
+  xlim(-1.5,2.5)
 
-c5=ggplot(data=plot_data5_f[plot_data5_f$lake=="Lake Balaton",], aes(x=A_cover , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(color=nofveg,shape=veg_type_2),size=5) +
+c5=ggplot(data=plot_data5_f[plot_data5_f$lake=="Lake Balaton",], aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
+  geom_point(aes(shape=veg_type_2),size=5,color="red",show.legend = FALSE) +
   geom_smooth(method="lm",se=FALSE)+
   theme_bw(base_size = 20) +
   ylab("Biomass (field)") +
   geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)
+  ylim(0,1.7)+
+  xlim(-1.5,2.5)
 
-grid.arrange(a5,b5,c5,
-             nrow = 1
-)
-
-d5=ggplot(data=plot_data5_f[plot_data5_f$lake=="Lake Ferto",], aes(x=V_var , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(color=nofveg,shape=veg_type_2),size=5) +
-  geom_smooth(method="lm",se=FALSE)+
+g5=ggplot(data=plot_data5_f, aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
+  geom_smooth(method="lm",se=FALSE,color="black")+
   theme_bw(base_size = 20) +
   ylab("Biomass (field)") +
   geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)
+  ylim(0,1.7)+
+  xlim(-1.5,2.5)+
+  scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
+  scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
 
-
-e5=ggplot(data=plot_data5_f[plot_data5_f$lake=="Lake Tisza",], aes(x=V_var , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(color=nofveg,shape=veg_type_2),size=5) +
-  geom_smooth(method="lm",se=FALSE)+
-  theme_bw(base_size = 20) +
-  ylab("Biomass (field)") +
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)
-
-f5=ggplot(data=plot_data5_f[plot_data5_f$lake=="Lake Balaton",], aes(x=V_var , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(color=nofveg,shape=veg_type_2),size=5) +
-  geom_smooth(method="lm",se=FALSE)+
-  theme_bw(base_size = 20) +
-  ylab("Biomass (field)") +
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,1.7)
-
-grid.arrange(d5,e5,f5,
+grid.arrange(a5,b5,c5,g5,
              nrow = 1
 )
