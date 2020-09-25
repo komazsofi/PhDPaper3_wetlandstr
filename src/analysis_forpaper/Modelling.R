@@ -217,7 +217,7 @@ plot_data2_f[plot_data2_f$lake=="Lake Tisza",29]<- "fwf"
 
 #biomass
 ggplot(data=plot_data2_f, aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(colour=lake,shape=veg_type_2),size=5) +
+  geom_point(aes(colour=lake,shape=veg_type_2,size=nofallp)) +
   geom_smooth(method="lm",aes(color=lake),se=FALSE)+
   geom_smooth(method="lm",color="black",se=FALSE)+
   theme_bw(base_size = 20) +
@@ -226,7 +226,8 @@ ggplot(data=plot_data2_f, aes(x=Scaled_V_var , y=total.weight),show.legend = TRU
   geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=2)+
   ggtitle("LiDAR metrics for estimating biomass (2.5 m)")+
   scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes and types")+
-  scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
+  scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))+
+  scale_size_continuous(breaks=c(250,500,1000),name="Number of points",range=c(1,6))
 
 ggplot(data=plot_data2_f, aes(x=Scaled_C_ppr , y=total.weight),show.legend = TRUE) +  
   geom_point(aes(colour=lake,shape=veg_type_2),size=5) +
