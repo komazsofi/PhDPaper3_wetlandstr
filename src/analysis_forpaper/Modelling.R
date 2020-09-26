@@ -21,7 +21,7 @@ plot_data05$total.weight=plot_data05$total.weight/10000
 plot_data05_scaled=scale(plot_data05[,c(3:10)])
 colnames(plot_data05_scaled)=paste("Scaled_",colnames(plot_data05_scaled),sep="")
 plot_data05_f=cbind(plot_data05,plot_data05_scaled)
-plot_data05_f=plot_data05_f[(plot_data05_f$OBJNAME!=120 & plot_data05_f$OBJNAME!=163 & plot_data05_f$OBJNAME!=209),]
+plot_data05_f=plot_data05_f[(plot_data05_f$OBJNAME!=120 & plot_data05_f$OBJNAME!=209),]
 
 plot_data2=read.csv(paste("Plot_db_",2.5,".csv",sep=""))
 plot_data2$total.weight=plot_data2$total.weight/10000
@@ -29,7 +29,7 @@ plot_data2$total.weight=plot_data2$total.weight/10000
 plot_data2_scaled=scale(plot_data2[,c(3:10)])
 colnames(plot_data2_scaled)=paste("Scaled_",colnames(plot_data2_scaled),sep="")
 plot_data2_f=cbind(plot_data2,plot_data2_scaled)
-plot_data2_f=plot_data2_f[(plot_data2_f$OBJNAME!=120 & plot_data2_f$OBJNAME!=163 & plot_data2_f$OBJNAME!=209),]
+plot_data2_f=plot_data2_f[(plot_data2_f$OBJNAME!=120 & plot_data2_f$OBJNAME!=209),]
 
 plot_data5=read.csv(paste("Plot_db_",5,".csv",sep=""))
 plot_data5$total.weight=plot_data5$total.weight/10000
@@ -37,7 +37,7 @@ plot_data5$total.weight=plot_data5$total.weight/10000
 plot_data5_scaled=scale(plot_data5[,c(3:10)])
 colnames(plot_data5_scaled)=paste("Scaled_",colnames(plot_data5_scaled),sep="")
 plot_data5_f=cbind(plot_data5,plot_data5_scaled)
-plot_data5_f=plot_data5_f[(plot_data5_f$OBJNAME!=120 & plot_data5_f$OBJNAME!=163 & plot_data5_f$OBJNAME!=209),]
+plot_data5_f=plot_data5_f[(plot_data5_f$OBJNAME!=120 & plot_data5_f$OBJNAME!=209),]
 
 ####################################### Correlation check
 col <- colorRampPalette(c("#4477AA","#77AADD","#FFFFFF","#EE9988","#BB4444"))
@@ -201,6 +201,13 @@ stargazer(model_fwf_step_h5,model_all_step_h5,model_fwf_step_b5,model_all_step_b
 
 stargazer(model_fwf_step_h05,model_all_step_h05,model_fwf_step_h2,model_all_step_h2,model_fwf_step_h5,model_all_step_h5,align=TRUE,type="html",column.labels=c("fwf [0.5 m]","all [0.5 m]","fwf [2.5 m]","all [2.5 m]","fwf [5 m]","all [5 m]"),title="Estimation of vegetation height at different resolutions",out="height_report.doc")
 stargazer(model_fwf_step_b05,model_all_step_b05,model_fwf_step_b2,model_all_step_b2,model_fwf_step_b5,model_all_step_b5,align=TRUE,type="html",column.labels=c("fwf [0.5 m]","all [0.5 m]","fwf [2.5 m]","all [2.5 m]","fwf [5 m]","all [5 m]"),title="Estimation of biomass at different resolutions",out="biomass_report.doc")
+
+# ols
+full_fwf_h05=ols_step_all_possible(model_fwf_h05)
+full_all_h05=ols_step_all_possible(model_all_h05)
+
+full_fwf_b5=ols_step_all_possible(model_fwf_b5)
+full_all_b5=ols_step_all_possible(model_all_b5)
 
 ####################################### Visualization
 
