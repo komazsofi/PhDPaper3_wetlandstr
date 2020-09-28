@@ -314,3 +314,11 @@ ggplot(data=std_coef_sum_b, aes(x=metric, y=coeff,fill=type)) +
   ggtitle("Feature importance for biomass")+
   theme_classic(base_size=20)+
   scale_fill_manual(values=c("all 0.5m"="plum4","all 2.5m"="plum3","all 5m"="plum2","fwf 0.5m"="darkolivegreen4","fwf 2.5m"="darkolivegreen3","fwf 5m"="darkolivegreen2"),name="Type + resolution")
+
+####################################### Partial rezidual
+
+par(mfrow=c(1, 1), cex=2.2, las=1, mar =c(2.5, 2.5, 1, 1))  
+termplot(model_fwf_step_b5, partial=T, term=1, pch=20, cex=1.5, col.term=0,
+         lwd.term=3, col.res="dodgerblue")
+lines(lwd=7, lty=2, col='red', termplot(model_fwf_step_b5, partial=T, term=1, plot=F)$Scaled_A_cover$x, 
+      termplot(model_fwf_step_b5, partial=T, term=1, plot=F)$Scaled_A_cover$y)
