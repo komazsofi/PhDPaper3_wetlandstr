@@ -21,7 +21,7 @@ plot_data05$total.weight=plot_data05$total.weight/10000
 plot_data05_scaled=scale(plot_data05[,c(3:10)])
 colnames(plot_data05_scaled)=paste("Scaled_",colnames(plot_data05_scaled),sep="")
 plot_data05_f=cbind(plot_data05,plot_data05_scaled)
-plot_data05_f=plot_data05_f[(plot_data05_f$OBJNAME!=120 & plot_data05_f$OBJNAME!=209),]
+plot_data05_f=plot_data05_f[(plot_data05_f$OBJNAME!=120 & plot_data05_f$OBJNAME!=209 & plot_data05_f$OBJNAME!=163),]
 
 plot_data2=read.csv(paste("Plot_db_",2.5,".csv",sep=""))
 plot_data2$total.weight=plot_data2$total.weight/10000
@@ -29,7 +29,7 @@ plot_data2$total.weight=plot_data2$total.weight/10000
 plot_data2_scaled=scale(plot_data2[,c(3:10)])
 colnames(plot_data2_scaled)=paste("Scaled_",colnames(plot_data2_scaled),sep="")
 plot_data2_f=cbind(plot_data2,plot_data2_scaled)
-plot_data2_f=plot_data2_f[(plot_data2_f$OBJNAME!=120 & plot_data2_f$OBJNAME!=209),]
+plot_data2_f=plot_data2_f[(plot_data2_f$OBJNAME!=120 & plot_data2_f$OBJNAME!=209 & plot_data2_f$OBJNAME!=163),]
 
 plot_data5=read.csv(paste("Plot_db_",5,".csv",sep=""))
 plot_data5$total.weight=plot_data5$total.weight/10000
@@ -37,7 +37,7 @@ plot_data5$total.weight=plot_data5$total.weight/10000
 plot_data5_scaled=scale(plot_data5[,c(3:10)])
 colnames(plot_data5_scaled)=paste("Scaled_",colnames(plot_data5_scaled),sep="")
 plot_data5_f=cbind(plot_data5,plot_data5_scaled)
-plot_data5_f=plot_data5_f[(plot_data5_f$OBJNAME!=120 & plot_data5_f$OBJNAME!=209),]
+plot_data5_f=plot_data5_f[(plot_data5_f$OBJNAME!=120 & plot_data5_f$OBJNAME!=209 & plot_data5_f$OBJNAME!=163),]
 
 ####################################### Correlation check
 col <- colorRampPalette(c("#4477AA","#77AADD","#FFFFFF","#EE9988","#BB4444"))
@@ -209,40 +209,108 @@ full_all_h05=ols_step_all_possible(model_all_h05)
 full_fwf_b5=ols_step_all_possible(model_fwf_b5)
 full_all_b5=ols_step_all_possible(model_all_b5)
 
-####################################### Visualization
+####################################### Standard coefficients
 
-##### 0.5 m
+std_coef_sum_h_05 <- data.frame(matrix(ncol = 2, nrow = 3))
+names(std_coef_sum_h_05)<-c("coeff","metric")
 
-a=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Ferto" | plot_data5_f$lake=="Lake Tisza"),], aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
-  geom_smooth(method="lm",se=FALSE)+
-  theme_bw(base_size = 20) +
-  ylab("Biomass (field)") +
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
-  ylim(0,2)+
-  xlim(-2,2.5)
+std_coef_sum_h_05$metric<-c("V_var","A_std","A_cover")
+std_coef_sum_h_05$coeff<-c(model_all_step_h05$coefficients[2],model_all_step_h05$coefficients[3],0)
+std_coef_sum_h_05$type<-c("all 0.5m")
 
-b=ggplot(data=plot_data5_f[plot_data5_f$lake=="Lake Balaton",], aes(x=Scaled_V_var  , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(shape=veg_type_2),size=5,color="red",show.legend = FALSE) +
-  geom_smooth(method="lm",se=FALSE)+
-  theme_bw(base_size = 20) +
-  ylab("Biomass (field)") +
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,2)+
-  xlim(-2,2.5)
+std_coef_sum_h_05_fwf <- data.frame(matrix(ncol = 2, nrow = 3))
+names(std_coef_sum_h_05_fwf)<-c("coeff","metric")
 
-c=ggplot(data=plot_data5_f, aes(x=Scaled_V_var , y=total.weight),show.legend = TRUE) +  
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
-  geom_smooth(method="lm",se=FALSE,color="black")+
-  theme_bw(base_size = 20) +
-  ylab("Biomass (field)") +
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  ylim(0,2)+
-  xlim(-2,2.5)+
-  scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
-  scale_shape_manual(values=c("carex"=16,"phragmites"=17,"typha"=15),name="Species",labels=c("Carex spec.","Phragmites australis","Typha spec."))
+std_coef_sum_h_05_fwf$metric<-c("V_var","A_std","A_cover")
+std_coef_sum_h_05_fwf$coeff<-c(model_fwf_step_h05$coefficients[2],model_fwf_step_h05$coefficients[3],0)
+std_coef_sum_h_05_fwf$type<-c("fwf 0.5m")
 
-grid.arrange(a,b,c,
-             nrow = 1
-)
+std_coef_sum_h_2 <- data.frame(matrix(ncol = 2, nrow = 3))
+names(std_coef_sum_h_2)<-c("coeff","metric")
+
+std_coef_sum_h_2$metric<-c("V_var","A_std","A_cover")
+std_coef_sum_h_2$coeff<-c(model_all_step_h2$coefficients[2],0,0)
+std_coef_sum_h_2$type<-c("all 2.5m")
+
+std_coef_sum_h_2_fwf <- data.frame(matrix(ncol = 2, nrow = 3))
+names(std_coef_sum_h_2_fwf)<-c("coeff","metric")
+
+std_coef_sum_h_2_fwf$metric<-c("V_var","A_std","A_cover")
+std_coef_sum_h_2_fwf$coeff<-c(model_fwf_step_h2$coefficients[2],model_fwf_step_h2$coefficients[3],0)
+std_coef_sum_h_2_fwf$type<-c("fwf 2.5m")
+
+std_coef_sum_h_5 <- data.frame(matrix(ncol = 2, nrow = 3))
+names(std_coef_sum_h_5)<-c("coeff","metric")
+
+std_coef_sum_h_5$metric<-c("V_var","A_std","A_cover")
+std_coef_sum_h_5$coeff<-c(model_all_step_h5$coefficients[2],model_all_step_h5$coefficients[3],0)
+std_coef_sum_h_5$type<-c("all 5m")
+
+std_coef_sum_h_5_fwf <- data.frame(matrix(ncol = 2, nrow = 3))
+names(std_coef_sum_h_5_fwf)<-c("coeff","metric")
+
+std_coef_sum_h_5_fwf$metric<-c("V_var","A_std","A_cover")
+std_coef_sum_h_5_fwf$coeff<-c(model_fwf_step_h5$coefficients[2],0,0)
+std_coef_sum_h_5_fwf$type<-c("fwf 5m")
+
+std_coef_sum_h=rbind(std_coef_sum_h_05_fwf,std_coef_sum_h_05,std_coef_sum_h_2_fwf,std_coef_sum_h_2,std_coef_sum_h_5_fwf,std_coef_sum_h_5)
+
+ggplot(data=std_coef_sum_h, aes(x=metric, y=coeff,fill=type)) +
+  geom_bar(stat="identity",position=position_dodge())+
+  xlab("LiDAR metrics")+ylab("Standardized coefficient")+
+  ggtitle("Feature importance for vegetation height")+
+  theme_classic(base_size=20)+
+  scale_fill_manual(values=c("all 0.5m"="plum4","all 2.5m"="plum3","all 5m"="plum2","fwf 0.5m"="darkolivegreen4","fwf 2.5m"="darkolivegreen3","fwf 5m"="darkolivegreen2"),name="Type + resolution")
+
+#########
+
+std_coef_sum_b_05 <- data.frame(matrix(ncol = 2, nrow = 3))
+names(std_coef_sum_b_05)<-c("coeff","metric")
+
+std_coef_sum_b_05$metric<-c("V_var","A_std","A_cover")
+std_coef_sum_b_05$coeff<-c(0,0,0)
+std_coef_sum_b_05$type<-c("all 0.5m")
+
+std_coef_sum_b_05_fwf <- data.frame(matrix(ncol = 2, nrow = 3))
+names(std_coef_sum_b_05_fwf)<-c("coeff","metric")
+
+std_coef_sum_b_05_fwf$metric<-c("V_var","A_std","A_cover")
+std_coef_sum_b_05_fwf$coeff<-c(0,0,0)
+std_coef_sum_b_05_fwf$type<-c("fwf 0.5m")
+
+std_coef_sum_b_2 <- data.frame(matrix(ncol = 2, nrow = 3))
+names(std_coef_sum_b_2)<-c("coeff","metric")
+
+std_coef_sum_b_2$metric<-c("V_var","A_std","A_cover")
+std_coef_sum_b_2$coeff<-c(model_all_step_b2$coefficients[2],0,model_all_step_b2$coefficients[3])
+std_coef_sum_b_2$type<-c("all 2.5m")
+
+std_coef_sum_b_2_fwf <- data.frame(matrix(ncol = 2, nrow = 3))
+names(std_coef_sum_b_2_fwf)<-c("coeff","metric")
+
+std_coef_sum_b_2_fwf$metric<-c("V_var","A_std","A_cover")
+std_coef_sum_b_2_fwf$coeff<-c(0,0,0)
+std_coef_sum_b_2_fwf$type<-c("fwf 2.5m")
+
+std_coef_sum_b_5 <- data.frame(matrix(ncol = 2, nrow = 3))
+names(std_coef_sum_b_5)<-c("coeff","metric")
+
+std_coef_sum_b_5$metric<-c("V_var","A_std","A_cover")
+std_coef_sum_b_5$coeff<-c(0,0,model_all_step_b5$coefficients[2])
+std_coef_sum_b_5$type<-c("all 5m")
+
+std_coef_sum_b_5_fwf <- data.frame(matrix(ncol = 2, nrow = 3))
+names(std_coef_sum_b_5_fwf)<-c("coeff","metric")
+
+std_coef_sum_b_5_fwf$metric<-c("V_var","A_std","A_cover")
+std_coef_sum_b_5_fwf$coeff<-c(0,0,model_fwf_step_b5$coefficients[2])
+std_coef_sum_b_5_fwf$type<-c("fwf 5m")
+
+std_coef_sum_b=rbind(std_coef_sum_b_05_fwf,std_coef_sum_b_05,std_coef_sum_b_2_fwf,std_coef_sum_b_2,std_coef_sum_b_5_fwf,std_coef_sum_b_5)
+
+ggplot(data=std_coef_sum_b, aes(x=metric, y=coeff,fill=type)) +
+  geom_bar(stat="identity",position=position_dodge())+
+  xlab("LiDAR metrics")+ylab("Standardized coefficient")+
+  ggtitle("Feature importance for biomass")+
+  theme_classic(base_size=20)+
+  scale_fill_manual(values=c("all 0.5m"="plum4","all 2.5m"="plum3","all 5m"="plum2","fwf 0.5m"="darkolivegreen4","fwf 2.5m"="darkolivegreen3","fwf 5m"="darkolivegreen2"),name="Type + resolution")
