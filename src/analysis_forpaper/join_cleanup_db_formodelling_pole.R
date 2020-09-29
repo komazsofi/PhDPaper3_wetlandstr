@@ -11,15 +11,15 @@ library(raster)
 library(sp)
 library(tidyverse)
 
-workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis7/"
+workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis8/"
 setwd(workdir)
-rad=5
+rad=0.5
 
 # Import
 
-balaton_m=read.csv(paste("Balaton_lidarmetrics_",rad,"_reclass2.csv",sep=""))
-tisza_m=read.csv(paste("Tisza_lidarmetrics_",rad,"_reclass2.csv",sep=""))
-ferto_m=read.csv(paste("Ferto_lidarmetrics_",rad,"_reclass2.csv",sep=""))
+balaton_m=read.csv(paste("Balaton_lidarmetrics_",rad,"_reclass3.csv",sep=""))
+tisza_m=read.csv(paste("Tisza_lidarmetrics_",rad,"_reclass3.csv",sep=""))
+ferto_m=read.csv(paste("Ferto_lidarmetrics_",rad,"_reclass3.csv",sep=""))
 
 tisza_pole = readOGR(dsn="tisza_full.shp")
 ferto_pole = readOGR(dsn="w_point.shp")
@@ -58,8 +58,8 @@ tisza_plot2=merge(tisza_plot,tisza_2m_r_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'
 ferto_plot=merge(ferto_m_c,ferto_pole_df_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
 ferto_plot2=merge(ferto_plot,ferto_2m_r_min, by.x=c('OBJNAME'), by.y=c('OBJNAME'))
 
-balaton_plot3=balaton_plot[c(1,2,5:25)]
-ferto_plot3=ferto_plot2[c(1,2,5:25)]
+balaton_plot3=balaton_plot[c(1,2,5:19)]
+ferto_plot3=ferto_plot2[c(1,2,5:19)]
 
 balaton_plot3$lake="Lake Balaton"
 ferto_plot3$lake="Lake Ferto"
