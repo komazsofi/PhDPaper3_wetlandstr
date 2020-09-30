@@ -209,6 +209,64 @@ full_all_h05=ols_step_all_possible(model_all_h05)
 full_fwf_b5=ols_step_all_possible(model_fwf_b5)
 full_all_b5=ols_step_all_possible(model_all_b5)
 
+####################################### Dependence + ANOVA
+
+lakes1 = lm(veg_height_m ~ lake, data = plot_data05_f)
+summary(lakes1)
+
+plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Ferto") 
+lakes2 = lm(veg_height_m ~ lake, data = plot_data05_f)
+summary(lakes2)
+
+plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Tisza") 
+lakes3 = lm(veg_height_m ~ lake, data = plot_data05_f)
+summary(lakes3)
+
+m1 = lm(V_var ~ lake, data = plot_data05_f)
+summary(m1)
+
+plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Ferto") 
+m1_2 = lm(V_var ~ lake, data = plot_data05_f)
+summary(m1_2)
+
+plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Tisza") 
+m1_3 = lm(V_var ~ lake, data = plot_data05_f)
+summary(m1_3)
+
+m2 = lm(A_std ~ lake, data = plot_data05_f)
+summary(m2)
+
+plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Ferto") 
+m2_2 = lm(A_std ~ lake, data = plot_data05_f)
+summary(m2_2)
+
+plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Tisza") 
+m2_3 = lm(A_std ~ lake, data = plot_data05_f)
+summary(m2_3)
+
+m3 = lm(A_cover ~ lake, data = plot_data05_f)
+summary(m2)
+
+plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Ferto") 
+m3_2 = lm(A_cover ~ lake, data = plot_data05_f)
+summary(m2_2)
+
+plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Tisza") 
+m3_3 = lm(A_cover ~ lake, data = plot_data05_f)
+summary(m2_3)
+
+lakes1_b = lm(total.weight ~ lake, data = plot_data05_f)
+summary(lakes1_b)
+
+plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Ferto") 
+lakes2_b = lm(total.weight ~ lake, data = plot_data05_f)
+summary(lakes2_b)
+
+plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Tisza") 
+lakes3_b = lm(total.weight ~ lake, data = plot_data05_f)
+summary(lakes3_b)
+
+
 ####################################### Standard coefficients
 
 std_coef_sum_h_05 <- data.frame(matrix(ncol = 2, nrow = 3))
