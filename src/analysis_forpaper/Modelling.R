@@ -7,8 +7,20 @@ library(tidyr)
 library(stargazer)
 library(usdm)
 
-library(olsrr)
 library(corrplot)
+library(multcompView)
+
+generate_label_df <- function(TUKEY, variable){
+  
+  # Extract labels and factor levels from Tukey post-hoc 
+  Tukey.levels <- TUKEY[[variable]][,4]
+  Tukey.labels <- data.frame(multcompLetters(Tukey.levels)['Letters'])
+  
+  #I need to put the labels in the same order as in the boxplot :
+  Tukey.labels$treatment=rownames(Tukey.labels)
+  Tukey.labels=Tukey.labels[order(Tukey.labels$treatment) , ]
+  return(Tukey.labels)
+}
 
 workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis8/"
 setwd(workdir)
@@ -202,17 +214,27 @@ stargazer(model_fwf_step_h5,model_all_step_h5,model_fwf_step_b5,model_all_step_b
 stargazer(model_fwf_step_h05,model_all_step_h05,model_fwf_step_h2,model_all_step_h2,model_fwf_step_h5,model_all_step_h5,align=TRUE,type="html",column.labels=c("fwf [0.5 m]","all [0.5 m]","fwf [2.5 m]","all [2.5 m]","fwf [5 m]","all [5 m]"),title="Estimation of vegetation height at different resolutions",out="height_report.doc")
 stargazer(model_fwf_step_b05,model_all_step_b05,model_fwf_step_b2,model_all_step_b2,model_fwf_step_b5,model_all_step_b5,align=TRUE,type="html",column.labels=c("fwf [0.5 m]","all [0.5 m]","fwf [2.5 m]","all [2.5 m]","fwf [5 m]","all [5 m]"),title="Estimation of biomass at different resolutions",out="biomass_report.doc")
 
-# ols
-full_fwf_h05=ols_step_all_possible(model_fwf_h05)
-full_all_h05=ols_step_all_possible(model_all_h05)
-
-full_fwf_b5=ols_step_all_possible(model_fwf_b5)
-full_all_b5=ols_step_all_possible(model_all_b5)
-
 ####################################### Dependence + ANOVA
+
+plot_data05_f$type="fwf"
+plot_data05_f[plot_data05_f$lake=="Lake Balaton",29] <- "discrete"
+
+plot_data05_f$pdens_act=NA
+plot_data05_f[plot_data05_f$nofallp<5,30] <- "low"
+plot_data05_f[(plot_data05_f$nofallp>5 & plot_data05_f$nofallp<15),30] <- "medium"
+plot_data05_f[plot_data05_f$nofallp>15,30] <- "high"
+
+###
 
 lakes1 = lm(veg_height_m ~ lake, data = plot_data05_f)
 summary(lakes1)
+
+ANOVA=aov(lakes1)
+TUKEY <- TukeyHSD(x=ANOVA, 'lake', conf.level=0.95)
+labels<-generate_label_df(TUKEY , "lake")
+names(labels)<-c('Letters','lake')
+yvalue<-aggregate(veg_height_m ~lake, data=plot_data05_f, mean)
+vegh_dep<-merge(labels,yvalue) 
 
 plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Ferto") 
 lakes2 = lm(veg_height_m ~ lake, data = plot_data05_f)
@@ -225,6 +247,13 @@ summary(lakes3)
 m1 = lm(V_var ~ lake, data = plot_data05_f)
 summary(m1)
 
+ANOVA=aov(m1)
+TUKEY <- TukeyHSD(x=ANOVA, 'lake', conf.level=0.95)
+labels<-generate_label_df(TUKEY , "lake")
+names(labels)<-c('Letters','lake')
+yvalue<-aggregate(V_var ~lake, data=plot_data05_f, mean)
+V_var_dep<-merge(labels,yvalue) 
+
 plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Ferto") 
 m1_2 = lm(V_var ~ lake, data = plot_data05_f)
 summary(m1_2)
@@ -235,6 +264,13 @@ summary(m1_3)
 
 m2 = lm(A_std ~ lake, data = plot_data05_f)
 summary(m2)
+
+ANOVA=aov(m2)
+TUKEY <- TukeyHSD(x=ANOVA, 'lake', conf.level=0.95)
+labels<-generate_label_df(TUKEY , "lake")
+names(labels)<-c('Letters','lake')
+yvalue<-aggregate(A_std ~lake, data=plot_data05_f, mean)
+A_std_dep<-merge(labels,yvalue)
 
 plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Ferto") 
 m2_2 = lm(A_std ~ lake, data = plot_data05_f)
@@ -247,6 +283,13 @@ summary(m2_3)
 m3 = lm(A_cover ~ lake, data = plot_data05_f)
 summary(m2)
 
+ANOVA=aov(m3)
+TUKEY <- TukeyHSD(x=ANOVA, 'lake', conf.level=0.95)
+labels<-generate_label_df(TUKEY , "lake")
+names(labels)<-c('Letters','lake')
+yvalue<-aggregate(A_cover ~lake, data=plot_data05_f, mean)
+A_cover_dep<-merge(labels,yvalue)
+
 plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Ferto") 
 m3_2 = lm(A_cover ~ lake, data = plot_data05_f)
 summary(m2_2)
@@ -258,6 +301,13 @@ summary(m2_3)
 lakes1_b = lm(total.weight ~ lake, data = plot_data05_f)
 summary(lakes1_b)
 
+ANOVA=aov(lakes1_b)
+TUKEY <- TukeyHSD(x=ANOVA, 'lake', conf.level=0.95)
+labels<-generate_label_df(TUKEY , "lake")
+names(labels)<-c('Letters','lake')
+yvalue<-aggregate(total.weight ~lake, data=plot_data05_f, mean)
+total.weight_dep<-merge(labels,yvalue)
+
 plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Ferto") 
 lakes2_b = lm(total.weight ~ lake, data = plot_data05_f)
 summary(lakes2_b)
@@ -266,112 +316,23 @@ plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Tisza")
 lakes3_b = lm(total.weight ~ lake, data = plot_data05_f)
 summary(lakes3_b)
 
+###boxplot visualization
 
-####################################### Standard coefficients
+ggplot(data=plot_data05_f,aes(x=lake,y=veg_height_m,fill=lake))+geom_boxplot()+geom_text(data = vegh_dep, aes(x = lake, y = c(4,4,4), label = Letters),vjust=-3.5,hjust=-.5)
+ggplot(data=plot_data05_f,aes(x=lake,y=total.weight,fill=lake))+geom_boxplot()+geom_text(data = total.weight_dep, aes(x = lake, y = c(1.6,1.6,1.6), label = Letters),hjust=-.5)
 
-std_coef_sum_h_05 <- data.frame(matrix(ncol = 2, nrow = 3))
-names(std_coef_sum_h_05)<-c("coeff","metric")
+ggplot(data=plot_data05_f,aes(x=lake,y=V_var,fill=lake))+geom_boxplot()+geom_text(data = V_var_dep, aes(x = lake, y = V_var, label = Letters),vjust=-3.5,hjust=-.5)
+ggplot(data=plot_data05_f,aes(x=lake,y=A_std,fill=lake))+geom_boxplot()+geom_text(data = A_std_dep, aes(x = lake, y = A_std, label = Letters),vjust=-3.5,hjust=-.5)
+ggplot(data=plot_data05_f,aes(x=lake,y=A_cover,fill=lake))+geom_boxplot()+geom_text(data = A_cover_dep, aes(x = lake, y = A_cover, label = Letters),vjust=-3.5,hjust=-.5)
 
-std_coef_sum_h_05$metric<-c("V_var","A_std","A_cover")
-std_coef_sum_h_05$coeff<-c(model_all_step_h05$coefficients[2],model_all_step_h05$coefficients[3],0)
-std_coef_sum_h_05$type<-c("all 0.5m")
+ggplot(data=plot_data05_f,aes(x=pdens_act,y=Scaled_V_var,fill=pdens_act))+geom_boxplot()
+ggplot(data=plot_data05_f,aes(x=pdens_act,y=Scaled_A_std,fill=pdens_act))+geom_boxplot()
+ggplot(data=plot_data05_f,aes(x=pdens_act,y=Scaled_A_cover,fill=pdens_act))+geom_boxplot()
 
-std_coef_sum_h_05_fwf <- data.frame(matrix(ncol = 2, nrow = 3))
-names(std_coef_sum_h_05_fwf)<-c("coeff","metric")
+ggplot(data=plot_data05_f,aes(x=type,y=Scaled_V_var,fill=type))+geom_boxplot()
+ggplot(data=plot_data05_f,aes(x=type,y=Scaled_A_std,fill=type))+geom_boxplot()
+ggplot(data=plot_data05_f,aes(x=type,y=Scaled_A_cover,fill=type))+geom_boxplot()
 
-std_coef_sum_h_05_fwf$metric<-c("V_var","A_std","A_cover")
-std_coef_sum_h_05_fwf$coeff<-c(model_fwf_step_h05$coefficients[2],model_fwf_step_h05$coefficients[3],0)
-std_coef_sum_h_05_fwf$type<-c("fwf 0.5m")
-
-std_coef_sum_h_2 <- data.frame(matrix(ncol = 2, nrow = 3))
-names(std_coef_sum_h_2)<-c("coeff","metric")
-
-std_coef_sum_h_2$metric<-c("V_var","A_std","A_cover")
-std_coef_sum_h_2$coeff<-c(model_all_step_h2$coefficients[2],0,0)
-std_coef_sum_h_2$type<-c("all 2.5m")
-
-std_coef_sum_h_2_fwf <- data.frame(matrix(ncol = 2, nrow = 3))
-names(std_coef_sum_h_2_fwf)<-c("coeff","metric")
-
-std_coef_sum_h_2_fwf$metric<-c("V_var","A_std","A_cover")
-std_coef_sum_h_2_fwf$coeff<-c(model_fwf_step_h2$coefficients[2],model_fwf_step_h2$coefficients[3],0)
-std_coef_sum_h_2_fwf$type<-c("fwf 2.5m")
-
-std_coef_sum_h_5 <- data.frame(matrix(ncol = 2, nrow = 3))
-names(std_coef_sum_h_5)<-c("coeff","metric")
-
-std_coef_sum_h_5$metric<-c("V_var","A_std","A_cover")
-std_coef_sum_h_5$coeff<-c(model_all_step_h5$coefficients[2],model_all_step_h5$coefficients[3],0)
-std_coef_sum_h_5$type<-c("all 5m")
-
-std_coef_sum_h_5_fwf <- data.frame(matrix(ncol = 2, nrow = 3))
-names(std_coef_sum_h_5_fwf)<-c("coeff","metric")
-
-std_coef_sum_h_5_fwf$metric<-c("V_var","A_std","A_cover")
-std_coef_sum_h_5_fwf$coeff<-c(model_fwf_step_h5$coefficients[2],0,0)
-std_coef_sum_h_5_fwf$type<-c("fwf 5m")
-
-std_coef_sum_h=rbind(std_coef_sum_h_05_fwf,std_coef_sum_h_05,std_coef_sum_h_2_fwf,std_coef_sum_h_2,std_coef_sum_h_5_fwf,std_coef_sum_h_5)
-
-ggplot(data=std_coef_sum_h, aes(x=metric, y=coeff,fill=type)) +
-  geom_bar(stat="identity",position=position_dodge())+
-  xlab("LiDAR metrics")+ylab("Standardized coefficient")+
-  ggtitle("Feature importance for vegetation height")+
-  theme_classic(base_size=20)+
-  scale_fill_manual(values=c("all 0.5m"="plum4","all 2.5m"="plum3","all 5m"="plum2","fwf 0.5m"="darkolivegreen4","fwf 2.5m"="darkolivegreen3","fwf 5m"="darkolivegreen2"),name="Type + resolution")
-
-#########
-
-std_coef_sum_b_05 <- data.frame(matrix(ncol = 2, nrow = 3))
-names(std_coef_sum_b_05)<-c("coeff","metric")
-
-std_coef_sum_b_05$metric<-c("V_var","A_std","A_cover")
-std_coef_sum_b_05$coeff<-c(0,0,0)
-std_coef_sum_b_05$type<-c("all 0.5m")
-
-std_coef_sum_b_05_fwf <- data.frame(matrix(ncol = 2, nrow = 3))
-names(std_coef_sum_b_05_fwf)<-c("coeff","metric")
-
-std_coef_sum_b_05_fwf$metric<-c("V_var","A_std","A_cover")
-std_coef_sum_b_05_fwf$coeff<-c(0,0,0)
-std_coef_sum_b_05_fwf$type<-c("fwf 0.5m")
-
-std_coef_sum_b_2 <- data.frame(matrix(ncol = 2, nrow = 3))
-names(std_coef_sum_b_2)<-c("coeff","metric")
-
-std_coef_sum_b_2$metric<-c("V_var","A_std","A_cover")
-std_coef_sum_b_2$coeff<-c(model_all_step_b2$coefficients[2],0,model_all_step_b2$coefficients[3])
-std_coef_sum_b_2$type<-c("all 2.5m")
-
-std_coef_sum_b_2_fwf <- data.frame(matrix(ncol = 2, nrow = 3))
-names(std_coef_sum_b_2_fwf)<-c("coeff","metric")
-
-std_coef_sum_b_2_fwf$metric<-c("V_var","A_std","A_cover")
-std_coef_sum_b_2_fwf$coeff<-c(0,0,0)
-std_coef_sum_b_2_fwf$type<-c("fwf 2.5m")
-
-std_coef_sum_b_5 <- data.frame(matrix(ncol = 2, nrow = 3))
-names(std_coef_sum_b_5)<-c("coeff","metric")
-
-std_coef_sum_b_5$metric<-c("V_var","A_std","A_cover")
-std_coef_sum_b_5$coeff<-c(0,0,model_all_step_b5$coefficients[2])
-std_coef_sum_b_5$type<-c("all 5m")
-
-std_coef_sum_b_5_fwf <- data.frame(matrix(ncol = 2, nrow = 3))
-names(std_coef_sum_b_5_fwf)<-c("coeff","metric")
-
-std_coef_sum_b_5_fwf$metric<-c("V_var","A_std","A_cover")
-std_coef_sum_b_5_fwf$coeff<-c(0,0,model_fwf_step_b5$coefficients[2])
-std_coef_sum_b_5_fwf$type<-c("fwf 5m")
-
-std_coef_sum_b=rbind(std_coef_sum_b_05_fwf,std_coef_sum_b_05,std_coef_sum_b_2_fwf,std_coef_sum_b_2,std_coef_sum_b_5_fwf,std_coef_sum_b_5)
-
-ggplot(data=std_coef_sum_b, aes(x=metric, y=coeff,fill=type)) +
-  geom_bar(stat="identity",position=position_dodge())+
-  xlab("LiDAR metrics")+ylab("Standardized coefficient")+
-  ggtitle("Feature importance for biomass")+
-  theme_classic(base_size=20)+
-  scale_fill_manual(values=c("all 0.5m"="plum4","all 2.5m"="plum3","all 5m"="plum2","fwf 0.5m"="darkolivegreen4","fwf 2.5m"="darkolivegreen3","fwf 5m"="darkolivegreen2"),name="Type + resolution")
 
 ####################################### Predicted vs actual
 
