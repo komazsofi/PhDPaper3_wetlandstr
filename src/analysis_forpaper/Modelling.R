@@ -211,7 +211,7 @@ stargazer(model_fwf_step_h5,model_all_step_h5,model_fwf_step_b5,model_all_step_b
 ####################################### Partial residual plot
 
 termplot(model_all_step_h05, partial=T, term=1, pch=20, cex=1.5, col.term=0,
-         lwd.term=3, col.res="dodgerblue",xlab="Scaled V_var", ylab="Partial residual")
+         lwd.term=3)
 lines(lwd=3, lty=2, col='red', termplot(model_all_step_h05, partial=T, term=1, plot=F)$Scaled_V_var$x, 
       termplot(model_all_step_h05, partial=T, term=1, plot=F)$Scaled_V_var$y)
 
@@ -237,68 +237,6 @@ names(labels)<-c('Letters','lake')
 yvalue<-aggregate(veg_height_m ~lake, data=plot_data05_f, mean)
 vegh_dep<-merge(labels,yvalue) 
 
-plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Ferto") 
-lakes2 = lm(veg_height_m ~ lake, data = plot_data05_f)
-summary(lakes2)
-
-plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Tisza") 
-lakes3 = lm(veg_height_m ~ lake, data = plot_data05_f)
-summary(lakes3)
-
-m1 = lm(V_var ~ lake, data = plot_data05_f)
-summary(m1)
-
-ANOVA=aov(m1)
-TUKEY <- TukeyHSD(x=ANOVA, 'lake', conf.level=0.95)
-labels<-generate_label_df(TUKEY , "lake")
-names(labels)<-c('Letters','lake')
-yvalue<-aggregate(V_var ~lake, data=plot_data05_f, mean)
-V_var_dep<-merge(labels,yvalue) 
-
-plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Ferto") 
-m1_2 = lm(V_var ~ lake, data = plot_data05_f)
-summary(m1_2)
-
-plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Tisza") 
-m1_3 = lm(V_var ~ lake, data = plot_data05_f)
-summary(m1_3)
-
-m2 = lm(A_std ~ lake, data = plot_data05_f)
-summary(m2)
-
-ANOVA=aov(m2)
-TUKEY <- TukeyHSD(x=ANOVA, 'lake', conf.level=0.95)
-labels<-generate_label_df(TUKEY , "lake")
-names(labels)<-c('Letters','lake')
-yvalue<-aggregate(A_std ~lake, data=plot_data05_f, mean)
-A_std_dep<-merge(labels,yvalue)
-
-plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Ferto") 
-m2_2 = lm(A_std ~ lake, data = plot_data05_f)
-summary(m2_2)
-
-plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Tisza") 
-m2_3 = lm(A_std ~ lake, data = plot_data05_f)
-summary(m2_3)
-
-m3 = lm(A_cover ~ lake, data = plot_data05_f)
-summary(m2)
-
-ANOVA=aov(m3)
-TUKEY <- TukeyHSD(x=ANOVA, 'lake', conf.level=0.95)
-labels<-generate_label_df(TUKEY , "lake")
-names(labels)<-c('Letters','lake')
-yvalue<-aggregate(A_cover ~lake, data=plot_data05_f, mean)
-A_cover_dep<-merge(labels,yvalue)
-
-plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Ferto") 
-m3_2 = lm(A_cover ~ lake, data = plot_data05_f)
-summary(m2_2)
-
-plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Tisza") 
-m3_3 = lm(A_cover ~ lake, data = plot_data05_f)
-summary(m2_3)
-
 lakes1_b = lm(total.weight ~ lake, data = plot_data05_f)
 summary(lakes1_b)
 
@@ -309,31 +247,162 @@ names(labels)<-c('Letters','lake')
 yvalue<-aggregate(total.weight ~lake, data=plot_data05_f, mean)
 total.weight_dep<-merge(labels,yvalue)
 
-plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Ferto") 
-lakes2_b = lm(total.weight ~ lake, data = plot_data05_f)
-summary(lakes2_b)
+#### metrics per lake
 
-plot_data05_f$lake = relevel(plot_data05_f$lake, ref="Lake Tisza") 
-lakes3_b = lm(total.weight ~ lake, data = plot_data05_f)
-summary(lakes3_b)
+m1 = lm(Scaled_V_var ~ lake, data = plot_data05_f)
+summary(m1)
+
+ANOVA=aov(m1)
+TUKEY <- TukeyHSD(x=ANOVA, 'lake', conf.level=0.95)
+labels<-generate_label_df(TUKEY , "lake")
+names(labels)<-c('Letters','lake')
+yvalue<-aggregate(Scaled_V_var ~lake, data=plot_data05_f, mean)
+V_var_dep<-merge(labels,yvalue) 
+
+m2 = lm(Scaled_A_std ~ lake, data = plot_data05_f)
+summary(m2)
+
+ANOVA=aov(m2)
+TUKEY <- TukeyHSD(x=ANOVA, 'lake', conf.level=0.95)
+labels<-generate_label_df(TUKEY , "lake")
+names(labels)<-c('Letters','lake')
+yvalue<-aggregate(Scaled_A_std ~lake, data=plot_data05_f, mean)
+A_std_dep<-merge(labels,yvalue)
+
+m3 = lm(Scaled_C_ppr ~ lake, data = plot_data05_f)
+summary(m2)
+
+ANOVA=aov(m3)
+TUKEY <- TukeyHSD(x=ANOVA, 'lake', conf.level=0.95)
+labels<-generate_label_df(TUKEY , "lake")
+names(labels)<-c('Letters','lake')
+yvalue<-aggregate(Scaled_C_ppr ~lake, data=plot_data05_f, mean)
+C_ppr_dep<-merge(labels,yvalue)
+
+#### metrics per pdens
+
+m1 = lm(Scaled_V_var ~ pdens_act, data = plot_data05_f)
+summary(m1)
+
+ANOVA=aov(m1)
+TUKEY <- TukeyHSD(x=ANOVA, 'pdens_act', conf.level=0.95)
+labels<-generate_label_df(TUKEY , "pdens_act")
+names(labels)<-c('Letters','pdens_act')
+yvalue<-aggregate(Scaled_V_var ~pdens_act, data=plot_data05_f, mean)
+V_var_dep_t<-merge(labels,yvalue) 
+
+m2 = lm(Scaled_A_std ~ pdens_act, data = plot_data05_f)
+summary(m2)
+
+ANOVA=aov(m2)
+TUKEY <- TukeyHSD(x=ANOVA, 'pdens_act', conf.level=0.95)
+labels<-generate_label_df(TUKEY , "pdens_act")
+names(labels)<-c('Letters','pdens_act')
+yvalue<-aggregate(Scaled_A_std ~pdens_act, data=plot_data05_f, mean)
+A_std_dep_t<-merge(labels,yvalue)
+
+m3 = lm(Scaled_C_ppr ~ pdens_act, data = plot_data05_f)
+summary(m2)
+
+ANOVA=aov(m3)
+TUKEY <- TukeyHSD(x=ANOVA, 'pdens_act', conf.level=0.95)
+labels<-generate_label_df(TUKEY , "pdens_act")
+names(labels)<-c('Letters','pdens_act')
+yvalue<-aggregate(Scaled_C_ppr ~pdens_act, data=plot_data05_f, mean)
+C_ppr_dep_t<-merge(labels,yvalue)
+
+#### metrics per lake 5m
+
+m1 = lm(Scaled_V_var ~ lake, data = plot_data5_f)
+summary(m1)
+
+ANOVA=aov(m1)
+TUKEY <- TukeyHSD(x=ANOVA, 'lake', conf.level=0.95)
+labels<-generate_label_df(TUKEY , "lake")
+names(labels)<-c('Letters','lake')
+yvalue<-aggregate(Scaled_V_var ~lake, data=plot_data5_f, mean)
+V_var_dep5<-merge(labels,yvalue) 
+
+m2 = lm(Scaled_A_std ~ lake, data = plot_data5_f)
+summary(m2)
+
+ANOVA=aov(m2)
+TUKEY <- TukeyHSD(x=ANOVA, 'lake', conf.level=0.95)
+labels<-generate_label_df(TUKEY , "lake")
+names(labels)<-c('Letters','lake')
+yvalue<-aggregate(Scaled_A_std ~lake, data=plot_data5_f, mean)
+A_std_dep5<-merge(labels,yvalue)
+
+m3 = lm(Scaled_C_ppr ~ lake, data = plot_data5_f)
+summary(m2)
+
+ANOVA=aov(m3)
+TUKEY <- TukeyHSD(x=ANOVA, 'lake', conf.level=0.95)
+labels<-generate_label_df(TUKEY , "lake")
+names(labels)<-c('Letters','lake')
+yvalue<-aggregate(Scaled_C_ppr ~lake, data=plot_data5_f, mean)
+C_ppr_dep5<-merge(labels,yvalue)
 
 ###boxplot visualization
 
-ggplot(data=plot_data05_f,aes(x=lake,y=veg_height_m,fill=lake))+geom_boxplot()+geom_text(data = vegh_dep, aes(x = lake, y = c(4,4,4), label = Letters),vjust=-3.5,hjust=-.5)
-ggplot(data=plot_data05_f,aes(x=lake,y=total.weight,fill=lake))+geom_boxplot()+geom_text(data = total.weight_dep, aes(x = lake, y = c(1.6,1.6,1.6), label = Letters),hjust=-.5)
+m11=ggplot(data=plot_data05_f,aes(x=lake,y=Scaled_V_var,fill=lake))+geom_boxplot(show.legend = FALSE)+
+  geom_text(data = V_var_dep, aes(x = lake, y = c(1.2,1.2,1.2), label = Letters),vjust=-3.5,hjust=-.5,size=5)+
+  scale_fill_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
+  xlab("Lakes")+ylab("Scaled V_var")+theme_bw(base_size = 18)+ylim(-1,1.5)
 
-ggplot(data=plot_data05_f,aes(x=lake,y=V_var,fill=lake))+geom_boxplot()+geom_text(data = V_var_dep, aes(x = lake, y = V_var, label = Letters),vjust=-3.5,hjust=-.5)
-ggplot(data=plot_data05_f,aes(x=lake,y=A_std,fill=lake))+geom_boxplot()+geom_text(data = A_std_dep, aes(x = lake, y = A_std, label = Letters),vjust=-3.5,hjust=-.5)
-ggplot(data=plot_data05_f,aes(x=lake,y=A_cover,fill=lake))+geom_boxplot()+geom_text(data = A_cover_dep, aes(x = lake, y = A_cover, label = Letters),vjust=-3.5,hjust=-.5)
+m21=ggplot(data=plot_data05_f,aes(x=lake,y=Scaled_C_ppr,fill=lake))+geom_boxplot(show.legend = FALSE)+
+  geom_text(data = C_ppr_dep, aes(x = lake, y = c(1.6,1.6,1.6), label = Letters),vjust=-3.5,hjust=-.5,size=5)+
+  scale_fill_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
+  xlab("Lakes")+ylab("Scaled C_ppr")+theme_bw(base_size = 18)+ylim(-1.5,2.2)
 
-ggplot(data=plot_data05_f,aes(x=pdens_act,y=Scaled_V_var,fill=pdens_act))+geom_boxplot()
-ggplot(data=plot_data05_f,aes(x=pdens_act,y=Scaled_A_std,fill=pdens_act))+geom_boxplot()
-ggplot(data=plot_data05_f,aes(x=pdens_act,y=Scaled_A_cover,fill=pdens_act))+geom_boxplot()
+m31=ggplot(data=plot_data05_f,aes(x=lake,y=Scaled_A_std,fill=lake))+geom_boxplot(show.legend = FALSE)+
+  geom_text(data = A_std_dep, aes(x = lake, y = c(1.6,1.6,1.6), label = Letters),vjust=-3.5,hjust=-.5,size=5)+
+  scale_fill_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
+  xlab("Lakes")+ylab("Scaled A_std")+theme_bw(base_size = 18)+ylim(-2.2,2.2)
 
-ggplot(data=plot_data05_f,aes(x=type,y=Scaled_V_var,fill=type))+geom_boxplot()
-ggplot(data=plot_data05_f,aes(x=type,y=Scaled_A_std,fill=type))+geom_boxplot()
-ggplot(data=plot_data05_f,aes(x=type,y=Scaled_A_cover,fill=type))+geom_boxplot()
+###
 
+m115=ggplot(data=plot_data5_f,aes(x=lake,y=Scaled_V_var,fill=lake))+geom_boxplot(show.legend = FALSE)+
+  geom_text(data = V_var_dep5, aes(x = lake, y = c(1.5,1.5,1.5), label = Letters),vjust=-3.5,hjust=-.5,size=5)+
+  scale_fill_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
+  xlab("Lakes")+ylab("Scaled V_var")+theme_bw(base_size = 18)+ylim(-1,2)
+
+m215=ggplot(data=plot_data5_f,aes(x=lake,y=Scaled_C_ppr,fill=lake))+geom_boxplot(show.legend = FALSE)+
+  geom_text(data = C_ppr_dep5, aes(x = lake, y = c(1.6,1.6,1.6), label = Letters),vjust=-3.5,hjust=-.5,size=5)+
+  scale_fill_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
+  xlab("Lakes")+ylab("Scaled C_ppr")+theme_bw(base_size = 18)+ylim(-1.5,2.2)
+
+m315=ggplot(data=plot_data5_f,aes(x=lake,y=Scaled_A_std,fill=lake))+geom_boxplot(show.legend = FALSE)+
+  geom_text(data = A_std_dep5, aes(x = lake, y = c(1.6,1.6,1.6), label = Letters),vjust=-3.5,hjust=-.5,size=5)+
+  scale_fill_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
+  xlab("Lakes")+ylab("Scaled A_std")+theme_bw(base_size = 18)+ylim(-2.2,2.2)
+
+###
+
+m12=ggplot(data=plot_data05_f,aes(x=pdens_act,y=Scaled_V_var,fill=pdens_act))+geom_boxplot(show.legend = FALSE)+
+  geom_text(data = V_var_dep_t, aes(x = pdens_act, y = c(1,1,1), label = Letters),vjust=-3.5,hjust=-.5)+
+  scale_fill_manual(values=c("high"="darkgoldenrod","medium"="deeppink","low"="cornsilk4"),name="Point density")+
+  xlab("Point densities")+ylab("Scaled V_var")+theme_bw(base_size = 18)+ylim(-1,1.2)
+
+m22=ggplot(data=plot_data05_f,aes(x=pdens_act,y=Scaled_C_ppr,fill=pdens_act))+geom_boxplot(show.legend = FALSE)+
+  geom_text(data = C_ppr_dep_t, aes(x = pdens_act, y = c(1.9,1.9,1.9), label = Letters),vjust=-3.5,hjust=-.5)+
+  scale_fill_manual(values=c("high"="darkgoldenrod","medium"="deeppink","low"="cornsilk4"),name="Point density")+
+  xlab("Lakes")+ylab("Scaled C_ppr")+theme_bw(base_size = 18)+ylim(-1.5,2.2)
+
+m32=ggplot(data=plot_data05_f,aes(x=pdens_act,y=Scaled_A_std,fill=pdens_act))+geom_boxplot(show.legend = FALSE)+
+  geom_text(data = A_std_dep_t, aes(x = pdens_act, y = c(1.8,1.8,1.8), label = Letters),vjust=-3.5,hjust=-.5)+
+  scale_fill_manual(values=c("high"="darkgoldenrod","medium"="deeppink","low"="cornsilk4"),name="Point density")+
+  xlab("Lakes")+ylab("Scaled A_std")+theme_bw(base_size = 18)+ylim(-2.2,2.2)
+
+grid.arrange(m11,m21,m31,m115,m215,m315,
+             nrow = 2,
+             ncol = 3
+)
+
+grid.arrange(m11,m21,m31,
+             nrow = 1,
+             ncol = 3
+)
 
 ####################################### Predicted vs actual
 
@@ -345,18 +414,18 @@ plot_data05_f[plot_data05_f$lake!="Lake Balaton",30]=predict(model_fwf_step_h05)
 j=ggplot(data=plot_data05_f,aes(x=predicted_h,y=veg_height_m))+
   geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE)+
   geom_smooth(method = "lm", se = FALSE, colour="black")+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
+  #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
   xlab("Predicted height")+
-  ylab("Actual height")+
+  ylab("Vegetation height (field)")+
   theme_bw(base_size = 20) +
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
 
 k=ggplot(data=plot_data05_f,aes(x=predicted_h_fwf,y=veg_height_m))+
   geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE)+
   geom_smooth(method = "lm", se = FALSE, colour="black")+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
+  #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
   xlab("Predicted height")+
-  ylab("Actual height")+
+  ylab("Vegetation height (field)")+
   theme_bw(base_size = 20) +
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
 
@@ -461,18 +530,18 @@ plot_data5_f[plot_data5_f$lake!="Lake Balaton",32]=predict(model_fwf_step_b5)
 j5_b=ggplot(data=plot_data5_f,aes(x=predicted_b,y=total.weight))+
   geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE)+
   geom_smooth(method = "lm", se = FALSE, colour="black")+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
+  #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
   xlab("Predicted biomass")+
-  ylab("Actual biomass")+
+  ylab("Biomass (field)")+
   theme_bw(base_size = 20) +
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
 
 k5_b=ggplot(data=plot_data5_f,aes(x=predicted_b_fwf,y=total.weight))+
   geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE)+
   geom_smooth(method = "lm", se = FALSE, colour="black")+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
+  #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
   xlab("Predicted biomass")+
-  ylab("Actual biomass")+
+  ylab("Biomass (field)")+
   theme_bw(base_size = 20) +
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
 
@@ -480,3 +549,23 @@ grid.arrange(j_b,k_b,j2_b,k2_b,j5_b,k5_b,
              nrow = 3,
              ncol = 2
 )
+
+#################Fig4
+
+a=ggplot(data=plot_data05_f,aes(x=lake,y=veg_height_m,fill=lake))+geom_boxplot()+
+  geom_text(data = vegh_dep, aes(x = lake, y = c(4.25,4.25,4.25), label = Letters),vjust=-3.5,hjust=-.5,size=5)+
+  scale_fill_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
+  ylim(2,5)+xlab("Lakes")+ylab("Vegetation height (field)")+theme_bw(base_size = 18)
+  
+b=ggplot(data=plot_data05_f,aes(x=lake,y=total.weight,fill=lake))+geom_boxplot()+
+  geom_text(data = total.weight_dep, aes(x = lake, y = c(1.6,1.6,1.6), label = Letters),hjust=-.5,size=5)+
+  scale_fill_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
+  ylim(0,1.8)+xlab("Lakes")+ylab("Biomass (field)")+theme_bw(base_size = 18)
+  
+
+grid.arrange(j+xlim(1.7,5)+ylim(1.7,5),k+xlim(1.7,5)+ylim(1.7,5),a,j5_b+xlim(0,1.25)+ylim(0,1.8),k5_b+xlim(0,1.25)+ylim(0,1.8),b,
+             nrow = 2,
+             ncol = 3
+)
+
+
