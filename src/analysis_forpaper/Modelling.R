@@ -89,15 +89,14 @@ corrplot(corr5, method="color", col=col(200),
          tl.col="black", tl.srt=45, #Text label color and rotation
          diag=FALSE)
 
-
-####################################### Scaled fit and report
+####################################### Scaled fit and report selection 1: V_Var, C_ppr, A_std
 
 ##### 0.5 m
 
 ##### height
 
 # all
-model_all_h05=lm(veg_height_m ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data = plot_data05_f)
+model_all_h05=lm(veg_height_m ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data = plot_data05_f)
 summary(model_all_h05) 
 
 #AIC model selection (step)
@@ -105,7 +104,7 @@ model_all_step_h05<-step(model_all_h05,direction = "backward")
 summary(model_all_step_h05)
 
 # fwf
-model_fwf_h05=lm(veg_height_m ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake!="Lake Balaton",])
+model_fwf_h05=lm(veg_height_m ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake!="Lake Balaton",])
 summary(model_fwf_h05) 
 
 #AIC model selection (step)
@@ -114,7 +113,7 @@ summary(model_fwf_step_h05)
 
 ##### biomass
 
-model_all_b05=lm(total.weight ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data = plot_data05_f)
+model_all_b05=lm(total.weight ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data = plot_data05_f)
 summary(model_all_b05) 
 
 #AIC model selection (step)
@@ -122,7 +121,7 @@ model_all_step_b05<-step(model_all_b05,direction = "backward")
 summary(model_all_step_b05)
 
 # fwf
-model_fwf_b05=lm(total.weight ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake!="Lake Balaton",])
+model_fwf_b05=lm(total.weight ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake!="Lake Balaton",])
 summary(model_fwf_b05) 
 
 #AIC model selection (step)
@@ -136,7 +135,7 @@ stargazer(model_fwf_step_h05,model_all_step_h05,model_fwf_step_b05,model_all_ste
 ##### height
 
 # all
-model_all_h2=lm(veg_height_m ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data = plot_data2_f)
+model_all_h2=lm(veg_height_m ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data = plot_data2_f)
 summary(model_all_h2) 
 
 #AIC model selection (step)
@@ -144,7 +143,7 @@ model_all_step_h2<-step(model_all_h2,direction = "backward")
 summary(model_all_step_h2)
 
 # fwf
-model_fwf_h2=lm(veg_height_m ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake!="Lake Balaton",])
+model_fwf_h2=lm(veg_height_m ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake!="Lake Balaton",])
 summary(model_fwf_h2) 
 
 #AIC model selection (step)
@@ -153,7 +152,7 @@ summary(model_fwf_step_h2)
 
 ##### biomass
 
-model_all_b2=lm(total.weight ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data = plot_data2_f)
+model_all_b2=lm(total.weight ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data = plot_data2_f)
 summary(model_all_b2) 
 
 #AIC model selection (step)
@@ -161,7 +160,7 @@ model_all_step_b2<-step(model_all_b2,direction = "backward")
 summary(model_all_step_b2)
 
 # fwf
-model_fwf_b2=lm(total.weight ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake!="Lake Balaton",])
+model_fwf_b2=lm(total.weight ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake!="Lake Balaton",])
 summary(model_fwf_b2) 
 
 #AIC model selection (step)
@@ -175,7 +174,7 @@ stargazer(model_fwf_step_h2,model_all_step_h2,model_fwf_step_b2,model_all_step_b
 ##### height
 
 # all
-model_all_h5=lm(veg_height_m ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data = plot_data5_f)
+model_all_h5=lm(veg_height_m ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data = plot_data5_f)
 summary(model_all_h5) 
 
 #AIC model selection (step)
@@ -183,7 +182,7 @@ model_all_step_h5<-step(model_all_h5,direction = "backward")
 summary(model_all_step_h5)
 
 # fwf
-model_fwf_h5=lm(veg_height_m ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake!="Lake Balaton",])
+model_fwf_h5=lm(veg_height_m ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake!="Lake Balaton",])
 summary(model_fwf_h5) 
 
 #AIC model selection (step)
@@ -192,7 +191,7 @@ summary(model_fwf_step_h5)
 
 ##### biomass
 
-model_all_b5=lm(total.weight ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data = plot_data5_f)
+model_all_b5=lm(total.weight ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data = plot_data5_f)
 summary(model_all_b5) 
 
 #AIC model selection (step)
@@ -200,7 +199,7 @@ model_all_step_b5<-step(model_all_b5,direction = "backward")
 summary(model_all_step_b5)
 
 # fwf
-model_fwf_b5=lm(total.weight ~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake!="Lake Balaton",])
+model_fwf_b5=lm(total.weight ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake!="Lake Balaton",])
 summary(model_fwf_b5) 
 
 #AIC model selection (step)
@@ -209,12 +208,14 @@ summary(model_fwf_step_b5)
 
 stargazer(model_fwf_step_h5,model_all_step_h5,model_fwf_step_b5,model_all_step_b5,align=TRUE,type="text",column.labels=c("fwf","all","fwf","all"),title="5 m")
 
-## report for study
+####################################### Partial residual plot
 
-stargazer(model_fwf_step_h05,model_all_step_h05,model_fwf_step_h2,model_all_step_h2,model_fwf_step_h5,model_all_step_h5,align=TRUE,type="html",column.labels=c("fwf [0.5 m]","all [0.5 m]","fwf [2.5 m]","all [2.5 m]","fwf [5 m]","all [5 m]"),title="Estimation of vegetation height at different resolutions",out="height_report.doc")
-stargazer(model_fwf_step_b05,model_all_step_b05,model_fwf_step_b2,model_all_step_b2,model_fwf_step_b5,model_all_step_b5,align=TRUE,type="html",column.labels=c("fwf [0.5 m]","all [0.5 m]","fwf [2.5 m]","all [2.5 m]","fwf [5 m]","all [5 m]"),title="Estimation of biomass at different resolutions",out="biomass_report.doc")
+termplot(model_all_step_h05, partial=T, term=1, pch=20, cex=1.5, col.term=0,
+         lwd.term=3, col.res="dodgerblue",xlab="Scaled V_var", ylab="Partial residual")
+lines(lwd=3, lty=2, col='red', termplot(model_all_step_h05, partial=T, term=1, plot=F)$Scaled_V_var$x, 
+      termplot(model_all_step_h05, partial=T, term=1, plot=F)$Scaled_V_var$y)
 
-####################################### Dependence + ANOVA
+####################################### Boxplot + Tukey test
 
 plot_data05_f$type="fwf"
 plot_data05_f[plot_data05_f$lake=="Lake Balaton",29] <- "discrete"
