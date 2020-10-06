@@ -10,6 +10,8 @@ library(usdm)
 library(corrplot)
 library(multcompView)
 
+library(pdp)
+
 generate_label_df <- function(TUKEY, variable){
   
   # Extract labels and factor levels from Tukey post-hoc 
@@ -214,6 +216,153 @@ termplot(model_all_step_h05, partial=T, term=1, pch=20, cex=1.5, col.term=0,
          lwd.term=3)
 lines(lwd=3, lty=2, col='red', termplot(model_all_step_h05, partial=T, term=1, plot=F)$Scaled_V_var$x, 
       termplot(model_all_step_h05, partial=T, term=1, plot=F)$Scaled_V_var$y)
+
+part_res <- resid(model_all_step_h05) + plot_data05_f$Scaled_V_var*coef(model_all_step_h05)["Scaled_V_var"]
+plot(part_res~ plot_data05_f$Scaled_V_var,ylab = "Partial residuals", xlab = "Scaled_V_var", las = 1)
+
+plot_data05_f$part_res_V_var_all=resid(model_all_step_h05) + plot_data05_f$Scaled_V_var*coef(model_all_step_h05)["Scaled_V_var"]
+plot_data05_f$part_res_V_var_all_y=termplot(model_all_step_h05, partial=T, term=1, plot=F)$Scaled_V_var$y
+plot_data05_f$part_res_V_var_all_x=termplot(model_all_step_h05, partial=T, term=1, plot=F)$Scaled_V_var$x
+
+plot_data05_f$part_res_V_var_fwf=NA
+plot_data05_f$part_res_V_var_fwf_y=NA
+plot_data05_f$part_res_V_var_fwf_x=NA
+
+plot_data05_f[plot_data05_f$lake!="Lake Balaton",32] <- resid(model_fwf_step_h05) + plot_data05_f[plot_data05_f$lake!="Lake Balaton",]$Scaled_V_var*coef(model_fwf_step_h05)["Scaled_V_var"]
+plot_data05_f[plot_data05_f$lake!="Lake Balaton",33] <- termplot(model_fwf_step_h05, partial=T, term=1, plot=F)$Scaled_V_var$y
+plot_data05_f[plot_data05_f$lake!="Lake Balaton",34] <- termplot(model_fwf_step_h05, partial=T, term=1, plot=F)$Scaled_V_var$x
+
+a05h=ggplot(data=plot_data05_f[(plot_data05_f$lake=="Lake Tisza"),], aes(x=Scaled_V_var , y=part_res_V_var_all),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
+  geom_line(data=plot_data05_f,aes(x=part_res_V_var_all_x,y=part_res_V_var_all_y),color="deeppink",size=2,linetype = "solid")+
+  geom_line(data=plot_data05_f,aes(x=part_res_V_var_fwf_x,y=part_res_V_var_fwf_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Tisza"="blue"),name="Lakes")
+
+b05h=ggplot(data=plot_data05_f[(plot_data05_f$lake=="Lake Ferto"),], aes(x=Scaled_V_var , y=part_res_V_var_all),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
+  geom_line(data=plot_data05_f,aes(x=part_res_V_var_all_x,y=part_res_V_var_all_y),color="deeppink",size=2,linetype = "solid")+
+  geom_line(data=plot_data05_f,aes(x=part_res_V_var_fwf_x,y=part_res_V_var_fwf_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Ferto"="darkgreen"),name="Lakes")
+
+c05h=ggplot(data=plot_data05_f[(plot_data05_f$lake=="Lake Balaton"),], aes(x=Scaled_V_var , y=part_res_V_var_all),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
+  geom_line(data=plot_data05_f,aes(x=part_res_V_var_all_x,y=part_res_V_var_all_y),color="deeppink",size=2,linetype = "solid")+
+  geom_line(data=plot_data05_f,aes(x=part_res_V_var_fwf_x,y=part_res_V_var_fwf_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Balaton"="red"),name="Lakes")
+
+abc05h=ggplot(data=plot_data05_f, aes(x=Scaled_V_var , y=part_res_V_var_all),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
+  geom_line(data=plot_data05_f,aes(x=part_res_V_var_all_x,y=part_res_V_var_all_y),color="deeppink",size=2,linetype = "solid")+
+  geom_line(data=plot_data05_f,aes(x=part_res_V_var_fwf_x,y=part_res_V_var_fwf_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")
+
+#####
+
+plot_data05_f$part_res_A_std_all=resid(model_all_step_h05) + plot_data05_f$Scaled_A_std*coef(model_all_step_h05)["Scaled_A_std"]
+plot_data05_f$part_res_A_std_all_y=termplot(model_all_step_h05, partial=T, term=3, plot=F)$Scaled_A_std$y
+plot_data05_f$part_res_A_std_all_x=termplot(model_all_step_h05, partial=T, term=3, plot=F)$Scaled_A_std$x
+
+plot_data05_f$part_res_A_std_fwf=NA
+plot_data05_f$part_res_A_std_fwf_y=NA
+plot_data05_f$part_res_A_std_fwf_x=NA
+
+plot_data05_f[plot_data05_f$lake!="Lake Balaton",36] <- resid(model_fwf_step_h05) + plot_data05_f[plot_data05_f$lake!="Lake Balaton",]$Scaled_A_std*coef(model_fwf_step_h05)["Scaled_A_std"]
+plot_data05_f[plot_data05_f$lake!="Lake Balaton",37] <- termplot(model_fwf_step_h05, partial=T, term=2, plot=F)$Scaled_A_std$y
+plot_data05_f[plot_data05_f$lake!="Lake Balaton",38] <- termplot(model_fwf_step_h05, partial=T, term=2, plot=F)$Scaled_A_std$x
+
+a05h2=ggplot(data=plot_data05_f[(plot_data05_f$lake=="Lake Tisza"),], aes(x=Scaled_A_std , y=part_res_A_std_all),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
+  geom_line(data=plot_data05_f,aes(x=part_res_A_std_all_x,y=part_res_A_std_all_y),color="deeppink",size=2,linetype = "dashed")+
+  geom_line(data=plot_data05_f,aes(x=part_res_A_std_fwf_x,y=part_res_A_std_fwf_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Tisza"="blue"),name="Lakes")
+
+b05h2=ggplot(data=plot_data05_f[(plot_data05_f$lake=="Lake Ferto"),], aes(x=Scaled_A_std , y=part_res_A_std_all),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
+  geom_line(data=plot_data05_f,aes(x=part_res_A_std_all_x,y=part_res_A_std_all_y),color="deeppink",size=2,linetype = "dashed")+
+  geom_line(data=plot_data05_f,aes(x=part_res_A_std_fwf_x,y=part_res_A_std_fwf_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Ferto"="darkgreen"),name="Lakes")
+
+c05h2=ggplot(data=plot_data05_f[(plot_data05_f$lake=="Lake Balaton"),], aes(x=Scaled_A_std , y=part_res_A_std_all),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
+  geom_line(data=plot_data05_f,aes(x=part_res_A_std_all_x,y=part_res_A_std_all_y),color="deeppink",size=2,linetype = "dashed")+
+  geom_line(data=plot_data05_f,aes(x=part_res_A_std_fwf_x,y=part_res_A_std_fwf_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Balaton"="red"),name="Lakes")
+
+abc05h2=ggplot(data=plot_data05_f, aes(x=Scaled_A_std , y=part_res_A_std_all),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
+  geom_line(data=plot_data05_f,aes(x=part_res_A_std_all_x,y=part_res_A_std_all_y),color="deeppink",size=2,linetype = "dashed")+
+  geom_line(data=plot_data05_f,aes(x=part_res_A_std_fwf_x,y=part_res_A_std_fwf_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")
+
+#####
+
+plot_data5_f$part_res_C_ppr_all=resid(model_all_step_b5) + plot_data5_f$Scaled_C_ppr*coef(model_all_step_b5)["Scaled_C_ppr"]
+plot_data5_f$part_res_C_ppr_all_y=termplot(model_all_step_b5, partial=T, term=1, plot=F)$Scaled_C_ppr$y
+plot_data5_f$part_res_C_ppr_all_x=termplot(model_all_step_b5, partial=T, term=1, plot=F)$Scaled_C_ppr$x
+
+plot_data5_f$part_res_C_ppr_fwf=NA
+plot_data5_f$part_res_C_ppr_fwf_y=NA
+plot_data5_f$part_res_C_ppr_fwf_x=NA
+
+plot_data5_f[plot_data5_f$lake!="Lake Balaton",32] <- resid(model_fwf_step_b5) + plot_data5_f[plot_data5_f$lake!="Lake Balaton",]$Scaled_C_ppr*coef(model_fwf_step_b5)["Scaled_C_ppr"]
+plot_data5_f[plot_data5_f$lake!="Lake Balaton",33] <- termplot(model_fwf_step_b5, partial=T, term=1, plot=F)$Scaled_C_ppr$y
+plot_data5_f[plot_data5_f$lake!="Lake Balaton",34] <- termplot(model_fwf_step_b5, partial=T, term=1, plot=F)$Scaled_C_ppr$x
+
+a5b=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Tisza"),], aes(x=Scaled_C_ppr , y=part_res_C_ppr_all),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
+  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_all_x,y=part_res_C_ppr_all_y),color="deeppink",size=2,linetype = "solid")+
+  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwf_x,y=part_res_C_ppr_fwf_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Tisza"="blue"),name="Lakes")
+
+b5b=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Ferto"),], aes(x=Scaled_C_ppr , y=part_res_C_ppr_all),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
+  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_all_x,y=part_res_C_ppr_all_y),color="deeppink",size=2,linetype = "solid")+
+  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwf_x,y=part_res_C_ppr_fwf_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Ferto"="darkgreen"),name="Lakes")
+
+c5b=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Balaton"),], aes(x=Scaled_C_ppr , y=part_res_C_ppr_all),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
+  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_all_x,y=part_res_C_ppr_all_y),color="deeppink",size=2,linetype = "solid")+
+  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwf_x,y=part_res_C_ppr_fwf_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Balaton"="red"),name="Lakes")
+
+abc5b=ggplot(data=plot_data5_f, aes(x=Scaled_C_ppr , y=part_res_C_ppr_all),show.legend = TRUE) +  
+  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
+  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_all_x,y=part_res_C_ppr_all_y),color="deeppink",size=2,linetype = "solid")+
+  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwf_x,y=part_res_C_ppr_fwf_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")
+
+grid.arrange(a05h,b05h,c05h,abc05h,
+             a05h2,b05h2,c05h2,abc05h2,
+             a5b,b5b,c5b,abc5b,
+             nrow = 3,
+             ncol = 4
+)
+
 
 ####################################### Boxplot + Tukey test
 
