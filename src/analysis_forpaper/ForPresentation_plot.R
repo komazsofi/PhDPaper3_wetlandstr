@@ -129,6 +129,80 @@ kb=ggplot(data=plot_data5_f,aes(x=predicted_h_fwf,y=total.weight))+
   theme_bw(base_size = 20) +
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
 
+##### LAI
+
+# all
+model_all_h5=lm(gct_lai~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data = pole_data5_f)
+summary(model_all_h5) 
+
+#AIC model selection (step)
+model_all_step_h5<-step(model_all_h5,direction = "backward")
+summary(model_all_step_h5)
+
+# fwf
+model_fwf_h5=lm(gct_lai~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std+Scaled_W_echw, data =pole_data5_f[pole_data5_f$lake!="Lake Balaton",])
+summary(model_fwf_h5) 
+
+#AIC model selection (step)
+model_fwf_step_h5<-step(model_fwf_h5,direction = "backward")
+summary(model_fwf_step_h5)
+
+# fwfl
+model_fwf_h5l=lm(gct_lai~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std+Scaled_W_echw, data =pole_data5_f[pole_data5_f$lake=="Lake Ferto",])
+summary(model_fwf_h5l) 
+
+#AIC model selection (step)
+model_fwf_step_h5l<-step(model_fwf_h5l,direction = "backward")
+summary(model_fwf_step_h5l)
+
+# fwfh
+model_fwf_h5h=lm(gct_lai~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std+Scaled_W_echw, data =pole_data5_f[pole_data5_f$lake=="Lake Tisza",])
+summary(model_fwf_h5h) 
+
+#AIC model selection (step)
+model_fwf_step_h5h<-step(model_fwf_h5h,direction = "backward")
+summary(model_fwf_step_h5h)
+
+pole_data5_f$predicted_fwf<-NA
+pole_data5_f$predicted_fwfl<-NA
+pole_data5_f$predicted_fwfh<-NA
+pole_data5_f[pole_data5_f$lake!="Lake Balaton",29]=predict(model_fwf_step_h5)
+pole_data5_f[pole_data5_f$lake=="Lake Ferto",30]=predict(model_fwf_step_h5l)
+pole_data5_f[pole_data5_f$lake=="Lake Tisza",31]=predict(model_fwf_step_h5h)
+pole_data5_f$predicted_all=predict(model_all_step_h5)
+
+g5=ggplot(data=pole_data5_f,aes(x=predicted_all,y=gct_lai))+
+  geom_point(aes(color=lake),size=5,show.legend = FALSE)+
+  geom_smooth(method = "lm", se = FALSE, colour="black")+
+  xlab("Predicted leaf area")+
+  ylab("Actual leaf area")+
+  theme_bw(base_size = 20) +
+  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
+
+j5=ggplot(data=pole_data5_f,aes(x=predicted_fwf,y=gct_lai))+
+  geom_point(aes(color=lake),size=5,show.legend = FALSE)+
+  geom_smooth(method = "lm", se = FALSE, colour="black",linetype = "dashed")+
+  xlab("Predicted leaf area")+
+  ylab("Actual leaf area")+
+  theme_bw(base_size = 20) +
+  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
+
+k5=ggplot(data=pole_data5_f,aes(x=predicted_fwfl,y=gct_lai))+
+  geom_point(aes(color=lake),size=5,show.legend = FALSE)+
+  geom_smooth(method = "lm", se = FALSE, colour="black")+
+  xlab("Predicted leaf area")+
+  ylab("Actual leaf area")+
+  theme_bw(base_size = 20) +
+  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
+
+l5=ggplot(data=pole_data5_f,aes(x=predicted_fwfh,y=gct_lai))+
+  geom_point(aes(color=lake),size=5,show.legend = FALSE)+
+  geom_smooth(method = "lm", se = FALSE, colour="black")+
+  xlab("Predicted leaf area")+
+  ylab("Actual leaf area")+
+  theme_bw(base_size = 20) +
+  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
+
 ####################################### Visualization boxplot per important metrics
 
 a=ggplot(data=plot_data05_f,aes(x=lake,y=V_var,fill=lake))+geom_boxplot()+theme_bw(base_size = 20)
