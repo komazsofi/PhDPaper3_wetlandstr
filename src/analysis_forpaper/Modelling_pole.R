@@ -34,7 +34,7 @@ plot_data5=read.csv(paste("Pole_db_",5,"_filt.csv",sep=""))
 plot_data5_scaled=scale(plot_data5[,c(4:11,18)])
 colnames(plot_data5_scaled)=paste("Scaled_",colnames(plot_data5_scaled),sep="")
 plot_data5_f=cbind(plot_data5,plot_data5_scaled)
-plot_data5_f=plot_data5_f[plot_data5_f$OBJNAME!=187,]
+plot_data5_f=plot_data5_f[(plot_data5_f$OBJNAME!=187 & plot_data5_f$OBJNAME!=250),]
 
 ####################################### Correlation check
 col <- colorRampPalette(c("#4477AA","#77AADD","#FFFFFF","#EE9988","#BB4444"))
@@ -185,6 +185,14 @@ summary(model_fwf_h5h)
 model_fwf_step_h5h<-step(model_fwf_h5h,direction = "backward")
 summary(model_fwf_step_h5h)
 
+# discrete
+model_dr_h5=lm(gct_lai~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake=="Lake Balaton",])
+summary(model_dr_h5) 
+
+#AIC model selection (step)
+model_dr_step_h5<-step(model_dr_h5,direction = "backward")
+summary(model_dr_step_h5)
+
 ## report for study
 
 stargazer(model_fwf_step_h05,model_fwf_step_h05l,model_fwf_step_h05h,model_fwf_step_h2,model_fwf_step_h2l,model_fwf_step_h2h,model_fwf_step_h5,model_fwf_step_h5l,model_fwf_step_h5h,align=TRUE,type="html",column.labels=c("fwf [0.5 m]","fwf low pdens [0.5 m]","fwf high pdens [0.5 m]","fwf [2.5 m]","fwf low pdens [2.5 m]","fwf high pdens [2.5 m]","fwf [5 m]","fwf low pdens [5 m]","fwf high pdens [5 m]"),title="Estimation of leaf area at different resolutions",out="lai_report.doc")
@@ -316,6 +324,14 @@ plot_data5_f[plot_data5_f$lake=="Lake Tisza",32] <- resid(model_fwf_step_h5h) + 
 plot_data5_f[plot_data5_f$lake=="Lake Tisza",33] <- termplot(model_fwf_step_h5h, partial=T, term=1, plot=F)$Scaled_C_ppr$y
 plot_data5_f[plot_data5_f$lake=="Lake Tisza",34] <- termplot(model_fwf_step_h5h, partial=T, term=1, plot=F)$Scaled_C_ppr$x
 
+plot_data5_f$part_res_V_Var_dr=NA
+plot_data5_f$part_res_V_Var_dr_y=NA
+plot_data5_f$part_res_V_Var_dr_x=NA
+
+plot_data5_f[plot_data5_f$lake=="Lake Balaton",35] <- resid(model_dr_step_h5) + plot_data5_f[plot_data5_f$lake=="Lake Balaton",]$Scaled_A_std*coef(model_dr_step_h5)["Scaled_A_std"]
+plot_data5_f[plot_data5_f$lake=="Lake Balaton",36] <- termplot(model_dr_step_h5, partial=T, term=1, plot=F)$Scaled_A_std$y
+plot_data5_f[plot_data5_f$lake=="Lake Balaton",37] <- termplot(model_dr_step_h5, partial=T, term=1, plot=F)$Scaled_A_std$x
+
 c5l=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Ferto"),], aes(x=Scaled_C_ppr , y=part_res_C_ppr_fwfl),show.legend = TRUE) +  
   geom_point(aes(color=lake),size=5,show.legend = TRUE) +
   geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwfl_x,y=part_res_C_ppr_fwfl_y),color="black",size=2,linetype = "dashed")+
@@ -330,4 +346,12 @@ abc5l=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Tisza"),], aes(x=Scaled
   theme_bw(base_size = 20) +
   ylab("Partial dependence") +
   scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
+  xlim(-2.2,2.2)+ylim(-3.2,3.2)
+
+ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Balaton"),], aes(x=Scaled_A_std , y=part_res_V_Var_dr),show.legend = TRUE) +  
+  geom_point(aes(color=lake),size=5,show.legend = TRUE) +
+  geom_line(data=plot_data5_f,aes(x=part_res_V_Var_dr_x,y=part_res_V_Var_dr_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
   xlim(-2.2,2.2)+ylim(-3.2,3.2)
