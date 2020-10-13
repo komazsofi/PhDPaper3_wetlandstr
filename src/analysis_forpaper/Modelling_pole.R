@@ -154,7 +154,7 @@ summary(model_fwf_step_h2h)
 ##### lai
 
 # all
-model_all_h5=lm(gct_lai~ Scaled_V_var+Scaled_A_cover+Scaled_A_std, data = plot_data5_f)
+model_all_h5=lm(gct_lai~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data = plot_data5_f)
 summary(model_all_h5) 
 
 #AIC model selection (step)
@@ -162,7 +162,7 @@ model_all_step_h5<-step(model_all_h5,direction = "backward")
 summary(model_all_step_h5)
 
 # fwf
-model_fwf_h5=lm(gct_lai~ Scaled_V_var+Scaled_A_cover+Scaled_A_std+Scaled_W_echw, data =plot_data5_f[plot_data5_f$lake!="Lake Balaton",])
+model_fwf_h5=lm(gct_lai~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake!="Lake Balaton",])
 summary(model_fwf_h5) 
 
 #AIC model selection (step)
@@ -170,7 +170,7 @@ model_fwf_step_h5<-step(model_fwf_h5,direction = "backward")
 summary(model_fwf_step_h5)
 
 # fwfl
-model_fwf_h5l=lm(gct_lai~ Scaled_V_var+Scaled_A_cover+Scaled_A_std+Scaled_W_echw, data =plot_data5_f[plot_data5_f$lake=="Lake Ferto",])
+model_fwf_h5l=lm(gct_lai~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake=="Lake Ferto",])
 summary(model_fwf_h5l) 
 
 #AIC model selection (step)
@@ -178,7 +178,7 @@ model_fwf_step_h5l<-step(model_fwf_h5l,direction = "backward")
 summary(model_fwf_step_h5l)
 
 # fwfh
-model_fwf_h5h=lm(gct_lai~ Scaled_V_var+Scaled_A_cover+Scaled_A_std+Scaled_W_echw, data =plot_data5_f[plot_data5_f$lake=="Lake Tisza",])
+model_fwf_h5h=lm(gct_lai~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake=="Lake Tisza",])
 summary(model_fwf_h5h) 
 
 #AIC model selection (step)
@@ -297,3 +297,37 @@ grid.arrange(j,k,l,j2,k2,l2,j5,k5,l5,
              nrow = 3,
              ncol = 3
 )
+
+###### partial dependence
+
+plot_data5_f$part_res_C_ppr_fwfl=NA
+plot_data5_f$part_res_C_ppr_fwfl_y=NA
+plot_data5_f$part_res_C_ppr_fwfl_x=NA
+
+plot_data5_f[plot_data5_f$lake=="Lake Ferto",29] <- resid(model_fwf_step_h5l) + plot_data5_f[plot_data5_f$lake=="Lake Ferto",]$Scaled_C_ppr*coef(model_fwf_step_h5l)["Scaled_C_ppr"]
+plot_data5_f[plot_data5_f$lake=="Lake Ferto",30] <- termplot(model_fwf_step_h5l, partial=T, term=1, plot=F)$Scaled_C_ppr$y
+plot_data5_f[plot_data5_f$lake=="Lake Ferto",31] <- termplot(model_fwf_step_h5l, partial=T, term=1, plot=F)$Scaled_C_ppr$x
+
+plot_data5_f$part_res_C_ppr_fwfh=NA
+plot_data5_f$part_res_C_ppr_fwfh_y=NA
+plot_data5_f$part_res_C_ppr_fwfh_x=NA
+
+plot_data5_f[plot_data5_f$lake=="Lake Tisza",32] <- resid(model_fwf_step_h5h) + plot_data5_f[plot_data5_f$lake=="Lake Tisza",]$Scaled_C_ppr*coef(model_fwf_step_h5h)["Scaled_C_ppr"]
+plot_data5_f[plot_data5_f$lake=="Lake Tisza",33] <- termplot(model_fwf_step_h5h, partial=T, term=1, plot=F)$Scaled_C_ppr$y
+plot_data5_f[plot_data5_f$lake=="Lake Tisza",34] <- termplot(model_fwf_step_h5h, partial=T, term=1, plot=F)$Scaled_C_ppr$x
+
+c5l=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Ferto"),], aes(x=Scaled_C_ppr , y=part_res_C_ppr_fwfl),show.legend = TRUE) +  
+  geom_point(aes(color=lake),size=5,show.legend = TRUE) +
+  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwfl_x,y=part_res_C_ppr_fwfl_y),color="black",size=2,linetype = "dashed")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
+  xlim(-2.2,2.2)+ylim(-3.2,3.2)
+
+abc5l=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Tisza"),], aes(x=Scaled_C_ppr , y=part_res_C_ppr_fwfh),show.legend = TRUE) +  
+  geom_point(aes(color=lake),size=5,show.legend = TRUE) +
+  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwfh_x,y=part_res_C_ppr_fwfh_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
+  xlim(-2.2,2.2)+ylim(-3.2,3.2)
