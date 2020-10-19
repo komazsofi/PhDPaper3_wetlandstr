@@ -13,7 +13,7 @@ library(tidyverse)
 
 workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis9/"
 setwd(workdir)
-rad=5
+rad=0.5
 
 # Import
 
@@ -39,7 +39,7 @@ balaton_pole_df_min=balaton_pole_df[c(1,20,23,24,22)]
 balaton_m_c=balaton_m[complete.cases(balaton_m), ]
 tisza_m_c=tisza_m[complete.cases(tisza_m), ]
 ferto_m_c=ferto_m[complete.cases(ferto_m), ]
-tisza_m_c2=tisza_m[complete.cases(tisza_m2), ]
+tisza_m_c2=tisza_m2[complete.cases(tisza_m2), ]
 
 # merge
 
