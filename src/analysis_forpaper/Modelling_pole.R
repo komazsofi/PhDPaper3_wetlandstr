@@ -83,7 +83,7 @@ corrplot(corr5, method="color", col=col(200),
 ##### lai
 
 # all
-model_all_h05=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data = plot_data05_f[plot_data05_f$season=="leaf-off",])
+model_all_h05=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data = plot_data05_f[plot_data05_f$season=="leaf-off",])
 summary(model_all_h05) 
 
 #AIC model selection (step)
@@ -91,7 +91,7 @@ model_all_step_h05<-step(model_all_h05,direction = "backward")
 summary(model_all_step_h05)
 
 # fwf
-model_fwf_h05=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data05_f[(plot_data05_f$lake!="Lake Balaton" & plot_data05_f$season=="leaf-off"),])
+model_fwf_h05=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data05_f[(plot_data05_f$lake!="Lake Balaton" & plot_data05_f$season=="leaf-off"),])
 summary(model_fwf_h05) 
 
 #AIC model selection (step)
@@ -127,7 +127,7 @@ summary(model_dr_step_h05)
 ##### lai
 
 # all
-model_all_h2=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data = plot_data2_f[plot_data2_f$season=="leaf-off",])
+model_all_h2=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data = plot_data2_f[plot_data2_f$season=="leaf-off",])
 summary(model_all_h2) 
 
 #AIC model selection (step)
@@ -135,7 +135,7 @@ model_all_step_h2<-step(model_all_h2,direction = "backward")
 summary(model_all_step_h2)
 
 # fwf
-model_fwf_h2=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data2_f[(plot_data2_f$lake!="Lake Balaton" & plot_data2_f$season=="leaf-off"),])
+model_fwf_h2=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data2_f[(plot_data2_f$lake!="Lake Balaton" & plot_data2_f$season=="leaf-off"),])
 summary(model_fwf_h2) 
 
 #AIC model selection (step)
@@ -179,7 +179,7 @@ summary(model_dr_step_h2)
 ##### lai
 
 # all
-model_all_h5=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data = plot_data5_f[plot_data5_f$season=="leaf-off"])
+model_all_h5=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data = plot_data5_f[plot_data5_f$season=="leaf-off",])
 summary(model_all_h5) 
 
 #AIC model selection (step)
@@ -187,7 +187,7 @@ model_all_step_h5<-step(model_all_h5,direction = "backward")
 summary(model_all_step_h5)
 
 # fwf
-model_fwf_h5=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data5_f[(plot_data5_f$lake!="Lake Balaton" & plot_data5_f$season=="leaf-off"),])
+model_fwf_h5=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data5_f[(plot_data5_f$lake!="Lake Balaton" & plot_data5_f$season=="leaf-off"),])
 summary(model_fwf_h5) 
 
 #AIC model selection (step)
