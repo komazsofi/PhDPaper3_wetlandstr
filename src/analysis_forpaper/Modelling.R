@@ -11,8 +11,8 @@ library(corrplot)
 
 library(pdp)
 
-#workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis9/"
-workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis9/"
+workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis9/"
+#workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis9/"
 setwd(workdir)
 
 ####################################### Import
@@ -86,7 +86,7 @@ corrplot(corr5, method="color", col=col(200),
 ##### height
 
 # all
-model_all_h05=lm(veg_height_m ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data = plot_data05_f)
+model_all_h05=lm(veg_height_m ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data = plot_data05_f)
 summary(model_all_h05) 
 
 #AIC model selection (step)
@@ -94,7 +94,7 @@ model_all_step_h05<-step(model_all_h05,direction = "backward")
 summary(model_all_step_h05)
 
 # fwf
-model_fwf_h05=lm(veg_height_m ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake!="Lake Balaton",])
+model_fwf_h05=lm(veg_height_m ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake!="Lake Balaton",])
 summary(model_fwf_h05) 
 
 #AIC model selection (step)
@@ -103,7 +103,7 @@ summary(model_fwf_step_h05)
 
 ##### biomass
 
-model_all_b05=lm(total.weight ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data = plot_data05_f)
+model_all_b05=lm(total.weight ~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data = plot_data05_f)
 summary(model_all_b05) 
 
 #AIC model selection (step)
@@ -111,7 +111,7 @@ model_all_step_b05<-step(model_all_b05,direction = "backward")
 summary(model_all_step_b05)
 
 # fwf
-model_fwf_b05=lm(total.weight ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake!="Lake Balaton",])
+model_fwf_b05=lm(total.weight ~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake!="Lake Balaton",])
 summary(model_fwf_b05) 
 
 #AIC model selection (step)
@@ -125,7 +125,7 @@ stargazer(model_fwf_step_h05,model_all_step_h05,model_fwf_step_b05,model_all_ste
 ##### height
 
 # all
-model_all_h2=lm(veg_height_m ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data = plot_data2_f)
+model_all_h2=lm(veg_height_m ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data = plot_data2_f)
 summary(model_all_h2) 
 
 #AIC model selection (step)
@@ -133,7 +133,7 @@ model_all_step_h2<-step(model_all_h2,direction = "backward")
 summary(model_all_step_h2)
 
 # fwf
-model_fwf_h2=lm(veg_height_m ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake!="Lake Balaton",])
+model_fwf_h2=lm(veg_height_m ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake!="Lake Balaton",])
 summary(model_fwf_h2) 
 
 #AIC model selection (step)
@@ -142,7 +142,7 @@ summary(model_fwf_step_h2)
 
 ##### biomass
 
-model_all_b2=lm(total.weight ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data = plot_data2_f)
+model_all_b2=lm(total.weight ~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data = plot_data2_f)
 summary(model_all_b2) 
 
 #AIC model selection (step)
@@ -150,7 +150,7 @@ model_all_step_b2<-step(model_all_b2,direction = "backward")
 summary(model_all_step_b2)
 
 # fwf
-model_fwf_b2=lm(total.weight ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake!="Lake Balaton",])
+model_fwf_b2=lm(total.weight ~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake!="Lake Balaton",])
 summary(model_fwf_b2) 
 
 #AIC model selection (step)
@@ -164,7 +164,7 @@ stargazer(model_fwf_step_h2,model_all_step_h2,model_fwf_step_b2,model_all_step_b
 ##### height
 
 # all
-model_all_h5=lm(veg_height_m ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data = plot_data5_f)
+model_all_h5=lm(veg_height_m ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data = plot_data5_f)
 summary(model_all_h5) 
 
 #AIC model selection (step)
@@ -172,7 +172,7 @@ model_all_step_h5<-step(model_all_h5,direction = "backward")
 summary(model_all_step_h5)
 
 # fwf
-model_fwf_h5=lm(veg_height_m ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake!="Lake Balaton",])
+model_fwf_h5=lm(veg_height_m ~ Scaled_V_var+Scaled_C_ppr+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake!="Lake Balaton",])
 summary(model_fwf_h5) 
 
 #AIC model selection (step)
@@ -181,7 +181,7 @@ summary(model_fwf_step_h5)
 
 ##### biomass
 
-model_all_b5=lm(total.weight ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data = plot_data5_f)
+model_all_b5=lm(total.weight ~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data = plot_data5_f)
 summary(model_all_b5) 
 
 #AIC model selection (step)
@@ -189,7 +189,7 @@ model_all_step_b5<-step(model_all_b5,direction = "backward")
 summary(model_all_step_b5)
 
 # fwf
-model_fwf_b5=lm(total.weight ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake!="Lake Balaton",])
+model_fwf_b5=lm(total.weight ~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake!="Lake Balaton",])
 summary(model_fwf_b5) 
 
 #AIC model selection (step)
