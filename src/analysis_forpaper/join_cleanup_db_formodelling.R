@@ -10,15 +10,15 @@ library(rgdal)
 library(raster)
 library(sp)
 
-workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis8/"
+workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis9/"
 setwd(workdir)
-rad=5
+rad=0.5
 
 # Import
 
-balaton_m=read.csv(paste("Balaton_lidarmetrics_",rad,"_reclass3.csv",sep=""))
-tisza_m=read.csv(paste("Tisza_lidarmetrics_",rad,"_reclass3.csv",sep=""))
-ferto_m=read.csv(paste("Ferto_lidarmetrics_",rad,"_reclass3.csv",sep=""))
+balaton_m=read.csv(paste("Balaton_lidarmetrics_",rad,"_reclass4.csv",sep=""))
+tisza_m=read.csv(paste("Tisza_lidarmetrics_",rad,"_reclass4.csv",sep=""))
+ferto_m=read.csv(paste("Ferto_lidarmetrics_",rad,"_reclass4.csv",sep=""))
 
 plotdata=read.csv("data_quadtrat_tolidar_forarticle.csv")
 
