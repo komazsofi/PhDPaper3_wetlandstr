@@ -11,8 +11,8 @@ library(corrplot)
 
 library(pdp)
 
-workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis9/"
-#workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis9/"
+#workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis9/"
+workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis9/"
 setwd(workdir)
 
 ####################################### Import
@@ -103,7 +103,7 @@ summary(model_fwf_step_h05)
 
 ##### biomass
 
-model_all_b05=lm(total.weight ~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data = plot_data05_f)
+model_all_b05=lm(total.weight ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data = plot_data05_f)
 summary(model_all_b05) 
 
 #AIC model selection (step)
@@ -111,7 +111,7 @@ model_all_step_b05<-step(model_all_b05,direction = "backward")
 summary(model_all_step_b05)
 
 # fwf
-model_fwf_b05=lm(total.weight ~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake!="Lake Balaton",])
+model_fwf_b05=lm(total.weight ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake!="Lake Balaton",])
 summary(model_fwf_b05) 
 
 #AIC model selection (step)
@@ -142,7 +142,7 @@ summary(model_fwf_step_h2)
 
 ##### biomass
 
-model_all_b2=lm(total.weight ~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data = plot_data2_f)
+model_all_b2=lm(total.weight ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data = plot_data2_f)
 summary(model_all_b2) 
 
 #AIC model selection (step)
@@ -150,7 +150,7 @@ model_all_step_b2<-step(model_all_b2,direction = "backward")
 summary(model_all_step_b2)
 
 # fwf
-model_fwf_b2=lm(total.weight ~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake!="Lake Balaton",])
+model_fwf_b2=lm(total.weight ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake!="Lake Balaton",])
 summary(model_fwf_b2) 
 
 #AIC model selection (step)
@@ -181,7 +181,7 @@ summary(model_fwf_step_h5)
 
 ##### biomass
 
-model_all_b5=lm(total.weight ~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data = plot_data5_f)
+model_all_b5=lm(total.weight ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data = plot_data5_f)
 summary(model_all_b5) 
 
 #AIC model selection (step)
@@ -189,7 +189,7 @@ model_all_step_b5<-step(model_all_b5,direction = "backward")
 summary(model_all_step_b5)
 
 # fwf
-model_fwf_b5=lm(total.weight ~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake!="Lake Balaton",])
+model_fwf_b5=lm(total.weight ~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake!="Lake Balaton",])
 summary(model_fwf_b5) 
 
 #AIC model selection (step)
@@ -200,19 +200,19 @@ stargazer(model_fwf_step_h5,model_all_step_h5,model_fwf_step_b5,model_all_step_b
 
 ####################################### Partial residual plot
 
-plot_data05_f$part_res_V_var_all=resid(model_all_step_h05) + plot_data05_f$Scaled_H_p99.99.*coef(model_all_step_h05)["Scaled_H_p99.99."]
-plot_data05_f$part_res_V_var_all_y=termplot(model_all_step_h05, partial=T, term=1, plot=F)$Scaled_H_p99.99.$y
-plot_data05_f$part_res_V_var_all_x=termplot(model_all_step_h05, partial=T, term=1, plot=F)$Scaled_H_p99.99.$x
+plot_data05_f$part_res_V_var_all=resid(model_all_step_h05) + plot_data05_f$Scaled_V_var*coef(model_all_step_h05)["Scaled_V_var"]
+plot_data05_f$part_res_V_var_all_y=termplot(model_all_step_h05, partial=T, term=1, plot=F)$Scaled_V_var$y
+plot_data05_f$part_res_V_var_all_x=termplot(model_all_step_h05, partial=T, term=1, plot=F)$Scaled_V_var$x
 
 plot_data05_f$part_res_V_var_fwf=NA
 plot_data05_f$part_res_V_var_fwf_y=NA
 plot_data05_f$part_res_V_var_fwf_x=NA
 
-plot_data05_f[plot_data05_f$lake!="Lake Balaton",32] <- resid(model_fwf_step_h05) + plot_data05_f[plot_data05_f$lake!="Lake Balaton",]$Scaled_H_p99.99.*coef(model_fwf_step_h05)["Scaled_H_p99.99."]
-plot_data05_f[plot_data05_f$lake!="Lake Balaton",33] <- termplot(model_fwf_step_h05, partial=T, term=1, plot=F)$Scaled_H_p99.99.$y
-plot_data05_f[plot_data05_f$lake!="Lake Balaton",34] <- termplot(model_fwf_step_h05, partial=T, term=1, plot=F)$Scaled_H_p99.99.$x
+plot_data05_f[plot_data05_f$lake!="Lake Balaton",32] <- resid(model_fwf_step_h05) + plot_data05_f[plot_data05_f$lake!="Lake Balaton",]$Scaled_V_var*coef(model_fwf_step_h05)["Scaled_V_var"]
+plot_data05_f[plot_data05_f$lake!="Lake Balaton",33] <- termplot(model_fwf_step_h05, partial=T, term=1, plot=F)$Scaled_V_var$y
+plot_data05_f[plot_data05_f$lake!="Lake Balaton",34] <- termplot(model_fwf_step_h05, partial=T, term=1, plot=F)$Scaled_V_var$x
 
-c05h=ggplot(data=plot_data05_f[(plot_data05_f$lake!="Lake Balaton"),], aes(x=Scaled_H_p99.99. , y=part_res_V_var_all),show.legend = TRUE) +  
+ggplot(data=plot_data05_f[(plot_data05_f$lake!="Lake Balaton"),], aes(x=Scaled_V_var , y=part_res_V_var_all),show.legend = TRUE) +  
   geom_point(aes(color=lake),size=5,show.legend = TRUE) +
   geom_line(data=plot_data05_f,aes(x=part_res_V_var_fwf_x,y=part_res_V_var_fwf_y),color="black",size=2,linetype = "solid")+
   theme_bw(base_size = 20) +
@@ -220,7 +220,7 @@ c05h=ggplot(data=plot_data05_f[(plot_data05_f$lake!="Lake Balaton"),], aes(x=Sca
   scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   xlim(-1.2,1.5)+ylim(-2.2,2.2)
 
-abc05h=ggplot(data=plot_data05_f, aes(x=Scaled_H_p99.99. , y=part_res_V_var_all),show.legend = TRUE) +  
+ggplot(data=plot_data05_f, aes(x=Scaled_V_var , y=part_res_V_var_all),show.legend = TRUE) +  
   geom_point(aes(color=lake),size=5,show.legend = TRUE) +
   geom_line(data=plot_data05_f,aes(x=part_res_V_var_all_x,y=part_res_V_var_all_y),color="black",size=2,linetype = "solid")+
   theme_bw(base_size = 20) +
@@ -242,37 +242,17 @@ plot_data05_f[plot_data05_f$lake!="Lake Balaton",38] <- resid(model_fwf_step_h05
 plot_data05_f[plot_data05_f$lake!="Lake Balaton",39] <- termplot(model_fwf_step_h05, partial=T, term=2, plot=F)$Scaled_A_std$y
 plot_data05_f[plot_data05_f$lake!="Lake Balaton",40] <- termplot(model_fwf_step_h05, partial=T, term=2, plot=F)$Scaled_A_std$x
 
-a05h2=ggplot(data=plot_data05_f[(plot_data05_f$lake=="Lake Tisza"),], aes(x=Scaled_A_std , y=part_res_A_std_all),show.legend = TRUE) +  
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
-  geom_line(data=plot_data05_f,aes(x=part_res_A_std_all_x,y=part_res_A_std_all_y),color="deeppink",size=2,linetype = "dashed")+
-  geom_line(data=plot_data05_f,aes(x=part_res_A_std_fwf_x,y=part_res_A_std_fwf_y),color="black",size=2,linetype = "solid")+
+ggplot(data=plot_data05_f[(plot_data05_f$lake!="Lake Balaton"),], aes(x=Scaled_A_std , y=part_res_A_std_all),show.legend = TRUE) +  
+  geom_point(aes(color=lake),size=5,show.legend = TRUE) +
+  geom_line(data=plot_data05_f,aes(x=part_res_A_std_fwf_x,y=part_res_A_std_fwf_y),color="black",size=2,linetype = "dotted")+
   theme_bw(base_size = 20) +
   ylab("Partial dependence") +
-  scale_colour_manual(values=c("Lake Tisza"="blue"),name="Lakes")+
+  scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   xlim(-2.2,2.2)+ylim(-1.5,2.2)
 
-b05h2=ggplot(data=plot_data05_f[(plot_data05_f$lake=="Lake Ferto"),], aes(x=Scaled_A_std , y=part_res_A_std_all),show.legend = TRUE) +  
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
-  geom_line(data=plot_data05_f,aes(x=part_res_A_std_all_x,y=part_res_A_std_all_y),color="deeppink",size=2,linetype = "dashed")+
-  geom_line(data=plot_data05_f,aes(x=part_res_A_std_fwf_x,y=part_res_A_std_fwf_y),color="black",size=2,linetype = "solid")+
-  theme_bw(base_size = 20) +
-  ylab("Partial dependence") +
-  scale_colour_manual(values=c("Lake Ferto"="darkgreen"),name="Lakes")+
-  xlim(-2.2,2.2)+ylim(-1.5,2.2)
-
-c05h2=ggplot(data=plot_data05_f[(plot_data05_f$lake=="Lake Balaton"),], aes(x=Scaled_A_std , y=part_res_A_std_all),show.legend = TRUE) +  
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
-  geom_line(data=plot_data05_f,aes(x=part_res_A_std_all_x,y=part_res_A_std_all_y),color="deeppink",size=2,linetype = "dashed")+
-  geom_line(data=plot_data05_f,aes(x=part_res_A_std_fwf_x,y=part_res_A_std_fwf_y),color="black",size=2,linetype = "solid")+
-  theme_bw(base_size = 20) +
-  ylab("Partial dependence") +
-  scale_colour_manual(values=c("Lake Balaton"="red"),name="Lakes")+
-  xlim(-2.2,2.2)+ylim(-1.5,2.2)
-
-abc05h2=ggplot(data=plot_data05_f, aes(x=Scaled_A_std , y=part_res_A_std_all),show.legend = TRUE) +  
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE) +
-  geom_line(data=plot_data05_f,aes(x=part_res_A_std_all_x,y=part_res_A_std_all_y),color="deeppink",size=2,linetype = "dashed")+
-  geom_line(data=plot_data05_f,aes(x=part_res_A_std_fwf_x,y=part_res_A_std_fwf_y),color="black",size=2,linetype = "solid")+
+ggplot(data=plot_data05_f, aes(x=Scaled_A_std , y=part_res_A_std_all),show.legend = TRUE) +  
+  geom_point(aes(color=lake),size=5,show.legend = TRUE) +
+  geom_line(data=plot_data05_f,aes(x=part_res_A_std_all_x,y=part_res_A_std_all_y),color="black",size=2,linetype = "dashed")+
   theme_bw(base_size = 20) +
   ylab("Partial dependence") +
   scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
@@ -292,8 +272,7 @@ plot_data5_f[plot_data5_f$lake!="Lake Balaton",32] <- resid(model_fwf_step_b5) +
 plot_data5_f[plot_data5_f$lake!="Lake Balaton",33] <- termplot(model_fwf_step_b5, partial=T, term=1, plot=F)$Scaled_C_ppr$y
 plot_data5_f[plot_data5_f$lake!="Lake Balaton",34] <- termplot(model_fwf_step_b5, partial=T, term=1, plot=F)$Scaled_C_ppr$x
 
-
-c5b=ggplot(data=plot_data5_f[(plot_data5_f$lake!="Lake Balaton"),], aes(x=Scaled_C_ppr , y=part_res_C_ppr_all),show.legend = TRUE) +  
+ggplot(data=plot_data5_f[(plot_data5_f$lake!="Lake Balaton"),], aes(x=Scaled_C_ppr , y=part_res_C_ppr_all),show.legend = TRUE) +  
   geom_point(aes(color=lake),size=5,show.legend = TRUE) +
   geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwf_x,y=part_res_C_ppr_fwf_y),color="black",size=2,linetype = "dashed")+
   theme_bw(base_size = 20) +
@@ -301,7 +280,7 @@ c5b=ggplot(data=plot_data5_f[(plot_data5_f$lake!="Lake Balaton"),], aes(x=Scaled
   scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   xlim(-1.5,2.2)+ylim(-1,1.2)
 
-abc5b=ggplot(data=plot_data5_f, aes(x=Scaled_C_ppr , y=part_res_C_ppr_all),show.legend = TRUE) +  
+ggplot(data=plot_data5_f, aes(x=Scaled_C_ppr , y=part_res_C_ppr_all),show.legend = TRUE) +  
   geom_point(aes(color=lake),size=5,show.legend = TRUE) +
   geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_all_x,y=part_res_C_ppr_all_y),color="black",size=2,linetype = "solid")+
   theme_bw(base_size = 20) +
@@ -309,158 +288,55 @@ abc5b=ggplot(data=plot_data5_f, aes(x=Scaled_C_ppr , y=part_res_C_ppr_all),show.
   scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   xlim(-1.5,2.2)+ylim(-1,1.2)
 
-fig4=grid.arrange(a05h,b05h,c05h,abc05h,
-             a05h2,b05h2,c05h2,abc05h2,
-             a5b,b5b,c5b,abc5b,
-             nrow = 3,
-             ncol = 4
-)
-
-ggsave("fig4_v1.png",fig4,width=35,height=30,units="cm")
-
 ####################################### Predicted vs actual
 
 # height
 plot_data05_f$predicted_h=predict(model_all_step_h05)
 plot_data05_f$predicted_h_fwf<-NA
-plot_data05_f[plot_data05_f$lake!="Lake Balaton",44]=predict(model_fwf_step_h05)
+plot_data05_f[plot_data05_f$lake!="Lake Balaton",42]=predict(model_fwf_step_h05)
 
-j=ggplot(data=plot_data05_f,aes(x=predicted_h,y=veg_height_m))+
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE)+
-  geom_smooth(method = "lm", se = FALSE, colour="deeppink",size=3)+
+ggplot(data=plot_data05_f,aes(x=predicted_h,y=veg_height_m))+
+  geom_point(aes(color=lake),size=5,show.legend = TRUE)+
+  geom_smooth(method = "lm", se = FALSE, colour="black",size=2)+
   #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
   xlab("Predicted height")+
   ylab("Vegetation height (field)")+
   theme_bw(base_size = 20) +
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
 
-k=ggplot(data=plot_data05_f,aes(x=predicted_h_fwf,y=veg_height_m))+
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE)+
-  geom_smooth(method = "lm", se = FALSE, colour="black",size=3)+
+ggplot(data=plot_data05_f,aes(x=predicted_h_fwf,y=veg_height_m))+
+  geom_point(aes(color=lake),size=5,show.legend = TRUE)+
+  geom_smooth(method = "lm", se = FALSE, colour="black",size=2)+
   #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
   xlab("Predicted height")+
   ylab("Vegetation height (field)")+
   theme_bw(base_size = 20) +
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
-
-plot_data2_f$predicted_h=predict(model_all_step_h2)
-plot_data2_f$predicted_h_fwf<-NA
-plot_data2_f[plot_data2_f$lake!="Lake Balaton",30]=predict(model_fwf_step_h2)
-
-j2=ggplot(data=plot_data2_f,aes(x=predicted_h,y=veg_height_m))+
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE)+
-  geom_smooth(method = "lm", se = FALSE, colour="black")+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  xlab("Predicted height")+
-  ylab("Actual height")+
-  theme_bw(base_size = 20) +
-  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
-
-k2=ggplot(data=plot_data2_f,aes(x=predicted_h_fwf,y=veg_height_m))+
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE)+
-  geom_smooth(method = "lm", se = FALSE, colour="black")+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  xlab("Predicted height")+
-  ylab("Actual height")+
-  theme_bw(base_size = 20) +
-  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
-
-plot_data5_f$predicted_h=predict(model_all_step_h5)
-plot_data5_f$predicted_h_fwf<-NA
-plot_data5_f[plot_data5_f$lake!="Lake Balaton",35]=predict(model_fwf_step_h5)
-
-j5=ggplot(data=plot_data5_f,aes(x=predicted_h,y=veg_height_m))+
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE)+
-  geom_smooth(method = "lm", se = FALSE, colour="black")+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  xlab("Predicted height")+
-  ylab("Actual height")+
-  theme_bw(base_size = 20) +
-  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
-
-k5=ggplot(data=plot_data5_f,aes(x=predicted_h_fwf,y=veg_height_m))+
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE)+
-  geom_smooth(method = "lm", se = FALSE, colour="black")+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  xlab("Predicted height")+
-  ylab("Actual height")+
-  theme_bw(base_size = 20) +
-  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
-
-grid.arrange(j,k,j2,k2,j5,k5,
-             nrow = 3,
-             ncol = 2
-)
 
 # biomass
-plot_data05_f$predicted_b=predict(model_all_step_b05)
-plot_data05_f$predicted_b_fwf<-NA
-plot_data05_f[plot_data05_f$lake!="Lake Balaton",46]=predict(model_fwf_step_b05)
-
-j_b=ggplot(data=plot_data05_f,aes(x=predicted_b,y=total.weight))+
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE)+
-  geom_smooth(method = "lm", se = FALSE, colour="deeppink",size=3)+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  xlab("Predicted biomass")+
-  ylab("Actual biomass")+
-  theme_bw(base_size = 20) +
-  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
-
-k_b=ggplot(data=plot_data05_f,aes(x=predicted_b_fwf,y=total.weight))+
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE)+
-  geom_smooth(method = "lm", se = FALSE, colour="black",size=3)+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  xlab("Predicted biomass")+
-  ylab("Actual biomass")+
-  theme_bw(base_size = 20) +
-  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
-
-plot_data2_f$predicted_b=predict(model_all_step_b2)
-plot_data2_f$predicted_b_fwf<-NA
-plot_data2_f[plot_data2_f$lake!="Lake Balaton",32]=predict(model_fwf_step_b2)
-
-j2_b=ggplot(data=plot_data2_f,aes(x=predicted_b,y=total.weight))+
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE)+
-  geom_smooth(method = "lm", se = FALSE, colour="black")+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  xlab("Predicted biomass")+
-  ylab("Actual biomass")+
-  theme_bw(base_size = 20) +
-  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
-
-k2_b=ggplot(data=plot_data2_f,aes(x=predicted_b_fwf,y=total.weight))+
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE)+
-  geom_smooth(method = "lm", se = FALSE, colour="black")+
-  geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  xlab("Predicted biomass")+
-  ylab("Actual biomass")+
-  theme_bw(base_size = 20) +
-  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
 
 plot_data5_f$predicted_b=predict(model_all_step_b5)
 plot_data5_f$predicted_b_fwf<-NA
-plot_data5_f[plot_data5_f$lake!="Lake Balaton",38]=predict(model_fwf_step_b5)
+plot_data5_f[plot_data5_f$lake!="Lake Balaton",36]=predict(model_fwf_step_b5)
 
-j5_b=ggplot(data=plot_data5_f,aes(x=predicted_b,y=total.weight))+
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE)+
-  geom_smooth(method = "lm", se = FALSE, colour="deeppink",size=3)+
+ggplot(data=plot_data5_f,aes(x=predicted_b,y=total.weight))+
+  geom_point(aes(color=lake),size=5,show.legend = TRUE)+
+  geom_smooth(method = "lm", se = FALSE, colour="black",size=2)+
   #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
   xlab("Predicted biomass")+
   ylab("Biomass (field)")+
   theme_bw(base_size = 20) +
-  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
+  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
+  xlim(0.2,1)+ylim(0,1.7)
 
-k5_b=ggplot(data=plot_data5_f,aes(x=predicted_b_fwf,y=total.weight))+
-  geom_point(aes(color=lake,shape=veg_type_2),size=5,show.legend = FALSE)+
-  geom_smooth(method = "lm", se = FALSE, colour="black",size=3)+
+ggplot(data=plot_data5_f,aes(x=predicted_b_fwf,y=total.weight))+
+  geom_point(aes(color=lake),size=5,show.legend = TRUE)+
+  geom_smooth(method = "lm", se = FALSE, colour="black",size=2,linetype = "dashed")+
   #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
   xlab("Predicted biomass")+
   ylab("Biomass (field)")+
   theme_bw(base_size = 20) +
-  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")
+  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
+  xlim(0.2,1)+ylim(0,1.7)
 
-grid.arrange(j_b,k_b,j2_b,k2_b,j5_b,k5_b,
-             nrow = 3,
-             ncol = 2
-)
 
