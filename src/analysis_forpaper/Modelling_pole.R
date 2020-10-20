@@ -99,7 +99,7 @@ model_fwf_step_h05<-step(model_fwf_h05,direction = "backward")
 summary(model_fwf_step_h05)
 
 # fwfl
-model_fwf_h05l=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake=="Lake Ferto",])
+model_fwf_h05l=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_coverr+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake=="Lake Ferto",])
 summary(model_fwf_h05l) 
 
 #AIC model selection (step)
@@ -107,7 +107,7 @@ model_fwf_step_h05l<-step(model_fwf_h05l,direction = "backward")
 summary(model_fwf_step_h05l)
 
 # fwfh
-model_fwf_h05h=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data05_f[(plot_data05_f$lake=="Lake Tisza" & plot_data05_f$season=="leaf-off"),])
+model_fwf_h05h=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data05_f[(plot_data05_f$lake=="Lake Tisza" & plot_data05_f$season=="leaf-off"),])
 summary(model_fwf_h05h) 
 
 #AIC model selection (step)
@@ -115,7 +115,7 @@ model_fwf_step_h05h<-step(model_fwf_h05h,direction = "backward")
 summary(model_fwf_step_h05h)
 
 # discrete
-model_dr_h05=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake=="Lake Balaton",])
+model_dr_h05=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data05_f[plot_data05_f$lake=="Lake Balaton",])
 summary(model_dr_h05) 
 
 #AIC model selection (step)
@@ -143,7 +143,7 @@ model_fwf_step_h2<-step(model_fwf_h2,direction = "backward")
 summary(model_fwf_step_h2)
 
 # fwfl
-model_fwf_h2l=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake=="Lake Ferto",])
+model_fwf_h2l=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake=="Lake Ferto",])
 summary(model_fwf_h2l) 
 
 #AIC model selection (step)
@@ -151,7 +151,7 @@ model_fwf_step_h2l<-step(model_fwf_h2l,direction = "backward")
 summary(model_fwf_step_h2l)
 
 # fwfh
-model_fwf_h2h=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data2_f[(plot_data2_f$lake=="Lake Tisza" & plot_data2_f$season=="leaf-off"),])
+model_fwf_h2h=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data2_f[(plot_data2_f$lake=="Lake Tisza" & plot_data2_f$season=="leaf-off"),])
 summary(model_fwf_h2h) 
 
 #AIC model selection (step)
@@ -159,7 +159,7 @@ model_fwf_step_h2h<-step(model_fwf_h2h,direction = "backward")
 summary(model_fwf_step_h2h)
 
 # fwfh2
-model_fwf_h2h2=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data2_f[(plot_data2_f$lake=="Lake Tisza" & plot_data2_f$season=="leaf-on"),])
+model_fwf_h2h2=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data2_f[(plot_data2_f$lake=="Lake Tisza" & plot_data2_f$season=="leaf-on"),])
 summary(model_fwf_h2h2) 
 
 #AIC model selection (step)
@@ -167,7 +167,7 @@ model_fwf_step_h2h2<-step(model_fwf_h2h2,direction = "backward")
 summary(model_fwf_step_h2h2)
 
 # discrete
-model_dr_h2=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake=="Lake Balaton",])
+model_dr_h2=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data2_f[plot_data2_f$lake=="Lake Balaton",])
 summary(model_dr_h2) 
 
 #AIC model selection (step)
@@ -195,7 +195,7 @@ model_fwf_step_h5<-step(model_fwf_h5,direction = "backward")
 summary(model_fwf_step_h5)
 
 # fwfl
-model_fwf_h5l=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake=="Lake Ferto",])
+model_fwf_h5l=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake=="Lake Ferto",])
 summary(model_fwf_h5l) 
 
 #AIC model selection (step)
@@ -203,7 +203,7 @@ model_fwf_step_h5l<-step(model_fwf_h5l,direction = "backward")
 summary(model_fwf_step_h5l)
 
 # fwfh
-model_fwf_h5h=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-off"),])
+model_fwf_h5h=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-off"),])
 summary(model_fwf_h5h) 
 
 #AIC model selection (step)
@@ -211,7 +211,7 @@ model_fwf_step_h5h<-step(model_fwf_h5h,direction = "backward")
 summary(model_fwf_step_h5h)
 
 # fwfh2
-model_fwf_h5h2=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-on"),])
+model_fwf_h5h2=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-on"),])
 summary(model_fwf_h5h2) 
 
 #AIC model selection (step)
@@ -219,7 +219,7 @@ model_fwf_step_h5h2<-step(model_fwf_h5h2,direction = "backward")
 summary(model_fwf_step_h5h2)
 
 # discrete
-model_dr_h5=lm(gct_lai~ Scaled_H_p99.99.+Scaled_C_ppr+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake=="Lake Balaton",])
+model_dr_h5=lm(gct_lai~ Scaled_H_p99.99.+Scaled_A_cover+Scaled_A_std, data =plot_data5_f[plot_data5_f$lake=="Lake Balaton",])
 summary(model_dr_h5) 
 
 #AIC model selection (step)
