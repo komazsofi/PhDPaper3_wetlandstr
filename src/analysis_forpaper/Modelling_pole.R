@@ -1,5 +1,6 @@
 library(ggplot2)
 library(gridExtra)
+library(ggrepel)
 
 library(dplyr)
 library(tidyr)
@@ -10,8 +11,15 @@ library(usdm)
 library(olsrr)
 library(corrplot)
 
-workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis9/"
-#workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis9/"
+get_legend<-function(myggplot){
+  tmp <- ggplot_gtable(ggplot_build(myggplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)
+}
+
+#workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis9/"
+workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis9/"
 setwd(workdir)
 
 ####################################### Import
@@ -242,42 +250,132 @@ plot_data5_f[plot_data5_f$lake=="Lake Ferto",29]=predict(model_fwf_step_h5l)
 plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-off"),30]=predict(model_fwf_step_h5h)
 plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-on"),31]=predict(model_fwf_step_h5h2)
 
-ggplot(data=plot_data5_f,aes(x=predicted_nfwf,y=gct_lai))+
-  geom_point(aes(color=lake),size=5,show.legend = TRUE)+
-  geom_smooth(method = "lm", se = FALSE, colour="black",size=2)+
+p1=ggplot(data=plot_data5_f,aes(x=predicted_nfwf,y=gct_lai))+
+  geom_point(aes(color=lake),size=5,show.legend = FALSE)+
+  #geom_smooth(method = "lm", se = FALSE, colour="black",size=2)+
   #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  xlab("Predicted leaf area")+
-  ylab("Actual leaf area")+
+  geom_abline()+
+  xlab("Predicted LAI")+
+  ylab("Observed LAI")+
   theme_bw(base_size = 20) +
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
   xlim(0.9,5)+ylim(0,6.5)
 
-ggplot(data=plot_data5_f,aes(x=predicted_fwfl,y=gct_lai))+
-  geom_point(aes(color=lake),size=5,show.legend = TRUE)+
-  geom_smooth(method = "lm", se = FALSE, colour="black",size=2,linetype="dashed")+
+p2=ggplot(data=plot_data5_f,aes(x=predicted_fwfl,y=gct_lai))+
+  geom_point(aes(color=lake),size=5,show.legend = FALSE)+
+  #geom_smooth(method = "lm", se = FALSE, colour="black",size=2,linetype="dashed")+
   #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  xlab("Predicted leaf area")+
-  ylab("Actual leaf area")+
+  geom_abline()+
+  xlab("Predicted LAI")+
+  ylab("Observed LAI")+
   theme_bw(base_size = 20) +
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
   xlim(0.9,5)+ylim(0,6.5)
 
-ggplot(data=plot_data5_f,aes(x=predicted_fwfh,y=gct_lai))+
-  geom_point(aes(color=lake),size=5,show.legend = TRUE)+
-  geom_smooth(method = "lm", se = FALSE, colour="black",size=2)+
+p3=ggplot(data=plot_data5_f,aes(x=predicted_fwfh,y=gct_lai))+
+  geom_point(aes(color=lake),size=5,show.legend = FALSE)+
+  #geom_smooth(method = "lm", se = FALSE, colour="black",size=2)+
   #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  xlab("Predicted leaf area")+
-  ylab("Actual leaf area")+
+  geom_abline()+
+  xlab("Predicted LAI")+
+  ylab("Observed LAI")+
   theme_bw(base_size = 20) +
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
   xlim(0.9,5)+ylim(0,6.5)
 
-ggplot(data=plot_data5_f,aes(x=predicted_fwfh2,y=gct_lai))+
-  geom_point(aes(color=lake),size=5,show.legend = TRUE)+
-  geom_smooth(method = "lm", se = FALSE, colour="black",size=2)+
+p4=ggplot(data=plot_data5_f,aes(x=predicted_fwfh2,y=gct_lai))+
+  geom_point(aes(color=lake),size=5,show.legend = FALSE)+
+  #geom_smooth(method = "lm", se = FALSE, colour="black",size=2)+
   #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
-  xlab("Predicted leaf area")+
-  ylab("Actual leaf area")+
+  geom_abline()+
+  xlab("Predicted LAI")+
+  ylab("Observed LAI")+
   theme_bw(base_size = 20) +
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
   xlim(0.9,5)+ylim(0,6.5)
+
+##### Partial residual
+
+plot_data5_f$part_res_C_ppr_fwfl=NA
+plot_data5_f$part_res_C_ppr_fwfl_y=NA
+plot_data5_f$part_res_C_ppr_fwfl_x=NA
+
+plot_data5_f[plot_data5_f$lake=="Lake Ferto",32] <- resid(model_fwf_step_h5l) + plot_data5_f[plot_data5_f$lake=="Lake Ferto",]$Scaled_C_ppr*coef(model_fwf_step_h5l)["Scaled_C_ppr"]
+plot_data5_f[plot_data5_f$lake=="Lake Ferto",33] <- termplot(model_fwf_step_h5l, partial=T, term=1, plot=F)$Scaled_C_ppr$y
+plot_data5_f[plot_data5_f$lake=="Lake Ferto",34] <- termplot(model_fwf_step_h5l, partial=T, term=1, plot=F)$Scaled_C_ppr$x
+
+p5=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Ferto"),], aes(x=Scaled_C_ppr , y=part_res_C_ppr_fwfl),show.legend = FALSE) +  
+  geom_point(aes(color=lake),size=5,show.legend = FALSE) +
+  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwfl_x,y=part_res_C_ppr_fwfl_y),color="black",size=2,linetype = "dashed")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
+  xlim(-2.2,2.2)+ylim(-3.5,2.2)
+
+plot_data5_f$part_res_C_ppr_fwfh=NA
+plot_data5_f$part_res_C_ppr_fwfh_y=NA
+plot_data5_f$part_res_C_ppr_fwfh_x=NA
+
+plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-off"),35] <- resid(model_fwf_step_h5h) + plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-off"),]$Scaled_C_ppr*coef(model_fwf_step_h5h)["Scaled_C_ppr"]
+plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-off"),36] <- termplot(model_fwf_step_h5h, partial=T, term=1, plot=F)$Scaled_C_ppr$y
+plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-off"),37] <- termplot(model_fwf_step_h5h, partial=T, term=1, plot=F)$Scaled_C_ppr$x
+
+p6=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-off"),], aes(x=Scaled_C_ppr , y=part_res_C_ppr_fwfh),show.legend = FALSE) +  
+  geom_point(aes(color=lake),size=5,show.legend = FALSE) +
+  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwfh_x,y=part_res_C_ppr_fwfh_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
+  xlim(-2.2,2.2)+ylim(-3.5,3.2)
+
+plot_data5_f$part_res_C_ppr_fwfh2=NA
+plot_data5_f$part_res_C_ppr_fwfh2_y=NA
+plot_data5_f$part_res_C_ppr_fwfh2_x=NA
+
+plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-on"),38] <- resid(model_fwf_step_h5h2) + plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-on"),]$Scaled_C_ppr*coef(model_fwf_step_h5h2)["Scaled_C_ppr"]
+plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-on"),39] <- termplot(model_fwf_step_h5h2, partial=T, term=1, plot=F)$Scaled_C_ppr$y
+plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-on"),40] <- termplot(model_fwf_step_h5h2, partial=T, term=1, plot=F)$Scaled_C_ppr$x
+
+p7=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-on"),], aes(x=Scaled_C_ppr , y=part_res_C_ppr_fwfh2),show.legend = FALSE) +  
+  geom_point(aes(color=lake),size=5,show.legend = FALSE) +
+  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwfh2_x,y=part_res_C_ppr_fwfh2_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
+  xlim(-2.2,2.2)+ylim(-3.5,3.2)
+
+plot_data5_f$part_res_C_ppr_nfwf=NA
+plot_data5_f$part_res_C_ppr_nfwf_y=NA
+plot_data5_f$part_res_C_ppr_nfwf_x=NA
+
+plot_data5_f[(plot_data5_f$lake=="Lake Balaton"),41] <- resid(model_dr_step_h5) + plot_data5_f[(plot_data5_f$lake=="Lake Balaton"),]$Scaled_H_p99.99.*coef(model_dr_step_h5)["Scaled_H_p99.99."]
+plot_data5_f[(plot_data5_f$lake=="Lake Balaton"),42] <- termplot(model_dr_step_h5, partial=T, term=1, plot=F)$Scaled_H_p99.99.$y
+plot_data5_f[(plot_data5_f$lake=="Lake Balaton" ),43] <- termplot(model_dr_step_h5, partial=T, term=1, plot=F)$Scaled_H_p99.99.$x
+
+p8=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Balaton"),], aes(x=Scaled_H_p99.99. , y=part_res_C_ppr_nfwf),show.legend = FALSE) +  
+  geom_point(aes(color=lake),size=5,show.legend = FALSE) +
+  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_nfwf_x,y=part_res_C_ppr_nfwf_y),color="black",size=2,linetype = "solid")+
+  theme_bw(base_size = 20) +
+  ylab("Partial dependence") +
+  xlab("Scaled_H_p99")+
+  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
+  xlim(-0.5,0)+ylim(-6.2,1)
+
+#### Figures
+
+p0=ggplot(data=plot_data5_f,aes(x=predicted_fwfh2,y=gct_lai))+
+  geom_point(aes(color=lake),size=5,show.legend = TRUE)+
+  geom_smooth(method = "lm", se = FALSE, colour="black",size=2)+
+  #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
+  xlab("Predicted LAI")+
+  ylab("Observed LAI")+
+  theme_bw(base_size = 20) +
+  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
+  xlim(0.9,5)+ylim(0,6.5)
+
+legend=get_legend(p0)
+
+grid.arrange(p1,p2,p3,p4,p8,p5,p6,p7,legend,
+             ncol=5,
+             nrow=2,
+             layout_matrix=rbind(c(1,2,3,4,10),c(6,7,8,9,10)))
