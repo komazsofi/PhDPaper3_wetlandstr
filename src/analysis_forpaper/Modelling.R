@@ -380,7 +380,7 @@ p10=ggplot(data=plot_data5_f,aes(x=predicted_b_fwf,y=total.weight))+
 p0=ggplot(data=plot_data05_f, aes(x=Scaled_V_var , y=part_res_V_var_all),show.legend = FALSE) +  
   geom_point(aes(color=lake),size=5,show.legend = TRUE) +
   geom_line(data=plot_data05_f,aes(x=part_res_V_var_all_x,y=part_res_V_var_all_y),color="black",size=2,linetype = "solid")+
-  theme_bw(base_size = 20) +
+  theme_bw(base_size = 30) +
   ylab("Partial dependence") +
   scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   xlim(-1.2,1.5)+ylim(-2.2,2.2)

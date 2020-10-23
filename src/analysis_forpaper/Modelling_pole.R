@@ -391,7 +391,7 @@ p0=ggplot(data=plot_data5_f,aes(x=predicted_fwfh2,y=gct_lai))+
   #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
   xlab("Predicted LAI")+
   ylab("Observed LAI")+
-  theme_bw(base_size = 20) +
+  theme_bw(base_size = 30) +
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
   scale_shape_manual(values=c(16,17),name="Season")+
   xlim(0.9,5)+ylim(0,6.5)
