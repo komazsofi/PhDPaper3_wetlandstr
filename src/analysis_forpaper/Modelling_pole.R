@@ -8,8 +8,6 @@ library(tidyr)
 
 library(stargazer)
 library(usdm)
-
-library(olsrr)
 library(corrplot)
 
 get_legend<-function(myggplot){
