@@ -8,7 +8,7 @@ library(stargazer)
 
 library(lidR)
 
-workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis7/"
+workdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis9/"
 #workdir="D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/Analysis7/"
 setwd(workdir)
 
@@ -20,8 +20,8 @@ plot_data5$total.weight=plot_data5$total.weight/10000
 
 las_bal <- readLAS("C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/balaton_25mrad_reclass/Balaton_OBJNAME204_25mrad_reclass.laz")
 las_fert <- readLAS("C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/ferto_25mrad_reclass/Ferto_OBJNAME321_25mrad_reclass.laz")
-las_tisza <- readLAS("C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad_leafon_reclass/Tisza_OBJNAME186_25mrad_reclass.laz")
-#las_tisza <- readLAS("C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad_reclass/Tisza_OBJNAME186_25mrad_reclass.laz")
+#las_tisza <- readLAS("C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad_leafon_reclass/Tisza_OBJNAME186_25mrad_reclass.laz")
+las_tisza <- readLAS("C:/Koma/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad_reclass/Tisza_OBJNAME186_25mrad_reclass.laz")
 
 ##### Pcloud visualization
 
@@ -38,7 +38,7 @@ plot_crossection <- function(las,
 {
   colour_by <- enquo(colour_by)
   data_clip <- clip_transect(las, p1, p2, width)
-  p <- ggplot(data_clip@data, aes(X,Z)) + geom_point(size = 5) + coord_equal() + theme_minimal(base_size=20)+
+  p <- ggplot(data_clip@data, aes(X,Z)) + geom_point(size = 5) + coord_equal() + theme_minimal(base_size=30)+
     geom_vline(xintercept=bal$coords.x1, linetype="dashed", color = "red")+
     geom_vline(xintercept=bal$coords.x1-0.5, linetype="dashed", color = "blue")+
     geom_vline(xintercept=bal$coords.x1+0.5, linetype="dashed", color = "blue")+
@@ -52,9 +52,15 @@ plot_crossection <- function(las,
   return(p)
 }
 
-plot_crossection(las_bal,p1 = c(bal$coords.x1-5, bal$coords.x2),p2 = c(bal$coords.x1+5, bal$coords.x2),bal,colour_by = factor(Classification))
-plot_crossection(las_fert,p1 = c(fert$coords.x1[1]+5, fert$coords.x2[1]),p2 = c(fert$coords.x1[1]-5, fert$coords.x2[1]),fert,colour_by = factor(Classification))
-plot_crossection(las_tisza,p1 = c(tisza$coords.x1[1]+5, tisza$coords.x2[1]),p2 = c(tisza$coords.x1[1]-5, tisza$coords.x2[1]),tisza,colour_by = factor(Classification))
+p1=plot_crossection(las_bal,p1 = c(bal$coords.x1-5, bal$coords.x2),p2 = c(bal$coords.x1+5, bal$coords.x2),bal,colour_by = factor(Classification))
+p2=plot_crossection(las_fert,p1 = c(fert$coords.x1[1]+5, fert$coords.x2[1]),p2 = c(fert$coords.x1[1]-5, fert$coords.x2[1]),fert,colour_by = factor(Classification))
+p3=plot_crossection(las_tisza,p1 = c(tisza$coords.x1[1]+5, tisza$coords.x2[1]),p2 = c(tisza$coords.x1[1]-5, tisza$coords.x2[1]),tisza,colour_by = factor(Classification))
+
+ggsave("Figcross_bal.png",plot = p1,width = 22, height = 12)
+ggsave("Figcross_fer.png",plot = p2,width = 22, height = 12)
+#ggsave("Figcross_tiszaon.png",plot = p3,width = 22, height = 12)
+ggsave("Figcross_tiszaoff.png",plot = p3,width = 22, height = 12)
+
 
 las_tisza@data=las_tisza@data[(las_tisza@data$Z<135 & las_tisza@data$Z>110),]
 
