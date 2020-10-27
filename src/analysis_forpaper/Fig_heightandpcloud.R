@@ -25,8 +25,8 @@ plot_data5$total.weight=plot_data5$total.weight/10000
 
 las_bal <- readLAS("D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/balaton_25mrad_reclass/Balaton_OBJNAME204_25mrad_reclass.laz")
 las_fert <- readLAS("D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/ferto_25mrad_reclass/Ferto_OBJNAME321_25mrad_reclass.laz")
-las_tisza <- readLAS("D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad_leafon_reclass/Tisza_OBJNAME186_25mrad_reclass.laz")
-#las_tisza <- readLAS("D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad_reclass/Tisza_OBJNAME186_25mrad_reclass.laz")
+#las_tisza <- readLAS("D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad_leafon_reclass/Tisza_OBJNAME186_25mrad_reclass.laz")
+las_tisza <- readLAS("D:/Sync/_Amsterdam/_PhD/Chapter2_habitat_str_lidar/3_Dataprocessing/pcloud/tisza_25mrad_reclass/Tisza_OBJNAME186_25mrad_reclass.laz")
 
 ##### Pcloud visualization
 
@@ -69,6 +69,6 @@ ggsave("Figcross_tiszaon.png",plot = p3,width = 22, height = 12)
 
 las_tisza@data=las_tisza@data[(las_tisza@data$Z<135 & las_tisza@data$Z>110),]
 
-plot(las_bal,size=4,axis=TRUE)
-plot(las_fert,size=4,axis=TRUE)
-plot(las_tisza,size=4,axis=TRUE)
+plot(las_bal,size=4,axis=FALSE,bg = "white")
+plot(las_fert,size=4,axis=FALSE,bg = "white")
+plot(las_tisza,size=4,axis=FALSE,bg = "white")
