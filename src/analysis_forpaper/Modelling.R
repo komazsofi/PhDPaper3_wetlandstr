@@ -221,7 +221,7 @@ plot_data05_f[plot_data05_f$lake!="Lake Balaton",32] <- resid(model_fwf_step_h05
 plot_data05_f[plot_data05_f$lake!="Lake Balaton",33] <- termplot(model_fwf_step_h05, partial=T, term=1, plot=F)$Scaled_H_p99.99.$y
 plot_data05_f[plot_data05_f$lake!="Lake Balaton",34] <- termplot(model_fwf_step_h05, partial=T, term=1, plot=F)$Scaled_H_p99.99.$x
 
-p1=ggplot(data=plot_data05_f[(plot_data05_f$lake!="Lake Balaton"),], aes(x=Scaled_H_p99.99. , y=part_res_V_var_all),show.legend = FALSE) +  
+p1=ggplot(data=plot_data05_f[(plot_data05_f$lake!="Lake Balaton"),], aes(x=Scaled_H_p99.99. , y=part_res_V_var_fwf),show.legend = FALSE) +  
   geom_point(aes(color=lake),size=5,show.legend = FALSE) +
   geom_line(data=plot_data05_f,aes(x=part_res_V_var_fwf_x,y=part_res_V_var_fwf_y),color="black",size=2,linetype = "solid")+
   theme_bw(base_size = 25) +
