@@ -229,7 +229,8 @@ p1=ggplot(data=plot_data05_f[(plot_data05_f$lake!="Lake Balaton"),], aes(x=Scale
   ylab("Partial dependence") +
   scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   xlim(-1.7,1.5)+ylim(-2,2.2)+
-  ggtitle("c) FWF [0.5 m]")
+  ggtitle("c) FWF [0.5 m]")+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 p2=ggplot(data=plot_data05_f, aes(x=Scaled_H_p99.99. , y=part_res_V_var_all),show.legend = FALSE) +  
   geom_point(aes(color=lake),size=5,show.legend = FALSE) +
@@ -240,7 +241,8 @@ p2=ggplot(data=plot_data05_f, aes(x=Scaled_H_p99.99. , y=part_res_V_var_all),sho
   scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   xlim(-1.7,1.5)+ylim(-2,2.2)+
   ggtitle("d) All [0.5 m]")+
-  theme(axis.title.y=element_blank())
+  theme(axis.title.y=element_blank())+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 #####
 
@@ -262,7 +264,8 @@ p3=ggplot(data=plot_data05_f[(plot_data05_f$lake!="Lake Balaton"),], aes(x=Scale
   theme_bw(base_size = 25) +
   ylab("Partial dependence") +
   scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
-  xlim(-2.2,2.2)+ylim(-1.5,2.2)
+  xlim(-2.2,2.2)+ylim(-1.5,2.2)+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 p4=ggplot(data=plot_data05_f, aes(x=Scaled_A_std , y=part_res_A_std_all),show.legend = FALSE) +  
   geom_point(aes(color=lake),size=5,show.legend = FALSE) +
@@ -270,7 +273,8 @@ p4=ggplot(data=plot_data05_f, aes(x=Scaled_A_std , y=part_res_A_std_all),show.le
   theme_bw(base_size = 25) +
   ylab("Partial dependence") +
   scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
-  xlim(-2.2,2.2)+ylim(-1.5,2.2)
+  xlim(-2.2,2.2)+ylim(-1.5,2.2)+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 #####
 
@@ -294,7 +298,8 @@ p5=ggplot(data=plot_data5_f[(plot_data5_f$lake!="Lake Balaton"),], aes(x=Scaled_
   ylab("Partial dependence") +
   scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   xlim(-1.5,2.2)+ylim(-1,1.2)+
-  ggtitle("c) FWF [5 m]")
+  ggtitle("c) FWF [5 m]")+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 p6=ggplot(data=plot_data5_f, aes(x=Scaled_C_ppr , y=part_res_C_ppr_all),show.legend = FALSE) +  
   geom_point(aes(color=lake),size=5,show.legend = FALSE) +
@@ -305,7 +310,8 @@ p6=ggplot(data=plot_data5_f, aes(x=Scaled_C_ppr , y=part_res_C_ppr_all),show.leg
   scale_colour_manual(values=c("Lake Balaton"="red", "Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   xlim(-1.5,2.2)+ylim(-1,1.2)+
   theme(axis.title.y=element_blank())+
-  ggtitle("d) All [5 m]")
+  ggtitle("d) All [5 m]")+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 ####################################### Predicted vs actual
 
@@ -326,7 +332,8 @@ p7=ggplot(data=plot_data05_f,aes(x=predicted_h,y=veg_height_m))+
   ylim(1.5,5)+xlim(1.5,5)+
   ggtitle("b) All [0.5 m]")+
   annotate("text",x = 2, y = 4.8,label = expression(paste("R"^2, " = 0.69")),size=10)+
-  theme(axis.title.y=element_blank())
+  theme(axis.title.y=element_blank())+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 p8=ggplot(data=plot_data05_f,aes(x=predicted_h_fwf,y=veg_height_m))+
   geom_point(aes(color=lake),size=5,show.legend = FALSE)+
@@ -339,7 +346,8 @@ p8=ggplot(data=plot_data05_f,aes(x=predicted_h_fwf,y=veg_height_m))+
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
   ylim(1.5,5)+xlim(1.5,5)+
   ggtitle("a) FWF [0.5 m]")+
-  annotate("text",x = 2, y = 4.8,label = expression(paste("R"^2, " = 0.84")),size=10)
+  annotate("text",x = 2, y = 4.8,label = expression(paste("R"^2, " = 0.84")),size=10)+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 # biomass
 
@@ -359,7 +367,8 @@ p9=ggplot(data=plot_data5_f,aes(x=predicted_b,y=total.weight))+
   xlim(0.2,1)+ylim(0,1.7)+
   theme(axis.title.y=element_blank())+
   ggtitle("b) All [5 m]")+
-  annotate("text",x = 0.35, y = 1.6,label = expression(paste("R"^2, " = 0.22")),size=10)
+  annotate("text",x = 0.35, y = 1.6,label = expression(paste("R"^2, " = 0.22")),size=10)+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 p10=ggplot(data=plot_data5_f,aes(x=predicted_b_fwf,y=total.weight))+
   geom_point(aes(color=lake),size=5,show.legend = FALSE)+
@@ -372,7 +381,8 @@ p10=ggplot(data=plot_data5_f,aes(x=predicted_b_fwf,y=total.weight))+
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
   xlim(0.2,1)+ylim(0,1.7)+
   ggtitle("a) FWF [5 m]")+
-  annotate("text",x = 0.35, y = 1.6,label = expression(paste("R"^2, " = 0.20")),size=10)
+  annotate("text",x = 0.35, y = 1.6,label = expression(paste("R"^2, " = 0.20")),size=10)+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 
 #### Figures

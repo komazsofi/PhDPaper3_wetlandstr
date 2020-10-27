@@ -260,7 +260,8 @@ p1=ggplot(data=plot_data5_f,aes(x=predicted_nfwf,y=gct_lai))+
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
   xlim(0.9,5)+ylim(0,6.5)+
   ggtitle("a) DR [Apr. 2014]")+
-  annotate("text",x = 2, y = 6,label = expression(paste("R"^2, " = 0.29")),size=10)
+  annotate("text",x = 2, y = 6,label = expression(paste("R"^2, " = 0.29")),size=10)+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 p2=ggplot(data=plot_data5_f,aes(x=predicted_fwfl,y=gct_lai))+
   geom_point(aes(color=lake,shape=season),size=5,show.legend = FALSE)+
@@ -274,7 +275,8 @@ p2=ggplot(data=plot_data5_f,aes(x=predicted_fwfl,y=gct_lai))+
   xlim(0.9,5)+ylim(0,6.5)+
   theme(axis.title.y=element_blank())+
   ggtitle("b) FWF [Dec. 2011]")+
-  annotate("text",x = 2, y = 6,label = expression(paste("R"^2, " = 0.08")),size=10)
+  annotate("text",x = 2, y = 6,label = expression(paste("R"^2, " = 0.08")),size=10)+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 p3=ggplot(data=plot_data5_f,aes(x=predicted_fwfh,y=gct_lai))+
   geom_point(aes(color=lake,shape=season),size=5,show.legend = FALSE)+
@@ -288,7 +290,8 @@ p3=ggplot(data=plot_data5_f,aes(x=predicted_fwfh,y=gct_lai))+
   xlim(0.9,5)+ylim(0,6.5)+
   theme(axis.title.y=element_blank())+
   ggtitle("c) FWF [Mar. 2012]")+
-  annotate("text",x = 2, y = 6,label = expression(paste("R"^2, " = 0.26")),size=10)
+  annotate("text",x = 2, y = 6,label = expression(paste("R"^2, " = 0.26")),size=10)+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 p4=ggplot(data=plot_data5_f,aes(x=predicted_fwfh2,y=gct_lai))+
   geom_point(aes(color=lake,shape=season),size=5,show.legend = FALSE)+
@@ -302,7 +305,8 @@ p4=ggplot(data=plot_data5_f,aes(x=predicted_fwfh2,y=gct_lai))+
   xlim(0.9,5)+ylim(0,6.5)+
   theme(axis.title.y=element_blank())+
   ggtitle("d) FWF [Jun. 2013]")+
-  annotate("text",x = 2, y = 6,label = expression(paste("R"^2, " = 0.30")),size=10)
+  annotate("text",x = 2, y = 6,label = expression(paste("R"^2, " = 0.30")),size=10)+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 ##### Partial residual
 
@@ -323,7 +327,8 @@ p5=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Ferto"),], aes(x=Scaled_C_
   scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   xlim(-2.2,2.2)+ylim(-3.5,2.2)+
   theme(axis.title.y=element_blank())+
-  ggtitle("f) FWF [Dec. 2011]")
+  ggtitle("f) FWF [Dec. 2011]")+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 plot_data5_f$part_res_C_ppr_fwfh=NA
 plot_data5_f$part_res_C_ppr_fwfh_y=NA
@@ -342,7 +347,8 @@ p6=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$seas
   scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   xlim(-2.2,2.2)+ylim(-3.5,3.2)+
   theme(axis.title.y=element_blank())+
-  ggtitle("g) FWF [Mar. 2012]")
+  ggtitle("g) FWF [Mar. 2012]")+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 plot_data5_f$part_res_C_ppr_fwfh2=NA
 plot_data5_f$part_res_C_ppr_fwfh2_y=NA
@@ -361,7 +367,8 @@ p7=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$seas
   scale_colour_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue"),name="Lakes")+
   xlim(-2.2,2.2)+ylim(-3.5,3.2)+
   theme(axis.title.y=element_blank())+
-  ggtitle("h) FWF [Jun. 2013]")
+  ggtitle("h) FWF [Jun. 2013]")+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 plot_data5_f$part_res_C_ppr_nfwf=NA
 plot_data5_f$part_res_C_ppr_nfwf_y=NA
@@ -379,7 +386,8 @@ p8=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Balaton"),], aes(x=Scaled_
   xlab("Scaled H_p99")+
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
   xlim(-0.5,0)+ylim(-6.2,1)+
-  ggtitle("e) DR [Apr. 2014]")
+  ggtitle("e) DR [Apr. 2014]")+
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 #### Figures
 
