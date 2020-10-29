@@ -414,4 +414,4 @@ fig5=grid.arrange(p1,p2,p3,p4,p8,p5,p6,p7,legend,t_1,t_2,
              widths = c(1,1,1,1,0.5),
              heights = c(0.5,4,0.5,4))
 
-ggsave("Fig5_subm1.png",plot = fig5,width = 22, height = 12)
+ggsave("Fig5_subm1.png",plot = fig5,width = 28, height = 12)
