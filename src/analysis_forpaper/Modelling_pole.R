@@ -404,6 +404,30 @@ p0=ggplot(data=plot_data5_f,aes(x=predicted_fwfh2,y=gct_lai))+
 
 legend=get_legend(p0)
 
+p01=ggplot(data=plot_data5_f,aes(x=predicted_fwfh2,y=gct_lai))+
+  geom_point(aes(color=lake),size=5,show.legend = TRUE)+
+  geom_smooth(method = "lm", se = FALSE, colour="black",size=2)+
+  #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
+  xlab("Predicted LAI")+
+  ylab("Observed LAI")+
+  theme_bw(base_size = 30) +
+  scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
+  xlim(0.9,5)+ylim(0,6.5)
+
+legend1=get_legend(p01)
+
+p02=ggplot(data=plot_data5_f,aes(x=predicted_fwfh2,y=gct_lai))+
+  geom_point(aes(shape=season),size=5,show.legend = TRUE)+
+  geom_smooth(method = "lm", se = FALSE, colour="black",size=2)+
+  #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
+  xlab("Predicted LAI")+
+  ylab("Observed LAI")+
+  theme_bw(base_size = 30) +
+  scale_shape_manual(values=c(16,17),name="Season")+
+  xlim(0.9,5)+ylim(0,6.5)
+
+legend2=get_legend(p02)
+
 t_1 <- textGrob("Prediction plots",gp=gpar(fontsize=25, col="black", fontface="bold"))
 t_2 <- textGrob("Partial dependence plots",gp=gpar(fontsize=25, col="black", fontface="bold"))
 
@@ -414,4 +438,11 @@ fig5=grid.arrange(p1,p2,p3,p4,p8,p5,p6,p7,legend,t_1,t_2,
              widths = c(1,1,1,1,0.5),
              heights = c(0.5,4,0.5,4))
 
-ggsave("Fig5_subm1.png",plot = fig5,width = 28, height = 12)
+fig5=grid.arrange(p1,p2,p3,p4,p8,p5,p6,p7,legend1,t_1,t_2,legend2,
+                  ncol=4,
+                  nrow=5,
+                  layout_matrix=rbind(c(11,11,11,11),c(1,2,3,4),c(12,12,12,12),c(6,7,8,9),c(NA,10,13,NA)),
+                  widths = c(1,1,1,1),
+                  heights = c(0.5,4,0.5,4,1))
+
+ggsave("Fig5_subm1.png",plot = fig5,width = 28, height = 20)
