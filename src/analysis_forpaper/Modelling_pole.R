@@ -385,9 +385,10 @@ p8=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Balaton"),], aes(x=Scaled_
   ylab("Partial dependence") +
   xlab("Scaled H_p99")+
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
-  xlim(-0.5,0)+ylim(-6.2,1)+
+  xlim(-0.5,0.5)+ylim(-6.2,1)+
   ggtitle("e) DR [Apr. 2014]")+
-  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
+  theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 3))
 
 #### Figures
 
@@ -412,7 +413,7 @@ p01=ggplot(data=plot_data5_f,aes(x=predicted_fwfh2,y=gct_lai))+
   ylab("Observed LAI")+
   theme_bw(base_size = 30) +
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
-  xlim(0.9,5)+ylim(0,6.5)
+  xlim(0.9,5)+ylim(0,6.5)+ theme(legend.position="bottom")
 
 legend1=get_legend(p01)
 
@@ -424,7 +425,7 @@ p02=ggplot(data=plot_data5_f,aes(x=predicted_fwfh2,y=gct_lai))+
   ylab("Observed LAI")+
   theme_bw(base_size = 30) +
   scale_shape_manual(values=c(16,17),name="Season")+
-  xlim(0.9,5)+ylim(0,6.5)
+  xlim(0.9,5)+ylim(0,6.5)+ theme(legend.position="bottom")
 
 legend2=get_legend(p02)
 
@@ -441,8 +442,8 @@ fig5=grid.arrange(p1,p2,p3,p4,p8,p5,p6,p7,legend,t_1,t_2,
 fig5=grid.arrange(p1,p2,p3,p4,p8,p5,p6,p7,legend1,t_1,t_2,legend2,
                   ncol=4,
                   nrow=5,
-                  layout_matrix=rbind(c(11,11,11,11),c(1,2,3,4),c(12,12,12,12),c(6,7,8,9),c(NA,10,13,NA)),
+                  layout_matrix=rbind(c(11,11,11,11),c(1,2,3,4),c(12,12,12,12),c(6,7,8,9),c(10,10,13,13)),
                   widths = c(1,1,1,1),
                   heights = c(0.5,4,0.5,4,1))
 
-ggsave("Fig5_subm1.png",plot = fig5,width = 28, height = 20)
+ggsave("Fig5_subm1.png",plot = fig5,width = 18, height = 10)
