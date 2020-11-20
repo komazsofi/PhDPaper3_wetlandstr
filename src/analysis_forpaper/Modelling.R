@@ -292,7 +292,7 @@ plot_data5_f[plot_data5_f$lake!="Lake Balaton",34] <- termplot(model_fwf_step_b5
 
 p5=ggplot(data=plot_data5_f[(plot_data5_f$lake!="Lake Balaton"),], aes(x=Scaled_C_ppr , y=part_res_C_ppr_all),show.legend = FALSE) +  
   geom_point(aes(color=lake),size=5,show.legend = FALSE) +
-  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwf_x,y=part_res_C_ppr_fwf_y),color="black",size=2,linetype = "dashed")+
+  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwf_x,y=part_res_C_ppr_fwf_y),color="black",size=2,linetype = "solid")+
   theme_bw(base_size = 25) +
   xlab("Scaled C_ppr")+
   ylab("Partial dependence") +
