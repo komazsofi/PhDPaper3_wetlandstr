@@ -320,7 +320,7 @@ plot_data5_f[plot_data5_f$lake=="Lake Ferto",34] <- termplot(model_fwf_step_h5l,
 
 p5=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Ferto"),], aes(x=Scaled_C_ppr , y=part_res_C_ppr_fwfl),show.legend = FALSE) +  
   geom_point(aes(color=lake,shape=season),size=5,show.legend = FALSE) +
-  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwfl_x,y=part_res_C_ppr_fwfl_y),color="black",size=2,linetype = "dashed")+
+  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwfl_x,y=part_res_C_ppr_fwfl_y),color="black",size=2,linetype = "solid")+
   theme_bw(base_size = 25) +
   xlab("Scaled C_ppr")+
   ylab("Partial dependence") +
