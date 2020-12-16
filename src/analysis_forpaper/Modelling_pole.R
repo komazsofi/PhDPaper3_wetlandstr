@@ -380,12 +380,13 @@ plot_data5_f[(plot_data5_f$lake=="Lake Balaton" ),43] <- termplot(model_dr_step_
 
 p8=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Balaton"),], aes(x=Scaled_H_p99.99. , y=part_res_C_ppr_nfwf),show.legend = FALSE) +  
   geom_point(aes(color=lake,shape=season),size=5,show.legend = FALSE) +
-  geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_nfwf_x,y=part_res_C_ppr_nfwf_y),color="black",size=2,linetype = "solid")+
+  #geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_nfwf_x,y=part_res_C_ppr_nfwf_y),color="black",size=2,linetype = "solid")+
+  geom_smooth(method="lm",colour='black',se=FALSE,size=2)+
   theme_bw(base_size = 25) +
   ylab("Partial dependence") +
   xlab("Scaled H_p99")+
   scale_color_manual(values=c("Lake Ferto"="darkgreen","Lake Tisza"="blue","Lake Balaton"="red"),name="Lakes")+
-  xlim(-0.5,0.5)+ylim(-6.2,1)+
+  xlim(-0.5,0.3)+ylim(-6.2,2)+
   ggtitle("e) DR [Apr. 2014]")+
   theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))+
   scale_x_continuous(breaks = scales::pretty_breaks(n = 3))
