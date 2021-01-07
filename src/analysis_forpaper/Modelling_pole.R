@@ -250,7 +250,7 @@ plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-off")
 plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-on"),31]=predict(model_fwf_step_h5h2)
 
 p1=ggplot(data=plot_data5_f,aes(x=predicted_nfwf,y=gct_lai))+
-  geom_point(aes(color=lake,shape=season),size=5,show.legend = FALSE)+
+  geom_point(aes(color=lake),size=5,show.legend = FALSE)+
   #geom_smooth(method = "lm", se = FALSE, colour="black",size=2)+
   #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
   geom_abline()+
@@ -264,7 +264,7 @@ p1=ggplot(data=plot_data5_f,aes(x=predicted_nfwf,y=gct_lai))+
   theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 p2=ggplot(data=plot_data5_f,aes(x=predicted_fwfl,y=gct_lai))+
-  geom_point(aes(color=lake,shape=season),size=5,show.legend = FALSE)+
+  geom_point(aes(color=lake),size=5,show.legend = FALSE)+
   #geom_smooth(method = "lm", se = FALSE, colour="black",size=2,linetype="dashed")+
   #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
   geom_abline()+
@@ -279,7 +279,7 @@ p2=ggplot(data=plot_data5_f,aes(x=predicted_fwfl,y=gct_lai))+
   theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 p3=ggplot(data=plot_data5_f,aes(x=predicted_fwfh,y=gct_lai))+
-  geom_point(aes(color=lake,shape=season),size=5,show.legend = FALSE)+
+  geom_point(aes(color=lake),size=5,show.legend = FALSE)+
   #geom_smooth(method = "lm", se = FALSE, colour="black",size=2)+
   #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
   geom_abline()+
@@ -294,7 +294,7 @@ p3=ggplot(data=plot_data5_f,aes(x=predicted_fwfh,y=gct_lai))+
   theme(axis.text.x = element_text(size=30),axis.text.y = element_text(size=30))
 
 p4=ggplot(data=plot_data5_f,aes(x=predicted_fwfh2,y=gct_lai))+
-  geom_point(aes(color=lake,shape=season),size=5,show.legend = FALSE)+
+  geom_point(aes(color=lake),size=5,show.legend = FALSE)+
   #geom_smooth(method = "lm", se = FALSE, colour="black",size=2)+
   #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
   geom_abline()+
@@ -339,7 +339,7 @@ plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-off")
 plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-off"),37] <- termplot(model_fwf_step_h5h, partial=T, term=1, plot=F)$Scaled_C_ppr$x
 
 p6=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-off"),], aes(x=Scaled_C_ppr , y=part_res_C_ppr_fwfh),show.legend = FALSE) +  
-  geom_point(aes(color=lake,shape=season),size=5,show.legend = FALSE) +
+  geom_point(aes(color=lake),size=5,show.legend = FALSE) +
   geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwfh_x,y=part_res_C_ppr_fwfh_y),color="black",size=2,linetype = "solid")+
   theme_bw(base_size = 25) +
   xlab("Scaled C_ppr")+
@@ -359,7 +359,7 @@ plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-on"),
 plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-on"),40] <- termplot(model_fwf_step_h5h2, partial=T, term=1, plot=F)$Scaled_C_ppr$x
 
 p7=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Tisza" & plot_data5_f$season=="leaf-on"),], aes(x=Scaled_C_ppr , y=part_res_C_ppr_fwfh2),show.legend = FALSE) +  
-  geom_point(aes(color=lake,shape=season),size=5,show.legend = FALSE,shape=17) +
+  geom_point(aes(color=lake),size=5,show.legend = FALSE) +
   geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_fwfh2_x,y=part_res_C_ppr_fwfh2_y),color="black",size=2,linetype = "solid")+
   theme_bw(base_size = 25) +
   xlab("Scaled C_ppr")+
@@ -379,7 +379,7 @@ plot_data5_f[(plot_data5_f$lake=="Lake Balaton"),42] <- termplot(model_dr_step_h
 plot_data5_f[(plot_data5_f$lake=="Lake Balaton" ),43] <- termplot(model_dr_step_h5, partial=T, term=1, plot=F)$Scaled_H_p99.99.$x
 
 p8=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Balaton"),], aes(x=Scaled_H_p99.99. , y=part_res_C_ppr_nfwf),show.legend = FALSE) +  
-  geom_point(aes(color=lake,shape=season),size=5,show.legend = FALSE) +
+  geom_point(aes(color=lake),size=5,show.legend = FALSE) +
   #geom_line(data=plot_data5_f,aes(x=part_res_C_ppr_nfwf_x,y=part_res_C_ppr_nfwf_y),color="black",size=2,linetype = "solid")+
   geom_smooth(method="lm",colour='black',se=FALSE,size=2)+
   theme_bw(base_size = 25) +
@@ -394,7 +394,7 @@ p8=ggplot(data=plot_data5_f[(plot_data5_f$lake=="Lake Balaton"),], aes(x=Scaled_
 #### Figures
 
 p0=ggplot(data=plot_data5_f,aes(x=predicted_fwfh2,y=gct_lai))+
-  geom_point(aes(color=lake,shape=season),size=5,show.legend = TRUE)+
+  geom_point(aes(color=lake),size=5,show.legend = TRUE)+
   geom_smooth(method = "lm", se = FALSE, colour="black",size=2)+
   #geom_text(aes(label=OBJNAME),hjust=0, vjust=0,size=4)+
   xlab("Predicted LAI")+
@@ -440,10 +440,10 @@ fig5=grid.arrange(p1,p2,p3,p4,p8,p5,p6,p7,legend,t_1,t_2,
              widths = c(1,1,1,1,0.5),
              heights = c(0.5,4,0.5,4))
 
-fig5=grid.arrange(p1,p2,p3,p4,p8,p5,p6,p7,legend1,t_1,t_2,legend2,
+fig5=grid.arrange(p1,p2,p3,p4,p8,p5,p6,p7,legend1,t_1,t_2,
                   ncol=4,
                   nrow=5,
-                  layout_matrix=rbind(c(11,11,11,11),c(1,2,3,4),c(12,12,12,12),c(6,7,8,9),c(10,10,13,13)),
+                  layout_matrix=rbind(c(11,11,11,11),c(1,2,3,4),c(12,12,12,12),c(6,7,8,9),c(10,10,10,10)),
                   widths = c(1,1,1,1),
                   heights = c(0.5,4,0.5,4,1))
 
